@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 
@@ -24,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
             $switch
                 ->locales(['ar','en','fr']); // also accepts a closure
         });
+      Model::unguard();
        
     }
 }

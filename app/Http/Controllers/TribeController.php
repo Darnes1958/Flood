@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Victims;
-use App\Http\Requests\StorevictimsRequest;
-use App\Http\Requests\UpdatevictimsRequest;
+use App\Models\Tribe;
+use App\Http\Requests\StoreTribeRequest;
+use App\Http\Requests\UpdateTribeRequest;
 
-class VictimsController extends Controller
+class TribeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class VictimsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorevictimsRequest $request)
+    public function store(StoreTribeRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class VictimsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Victims $victims)
+    public function show(Tribe $tribe)
     {
         //
     }
@@ -43,7 +43,7 @@ class VictimsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Victims $victims)
+    public function edit(Tribe $tribe)
     {
         //
     }
@@ -51,7 +51,7 @@ class VictimsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatevictimsRequest $request, Victims $victims)
+    public function update(UpdateTribeRequest $request, Tribe $tribe)
     {
         //
     }
@@ -59,7 +59,7 @@ class VictimsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Victims $victims)
+    public function destroy(Tribe $tribe)
     {
         //
     }

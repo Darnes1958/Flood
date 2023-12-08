@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Familys;
-use App\Http\Requests\StoreFamilysRequest;
-use App\Http\Requests\UpdateFamilysRequest;
+use App\Models\Area;
+use App\Http\Requests\StoreAreaRequest;
+use App\Http\Requests\UpdateAreaRequest;
 
-class FamilysController extends Controller
+class AreaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class FamilysController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreFamilysRequest $request)
+    public function store(StoreAreaRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class FamilysController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Familys $familys)
+    public function show(Area $area)
     {
         //
     }
@@ -43,7 +43,7 @@ class FamilysController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Familys $familys)
+    public function edit(Area $area)
     {
         //
     }
@@ -51,7 +51,7 @@ class FamilysController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateFamilysRequest $request, Familys $familys)
+    public function update(UpdateAreaRequest $request, Area $area)
     {
         //
     }
@@ -59,7 +59,7 @@ class FamilysController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Familys $familys)
+    public function destroy(Area $area)
     {
         //
     }

@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Area;
 
 return new class extends Migration
 {
@@ -11,13 +12,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('Victims', function (Blueprint $table) {
+        Schema::create('streets', function (Blueprint $table) {
             $table->id();
-            $table->string('Name1');
-            $table->string('Name2');
-            $table->string('Name3');
-            $table->string('Name4');
-
+            $table->string('StrName');
+            $table->foreignIdFor(Area::class );
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('Victims');
+        Schema::dropIfExists('streets');
     }
 };

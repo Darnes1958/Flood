@@ -24,10 +24,9 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-
+            ->maxContentWidth('md')
             ->sidebarFullyCollapsibleOnDesktop()
             ->default()
-
             ->id('admin')
             ->path('admin')
             ->login()
