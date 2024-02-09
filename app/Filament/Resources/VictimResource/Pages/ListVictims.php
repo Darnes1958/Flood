@@ -15,6 +15,11 @@ class ListVictims extends ListRecords
         return [
             Actions\CreateAction::make()
             ->label('إضافة ضحية جديدة'),
+          Actions\Action::make('byfammily')
+          ->label('ادحال يالعائلات')
+          ->icon('heroicon-m-users')
+            ->color('success')
+          ->url('victims/createbyfather')
         ];
     }
 }

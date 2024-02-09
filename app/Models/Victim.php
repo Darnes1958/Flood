@@ -28,6 +28,7 @@ class Victim extends Model
   public function mother(){
     return $this->hasMany(self::class, 'son_id');
   }
+
   public function sonOfFather(){
     return $this->belongsTo(self::class, 'father_id');
   }
@@ -35,7 +36,11 @@ class Victim extends Model
     return $this->belongsTo(self::class, 'mother_id');
   }
 
+  protected $casts = [
+    'is_mother' => 'boolean',
+    'is_father' => 'boolean',
 
+  ];
 
 
 }

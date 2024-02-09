@@ -16,6 +16,7 @@ use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Closure;
+use Hamcrest\Core\Set;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\Radio;
@@ -23,6 +24,7 @@ use Filament\Forms\Get;
 
 class VictimResource extends Resource
 {
+
     protected static ?string $model = Victim::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
@@ -32,12 +34,35 @@ class VictimResource extends Resource
     {
         return $form
             ->schema([
+              Forms\Components\Toggle::make('is_father')
+                ->onColor(function (Get $get){
+                  if ($get('male')=='ذكر') return 'success';
+                  else return 'gray';})
+                ->offColor(function (Get $get){
+                  if ($get('male')=='ذكر') return 'danger';
+                  else return 'gray';})
+               ->disabled(fn(Get $get): bool=>$get('male')=='أنثي')
+               ->label('أب'),
+              Forms\Components\Toggle::make('is_mother')
+                ->onColor(function (Get $get){
+                  if ($get('male')=='أنثي') return 'success';
+                  else return 'gray';})
+                ->offColor(function (Get $get){
+                  if ($get('male')=='أنثي') return 'danger';
+                  else return 'gray';})
+
+                ->label('أم'),
+
 
               Radio::make('male')
                 ->label('الجنس')
                 ->inline()
                 ->default('ذكر')
+                ->columnSpan(2)
                 ->reactive()
+                ->afterStateUpdated(function(Forms\Set $set,$state) {
+                  if ($state=='ذكر')  $set('is_mother',0);
+                  else $set('is_father',0);})
                 ->options([
                   'ذكر' => 'ذكر',
                   'أنثي' => 'أنثى',
@@ -81,6 +106,7 @@ class VictimResource extends Resource
                   ->where('male','أنثي'))
                 ->searchable()
                 ->reactive()
+                ->columnSpan(2)
                 ->preload(),
 
               TextInput::make('Name1')
@@ -179,8 +205,6 @@ class VictimResource extends Resource
     }
     public static function table(Table $table): Table
     {
-
-
         return $table
 
             ->striped()
@@ -238,6 +262,7 @@ class VictimResource extends Resource
     {
         return [
             'index' => Pages\ListVictims::route('/'),
+            'createbyfather' => Pages\CreateByFather::route('/createbyfather'),
             'create' => Pages\CreateVictim::route('/create'),
             'edit' => Pages\EditVictim::route('/{record}/edit'),
         ];
