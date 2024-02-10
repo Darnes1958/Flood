@@ -194,19 +194,19 @@ class CreateByFather extends Page implements HasTable
             ->label('الإسم الرابع'),
           Select::make('family_id')
             ->label('العائلة')
-            ->afterStateUpdated(function (Set $set,$state,Get $get) {
-              $set('FullName',$get('Name1').' '.$get('Name2').' '.$get('Name3').' '.$get('Name4')); })
-            ->extraAttributes(['wire:keydown.enter' => "Store(4)",])
             ->required()
             ->relationship('Family','FamName')
             ->searchable()
-            ->preload()
-            ->disabled(!$this->openInfo),
+            ->preload(),
+
           Select::make('street_id')
             ->label('الشارع')
             ->relationship('Street','StrName')
-            ->required()
-            ->disabled(!$this->openInfo),
+            ->live()
+            ->preload()
+
+            ->required(),
+
           TextInput::make('FullName')
             ->label('الاسم بالكامل')
             ->unique()
