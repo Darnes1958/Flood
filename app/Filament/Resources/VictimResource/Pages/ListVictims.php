@@ -9,6 +9,7 @@ use Filament\Resources\Pages\ListRecords;
 class ListVictims extends ListRecords
 {
     protected static string $resource = VictimResource::class;
+    protected ?string $heading="";
 
     protected function getHeaderActions(): array
     {

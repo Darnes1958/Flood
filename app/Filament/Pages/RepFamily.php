@@ -2,14 +2,20 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\Family;
 use App\Models\Victim;
+use Filament\Forms\Components\Select;
 use Filament\Pages\Page;
 use Filament\Tables\Columns\Summarizers\Count;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
-use Illuminate\Database\Query\Builder;
+
+use Illuminate\Database\Eloquent\Builder;
+
 use Illuminate\Support\Str;
 
 class RepFamily extends Page implements HasTable
@@ -26,13 +32,13 @@ class RepFamily extends Page implements HasTable
   {
     return $table
       ->query(function (Victim $victim)  {
-        $victim=Victim::where('is_father','!=',null)
-          ->orwhere('is_mother','!=',null)
+        $victim=Victim::where('is_father',1)
+        ->orwhere('is_mother',1)
         ->orwhere([
           ['father_id',null],
           ['mother_id',null],
-          ['is_father',null],
-          ['is_mother',null],
+          ['is_father','!=',1],
+          ['is_mother','!=',1],
         ]);
         return  $victim;
       })
@@ -40,6 +46,7 @@ class RepFamily extends Page implements HasTable
 
         TextColumn::make('FullName')
           ->label('الاسم بالكامل')
+
           ->color(function (Victim $record) {
             if ($record->is_father) return 'blue';
             if ($record->is_mother) return 'Fuchsia';
@@ -80,6 +87,6 @@ class RepFamily extends Page implements HasTable
           ->collapsible(),
       ])
       ->defaultGroup('Family.FamName')
-      ->striped();
+           ->striped();
   }
 }
