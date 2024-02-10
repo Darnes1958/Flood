@@ -10,7 +10,7 @@ class Family extends Model
     use HasFactory;
 
 
-    public function Victim(){
+    public function victims(){
       return $this->hasMany(Victim::class);
     }
     public function Tribe(){
