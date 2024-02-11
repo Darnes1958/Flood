@@ -4,6 +4,7 @@ namespace App\Filament\Resources\VictimResource\Pages;
 
 use App\Filament\Resources\VictimResource;
 use App\Models\Family;
+use App\Models\Street;
 use App\Models\Victim;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
@@ -47,12 +48,22 @@ class CreateByFather extends Page implements HasTable
     public $openInfo=false;
     public $openParaent=false;
 
+    public $name1;
+    public $name2;
+    public $name3;
+
+
 
 
   public function mount(): void
   {
+    $this->family_id=Family::where('FamName','غير محدد')->first()->id;
     $this->familyForm->fill([]);
-    $this->victimForm->fill([]);
+    $this->victimForm->fill([
+      'male'=>'ذكر',
+      'family_id'=>$this->family_id,
+      'street_id'=>Street::where('StrName','غير محدد')->first()->id,
+      ]);
 
   }
 
@@ -72,12 +83,14 @@ class CreateByFather extends Page implements HasTable
   }
 
   public function Store($tag){
-    if ($this->openName && $tag=1) $this->dispatch('gotoitem', test: 'Name2');
-    if ($this->openName && $tag=2) $this->dispatch('gotoitem', test: 'Name3');
-    if ($this->openName && $tag=3) $this->dispatch('gotoitem', test: 'Name4');
+    if ($tag==1 && !filled($this->victimData['Name2']))  {$this->dispatch('gotoitem', test: 'Name2'); return;}
+    if ($tag==2 ) {$this->dispatch('gotoitem', test: 'Name3');return;}
+    if ($tag==3) {$this->dispatch('gotoitem', test: 'Name4');return;}
     $this->validate();
 
     $this->victim=Victim::create($this->victimData);
+    if ($this->victim->wife_id) Victim::find($this->victim->wife_id)->update(['husband_id'=>$this->victim->id]);
+    if ($this->victim->husband_id) Victim::find($this->victim->husband_id)->update(['wife_id'=>$this->victim->id]);
     if ($this->victim->mother_id) Victim::find($this->victim->mother_id)->update(['is_mother'=>1]);
     if ($this->victim->father_id) Victim::find($this->victim->father_id)->update(['is_father'=>1]);
 
@@ -104,7 +117,6 @@ class CreateByFather extends Page implements HasTable
               if ($get('male')=='ذكر') return 'danger';
               else return 'gray';})
             ->disabled(fn(Get $get): bool=>$get('male')=='أنثي')
-            ->disabled($this->openParaent)
             ->label('أب'),
           Toggle::make('is_mother')
             ->onColor(function (Get $get){
@@ -113,7 +125,7 @@ class CreateByFather extends Page implements HasTable
             ->offColor(function (Get $get){
               if ($get('male')=='أنثي') return 'danger';
               else return 'gray';})
-            ->disabled($this->openParaent)
+            ->disabled(fn(Get $get): bool=>$get('male')=='ذكر')
             ->label('أم'),
           Radio::make('male')
             ->label('الجنس')
@@ -122,7 +134,7 @@ class CreateByFather extends Page implements HasTable
             ->columnSpan(2)
             ->reactive()
             ->required()
-            ->disabled($this->openParaent)
+
             ->afterStateUpdated(function(Set $set,$state) {
               if ($state=='ذكر')  $set('is_mother',0);
               else $set('is_father',0);})
@@ -130,6 +142,52 @@ class CreateByFather extends Page implements HasTable
               'ذكر' => 'ذكر',
               'أنثي' => 'أنثى',
             ]),
+          Select::make('family_id')
+            ->label('العائلة')
+            ->required()
+            ->relationship('Family','FamName')
+            ->searchable()
+            ->createOptionForm([
+              TextInput::make('FamName')
+                ->required()
+                ->label('اسم العائلة')
+                ->unique()
+                ->maxLength(255),
+              Select::make('tribe_id')
+                ->relationship('Tribe','TriName')
+                ->label('القبيلة')
+
+                ->searchable()
+                ->preload()
+                ->createOptionForm([
+                  TextInput::make('TriName')
+                    ->required()
+                    ->label('اسم القبيلة')
+                    ->maxLength(255)
+                    ->unique()
+                    ->required(),
+                ])
+                ->reactive()
+                ->required(),
+            ])
+            ->editOptionForm([
+              TextInput::make('FamName')
+                ->required()
+                ->label('اسم العائلة')
+                ->maxLength(255),
+              Select::make('tribe_id')
+                ->relationship('Tribe','TriName')
+                ->label('القبيلة')
+                ->searchable()
+                ->preload()
+                ->reactive()
+                ->required(),
+            ])
+            ->afterStateUpdated(function ($state){
+              $this->family_id=$state;
+            })
+            ->preload(),
+
           Select::make('husband_id')
             ->label('زوجة')
             ->relationship('husband', 'FullName', fn (Builder $query) => $query
@@ -137,7 +195,6 @@ class CreateByFather extends Page implements HasTable
             ->searchable()
             ->reactive()
             ->preload()
-
             ->visible(fn (Get $get) => $get('male') == 'أنثي'),
           Select::make('wife_id')
             ->label('زوج')
@@ -146,7 +203,6 @@ class CreateByFather extends Page implements HasTable
             ->searchable()
             ->reactive()
             ->preload()
-
             ->visible(fn (Get $get) => $get('male') == 'ذكر'),
           Select::make('father_id')
             ->label('والده')
@@ -154,18 +210,17 @@ class CreateByFather extends Page implements HasTable
               ->where('male','ذكر'))
             ->searchable()
             ->preload(),
-
           Select::make('mother_id')
             ->label('والدته')
             ->relationship('sonOfMother','FullName', fn (Builder $query) => $query
               ->where('male','أنثي'))
             ->searchable()
             ->preload(),
-
           TextInput::make('Name1')
             ->label('الإسم الاول')
             ->afterStateUpdated(function (Set $set,$state,Get $get) {
               $set('FullName',$state.' '.$get('Name2').' '.$get('Name3').' '.$get('Name4'));
+              $this->name1=$state;
             })
             ->live(onBlur: true)
             ->extraAttributes([
@@ -176,40 +231,38 @@ class CreateByFather extends Page implements HasTable
           TextInput::make('Name2')
             ->label('الإسم الثاني')
             ->afterStateUpdated(function (Set $set,$state,Get $get) {
-              $set('FullName',$get('Name1').' '.$get('Name2').' '.$get('Name3').' '.$get('Name4')); })
+              $set('FullName',$get('Name1').' '.$get('Name2').' '.$get('Name3').' '.$get('Name4'));
+              $this->name2=$state;
+            })
             ->extraAttributes(['wire:keydown.enter' => "Store(2)",])
-            ->disabled(!$this->openName)
+            ->id('Name2')
             ->required(),
           TextInput::make('Name3')
             ->afterStateUpdated(function (Set $set,$state,Get $get) {
-              $set('FullName',$get('Name1').' '.$get('Name2').' '.$get('Name3').' '.$get('Name4')); })
+              $set('FullName',$get('Name1').' '.$get('Name2').' '.$get('Name3').' '.$get('Name4'));
+              $this->name3=$state;
+            })
             ->extraAttributes(['wire:keydown.enter' => "Store(3)",])
-            ->disabled(!$this->openName)
+            ->id('Name3')
             ->label('الإسم الثالث'),
           TextInput::make('Name4')
             ->afterStateUpdated(function (Set $set,$state,Get $get) {
               $set('FullName',$get('Name1').' '.$get('Name2').' '.$get('Name3').' '.$get('Name4')); })
-            ->extraAttributes(['wire:keydown.enter' => "Store(3)",])
-            ->disabled(!$this->openName)
+            ->extraAttributes(['wire:keydown.enter' => "Store(4)",])
+            ->id('Name4')
             ->label('الإسم الرابع'),
-          Select::make('family_id')
-            ->label('العائلة')
-            ->required()
-            ->relationship('Family','FamName')
-            ->searchable()
-            ->preload(),
 
           Select::make('street_id')
             ->label('الشارع')
             ->relationship('Street','StrName')
-            ->live()
+            ->searchable()
             ->preload()
-
             ->required(),
 
           TextInput::make('FullName')
             ->label('الاسم بالكامل')
             ->unique()
+            ->columnSpan(2)
             ->disabled(),
 
         ])->columns(4)
@@ -351,12 +404,25 @@ class CreateByFather extends Page implements HasTable
       ->query(function (Victim $victim)  {
 
          $victim=Victim::
-         when($this->father_id,function ($q){
+         when($this->family_id,function ($q){
+           $q->where('family_id',$this->family_id) ;
+         })
+         ->when($this->father_id,function ($q){
            $q->where('father_id',$this->father_id) ;
          })
          ->when($this->mother_id,function ($q){
            $q->where('mother_id',$this->mother_id) ;
-          });
+          })
+        ->when((!$this->mother_id && !$this->father_id && $this->name1  ),function ($q){
+          $q->where('Name1','like','%'.$this->name1.'%') ;
+        })
+        ->when((!$this->mother_id && !$this->father_id && $this->name2  ),function ($q){
+          $q->where('Name2','like','%'.$this->name2.'%') ;
+        })
+        ->when((!$this->mother_id && !$this->father_id && $this->name3  ),function ($q){
+          $q->where('Name3','like','%'.$this->name3.'%') ;
+        });
+
 
 
         return  $victim;
