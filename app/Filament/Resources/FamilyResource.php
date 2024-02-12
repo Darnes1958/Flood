@@ -46,10 +46,10 @@ class FamilyResource extends Resource
                  ->label('الاسم'),
                 Tables\Columns\TextColumn::make('Tribe.TriName')
                   ->label('القبيلة'),
-
             ])
             ->filters([
-                //
+              Tables\Filters\SelectFilter::make('فلترة بالقبيلة')
+                ->relationship('Tribe','TriName'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
