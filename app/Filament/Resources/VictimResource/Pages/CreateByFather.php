@@ -254,6 +254,33 @@ class CreateByFather extends Page implements HasTable
           Select::make('street_id')
             ->label('الشارع')
             ->relationship('Street','StrName')
+              ->createOptionForm([
+                 TextInput::make('StrName')
+                      ->required()
+                      ->label('اسم الشارع')
+                      ->unique()
+                      ->maxLength(255),
+                  Select::make('area_id')
+                      ->relationship('Area','AreaName')
+                      ->label('المحلة')
+                      ->searchable()
+                      ->preload()
+                      ->reactive()
+                      ->required(),
+              ])
+              ->editOptionForm([
+                  TextInput::make('StrName')
+                      ->required()
+                      ->label('اسم الشارع')
+                      ->maxLength(255),
+                  Select::make('area_id')
+                      ->relationship('Area','AreaName')
+                      ->label('المحلة')
+                      ->searchable()
+                      ->preload()
+                      ->reactive()
+                      ->required(),
+              ])
             ->searchable()
             ->preload()
             ->required(),
