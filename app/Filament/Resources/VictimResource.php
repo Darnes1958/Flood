@@ -30,6 +30,11 @@ class VictimResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $pluralModelLabel='ضحايا';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
     public static function form(Form $form): Form
     {
         return $form

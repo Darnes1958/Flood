@@ -107,7 +107,6 @@ class CreateByFather extends Page implements HasTable
   {
     return [
       Section::make()
-        ->collapsible()
         ->schema([
           Toggle::make('is_father')
             ->onColor(function (Get $get){
@@ -331,10 +330,8 @@ class CreateByFather extends Page implements HasTable
   protected function getFamilyFormSchema(): array
   {
     return [
-      Section::make('اختيار بواسطة الأب او الأم')
-        ->icon('heroicon-m-user-group')
-        ->iconColor('info')
-        ->collapsible()
+      Section::make()
+
        ->schema([
          Actions::make([
            Action::make('father')
