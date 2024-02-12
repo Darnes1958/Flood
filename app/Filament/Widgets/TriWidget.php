@@ -15,6 +15,7 @@ use Illuminate\Support\HtmlString;
 
 class TriWidget extends BaseWidget
 {
+    protected int | string | array $columnSpan=1;
     public function table(Table $table): Table
     {
         return $table
@@ -25,6 +26,7 @@ class TriWidget extends BaseWidget
             )
             ->heading(new HtmlString('<div class="text-primary-400 text-lg">العدد حسب القبائل</div>'))
             ->defaultPaginationPageOption(5)
+
             ->defaultSort('victim_count','desc')
             ->striped()
             ->columns([
@@ -34,6 +36,7 @@ class TriWidget extends BaseWidget
                 ->label('القبيلة'),
                 TextColumn::make('victim_count')
                  ->counts('Victim')
+
                  ->color('warning')
                  ->sortable()
                  ->label('العدد')
