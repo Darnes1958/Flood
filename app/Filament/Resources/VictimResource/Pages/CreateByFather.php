@@ -100,7 +100,7 @@ class CreateByFather extends Page implements HasTable
       if ($this->victimData['male']=='أنثي' && $this->victimData['is_father']==1)
       {
           Notification::make()
-              ->title('لا يجوز أن يكون انثي وأم')
+              ->title('لا يجوز أن يكون انثي وأب')
               ->success()
               ->send();
           return;
@@ -222,9 +222,12 @@ class CreateByFather extends Page implements HasTable
             ->preload(),
           TextInput::make('Name1')
             ->label('الإسم الاول')
-            ->afterStateUpdated(function ($state) {
+            ->afterStateUpdated(function ($state,Set $set,Get $get) {
 
               $this->name1=$state;
+              $set('FullName',$get('Name1').' '.$get('Name2').
+                  ' '.$get('Name3').' '.$get('Name4'));
+
             })
             ->live(onBlur: true)
             ->extraAttributes([
@@ -251,6 +254,13 @@ class CreateByFather extends Page implements HasTable
           TextInput::make('Name4')
             ->extraAttributes(['wire:keydown.enter' => "Store(4)",])
             ->id('Name4')
+              ->afterStateUpdated(function (Set $set,Get $get) {
+
+
+                  $set('FullName',$get('Name1').' '.$get('Name2').
+                      ' '.$get('Name3').' '.$get('Name4'));
+
+              })
             ->label('الإسم الرابع'),
 
           Select::make('street_id')
