@@ -115,7 +115,7 @@ class CreateByFather extends Page implements HasTable
             ->offColor(function (Get $get){
               if ($get('male')=='ذكر') return 'danger';
               else return 'gray';})
-            ->disabled(fn(Get $get): bool=>$get('male')=='أنثي')
+
             ->label('أب'),
           Toggle::make('is_mother')
             ->onColor(function (Get $get){
@@ -124,7 +124,7 @@ class CreateByFather extends Page implements HasTable
             ->offColor(function (Get $get){
               if ($get('male')=='أنثي') return 'danger';
               else return 'gray';})
-            ->disabled(fn(Get $get): bool=>$get('male')=='ذكر')
+
             ->label('أم'),
           Radio::make('male')
             ->label('الجنس')
@@ -133,10 +133,6 @@ class CreateByFather extends Page implements HasTable
             ->columnSpan(2)
             ->reactive()
             ->required()
-
-            ->afterStateUpdated(function(Set $set,$state) {
-              if ($state=='ذكر')  $set('is_mother',0);
-              else $set('is_father',0);})
             ->options([
               'ذكر' => 'ذكر',
               'أنثي' => 'أنثى',
@@ -182,8 +178,9 @@ class CreateByFather extends Page implements HasTable
                 ->reactive()
                 ->required(),
             ])
-            ->afterStateUpdated(function ($state){
+            ->afterStateUpdated(function ($state,Set $set){
               $this->family_id=$state;
+              $set('Name4',Family::find($state)->FamName);
             })
             ->preload(),
 
@@ -217,8 +214,8 @@ class CreateByFather extends Page implements HasTable
             ->preload(),
           TextInput::make('Name1')
             ->label('الإسم الاول')
-            ->afterStateUpdated(function (Set $set,$state,Get $get) {
-              $set('FullName',$state.' '.$get('Name2').' '.$get('Name3').' '.$get('Name4'));
+            ->afterStateUpdated(function ($state) {
+
               $this->name1=$state;
             })
             ->live(onBlur: true)
@@ -229,24 +226,21 @@ class CreateByFather extends Page implements HasTable
             ->required(),
           TextInput::make('Name2')
             ->label('الإسم الثاني')
-            ->afterStateUpdated(function (Set $set,$state,Get $get) {
-              $set('FullName',$get('Name1').' '.$get('Name2').' '.$get('Name3').' '.$get('Name4'));
+            ->afterStateUpdated(function ($state) {
+
               $this->name2=$state;
             })
             ->extraAttributes(['wire:keydown.enter' => "Store(2)",])
             ->id('Name2')
             ->required(),
           TextInput::make('Name3')
-            ->afterStateUpdated(function (Set $set,$state,Get $get) {
-              $set('FullName',$get('Name1').' '.$get('Name2').' '.$get('Name3').' '.$get('Name4'));
+            ->afterStateUpdated(function ($state) {
               $this->name3=$state;
             })
             ->extraAttributes(['wire:keydown.enter' => "Store(3)",])
             ->id('Name3')
             ->label('الإسم الثالث'),
           TextInput::make('Name4')
-            ->afterStateUpdated(function (Set $set,$state,Get $get) {
-              $set('FullName',$get('Name1').' '.$get('Name2').' '.$get('Name3').' '.$get('Name4')); })
             ->extraAttributes(['wire:keydown.enter' => "Store(4)",])
             ->id('Name4')
             ->label('الإسم الرابع'),
