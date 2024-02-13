@@ -16,6 +16,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Page;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
@@ -88,6 +89,23 @@ class CreateByFather extends Page implements HasTable
     if ($tag==3) {$this->dispatch('gotoitem', test: 'Name4');return;}
     $this->validate();
 
+    if ($this->victimData['male']=='ذكر' && $this->victimData['is_mother']==1)
+    {
+        Notification::make()
+            ->title('لا يجوز أن يكون ذكر وام')
+            ->success()
+            ->send();
+        return;
+    }
+      if ($this->victimData['male']=='أنثي' && $this->victimData['is_father']==1)
+      {
+          Notification::make()
+              ->title('لا يجوز أن يكون انثي وأم')
+              ->success()
+              ->send();
+          return;
+      }
+
     $this->victim=Victim::create($this->victimData);
     if ($this->victim->wife_id) Victim::find($this->victim->wife_id)->update(['husband_id'=>$this->victim->id]);
     if ($this->victim->husband_id) Victim::find($this->victim->husband_id)->update(['wife_id'=>$this->victim->id]);
@@ -109,22 +127,12 @@ class CreateByFather extends Page implements HasTable
       Section::make()
         ->schema([
           Toggle::make('is_father')
-            ->onColor(function (Get $get){
-              if ($get('male')=='ذكر') return 'success';
-              else return 'gray';})
-            ->offColor(function (Get $get){
-              if ($get('male')=='ذكر') return 'danger';
-              else return 'gray';})
-
+            ->onColor( 'success')
+            ->offColor( 'danger')
             ->label('أب'),
           Toggle::make('is_mother')
-            ->onColor(function (Get $get){
-              if ($get('male')=='أنثي') return 'success';
-              else return 'gray';})
-            ->offColor(function (Get $get){
-              if ($get('male')=='أنثي') return 'danger';
-              else return 'gray';})
-
+            ->onColor('success')
+            ->offColor( 'danger')
             ->label('أم'),
           Radio::make('male')
             ->label('الجنس')
