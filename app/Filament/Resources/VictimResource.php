@@ -218,7 +218,6 @@ class VictimResource extends Resource
 
               Tables\Columns\TextColumn::make('FullName')
               ->label('الاسم بالكامل')
-
               ->size(Tables\Columns\TextColumn\TextColumnSize::ExtraSmall)
               ->searchable(),
               Tables\Columns\TextColumn::make('Street.StrName')
@@ -226,12 +225,16 @@ class VictimResource extends Resource
               Tables\Columns\TextColumn::make('Street.Area.AreaName')
                 ->label('المحلة'),
               Tables\Columns\TextColumn::make('Family.FamName')
+                ->sortable()
                 ->label('العائلة'),
               Tables\Columns\TextColumn::make('Family.Tribe.TriName')
+                ->sortable()
                 ->label('القبيلة'),
               Tables\Columns\ImageColumn::make('image')
-
                 ->circular(),
+              Tables\Columns\TextColumn::make('created_at')
+                ->sortable()
+              ->label('تاريخ الادخال')
 
             ])
           ->actions([
