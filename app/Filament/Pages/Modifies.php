@@ -216,7 +216,6 @@ class Modifies extends Page implements HasTable,HasForms
         BulkActionGroup::make([
           BulkAction::make('editStreet')
             ->label('تعديل الشارع')
-
             ->hidden(!$this->street_id)
             ->requiresConfirmation()
             ->action(fn (Collection $records) => $records->each->update([
@@ -224,7 +223,7 @@ class Modifies extends Page implements HasTable,HasForms
             ])),
           BulkAction::make('editFamily')
             ->label('تعديل العائلة')
-            ->hidden(!$this->family_id)
+            ->hidden(!$this->newFamily_id)
             ->requiresConfirmation()
             ->action(fn (Collection $records) => $records->each->update([
               'family_id'=>$this->newFamily_id
