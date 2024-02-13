@@ -115,6 +115,18 @@ class CreateByFather extends Page implements HasTable
     if ($this->victim->mother_id) Victim::find($this->victim->mother_id)->update(['is_mother'=>1]);
     if ($this->victim->father_id) Victim::find($this->victim->father_id)->update(['is_father'=>1]);
 
+    if ($this->victim->is_father) {
+
+       $mother=$this->victim->wife_id;
+      $this->victimForm->fill([
+        'Name1' => '',
+        'Name2' => $this->victimData['Name1'], 'Name3' => $this->victimData['Name2'], 'Name4' => $this->victimData['Name4'],
+        'family_id' => $this->victimData['family_id'], 'street_id' => $this->victimData['street_id'],
+        'father_id' => $this->victim->id, 'mother_id' => $mother,
+        'male' => 'ذكر',
+      ]);
+    }
+    else
     $this->victimForm->fill([
       'Name1'=>'',
       'Name2'=>$this->victimData['Name2'],'Name3'=>$this->victimData['Name3'],'Name4'=>$this->victimData['Name4'],
