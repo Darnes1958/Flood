@@ -105,7 +105,10 @@ class CreateByFather extends Page implements HasTable
               ->send();
           return;
       }
-
+      $this->victimData['FullName']=$this->victimData['Name1'].' '.
+          $this->victimData['Name2'].' '.
+          $this->victimData['Name3'].' '.
+          $this->victimData['Name4'];
     $this->victim=Victim::create($this->victimData);
     if ($this->victim->wife_id) Victim::find($this->victim->wife_id)->update(['husband_id'=>$this->victim->id]);
     if ($this->victim->husband_id) Victim::find($this->victim->husband_id)->update(['wife_id'=>$this->victim->id]);
@@ -225,8 +228,7 @@ class CreateByFather extends Page implements HasTable
             ->afterStateUpdated(function ($state,Set $set,Get $get) {
 
               $this->name1=$state;
-              $set('FullName',$get('Name1').' '.$get('Name2').
-                  ' '.$get('Name3').' '.$get('Name4'));
+
 
             })
             ->live(onBlur: true)
@@ -237,30 +239,30 @@ class CreateByFather extends Page implements HasTable
             ->required(),
           TextInput::make('Name2')
             ->label('الإسم الثاني')
-            ->afterStateUpdated(function ($state) {
+            ->live(onBlur: true)
+            ->afterStateUpdated(function ($state,Set $set,Get $get) {
 
               $this->name2=$state;
+
             })
             ->extraAttributes(['wire:keydown.enter' => "Store(2)",])
+
             ->id('Name2')
             ->required(),
           TextInput::make('Name3')
-            ->afterStateUpdated(function ($state) {
+            ->afterStateUpdated(function ($state,Set $set,Get $get) {
+
               $this->name3=$state;
             })
+
             ->extraAttributes(['wire:keydown.enter' => "Store(3)",])
             ->id('Name3')
             ->label('الإسم الثالث'),
           TextInput::make('Name4')
             ->extraAttributes(['wire:keydown.enter' => "Store(4)",])
+
             ->id('Name4')
-              ->afterStateUpdated(function (Set $set,Get $get) {
 
-
-                  $set('FullName',$get('Name1').' '.$get('Name2').
-                      ' '.$get('Name3').' '.$get('Name4'));
-
-              })
             ->label('الإسم الرابع'),
 
           Select::make('street_id')
