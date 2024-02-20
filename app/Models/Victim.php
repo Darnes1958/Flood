@@ -36,6 +36,16 @@ class Victim extends Model
     return $this->belongsTo(self::class, 'mother_id');
   }
 
+  public function Job(){
+      return $this->belongsTo(Job::class);
+  }
+  public function Qualification(){
+    return    $this->belongsTo(Qualification::class);
+  }
+  public function Talent(){
+    return $this->belongsTo(Talent::class);
+  }
+
   protected $casts = [
     'is_mother' => 'boolean',
     'is_father' => 'boolean',

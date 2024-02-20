@@ -198,9 +198,70 @@ class VictimResource extends Resource
                     ->required(),
                 ])
                 ->required(),
+
+              Select::make('qualification_id')
+                ->label('المؤهل')
+                ->relationship('Qualification','name')
+                ->searchable()
+                ->preload()
+                ->reactive()
+                ->createOptionForm([
+                  Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->label('المؤهل')
+                    ->maxLength(255),
+                ])
+                ->editOptionForm([
+                  TextInput::make('name')
+                    ->required()
+                    ->label('المؤهل')
+                    ->maxLength(255),
+                ]),
+
+
+              Select::make('job_id')
+                ->label('الوظيفة')
+                ->relationship('Job','name')
+                ->searchable()
+                ->preload()
+                ->reactive()
+                ->createOptionForm([
+                  Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->label('الوظيفة')
+                    ->maxLength(255),
+                ])
+                ->editOptionForm([
+                  TextInput::make('name')
+                    ->required()
+                    ->label('الوظيفة')
+                    ->maxLength(255),
+                ]),
+
+              Select::make('talent_id')
+                ->label('الموهبة')
+                ->relationship('Talent','name')
+                ->searchable()
+                ->preload()
+                ->reactive()
+                ->createOptionForm([
+                  Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->label('الموهبة')
+                    ->maxLength(255),
+                ])
+                ->editOptionForm([
+                  TextInput::make('name')
+                    ->required()
+                    ->label('الموهبة')
+                    ->maxLength(255),
+                ]),
+              TextInput::make('notes')
+                ->columnSpan()
+                ->label('ملاحظات'),
+
               Forms\Components\FileUpload::make('image')
-                ->directory('form-attachments')
-              ,
+                ->directory('form-attachments'),
               TextInput::make('FullName')
               ->hidden(),
 
