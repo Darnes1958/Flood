@@ -266,7 +266,7 @@ class VictimResource extends Resource
                     ->maxLength(255),
                 ]),
               TextInput::make('notes')
-                ->columnSpan()
+                ->columnSpan(2)
                 ->label('ملاحظات'),
 
               Forms\Components\FileUpload::make('image')
