@@ -64,6 +64,8 @@ class RepFamily extends Page implements HasTable
             {
               $vic=Victim::where('wife_id',$record->id)->first();
               if ($vic) return 'زوجة : '.$vic->FullName;
+              $vic=Victim::where('wife2_id',$record->id)->first();
+              if ($vic) return 'زوجة ثانية لـ: '.$vic->FullName;
               else return (null);
             }
           }

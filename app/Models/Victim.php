@@ -19,6 +19,9 @@ class Victim extends Model
   public function wife(){
     return $this->belongsTo(self::class, 'husband_id');
   }
+    public function wife2(){
+        return $this->belongsTo(self::class, 'husband_id');
+    }
   public function husband(){
     return $this->belongsTo(self::class, 'wife_id');
   }

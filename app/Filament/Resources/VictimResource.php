@@ -80,6 +80,7 @@ class VictimResource extends Resource
                ->reactive()
                ->preload()
                ->visible(fn (Get $get) => $get('male') == 'أنثي'),
+
               Select::make('wife_id')
                 ->label('زوج')
                 ->relationship('wife','FullName', fn (Builder $query) => $query
@@ -88,6 +89,14 @@ class VictimResource extends Resource
                 ->reactive()
                 ->preload()
                 ->visible(fn (Get $get) => $get('male') == 'ذكر'),
+                Select::make('wife2_id')
+                    ->label('زوجة ثانية')
+                    ->relationship('wife2','FullName', fn (Builder $query) => $query
+                        ->where('male','أنثي'))
+                    ->searchable()
+                    ->reactive()
+                    ->preload()
+                    ->visible(fn (Get $get) => $get('male') == 'ذكر'),
               Select::make('father_id')
                 ->label('والده')
                 ->relationship('sonOfFather','FullName', fn (Builder $query) => $query
@@ -111,7 +120,7 @@ class VictimResource extends Resource
                   ->where('male','أنثي'))
                 ->searchable()
                 ->reactive()
-                ->columnSpan(2)
+
                 ->preload(),
 
               TextInput::make('Name1')
