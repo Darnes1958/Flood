@@ -5,7 +5,10 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\VictimResource\Pages;
 use App\Filament\Resources\VictimResource\RelationManagers;
 use App\Models\Area;
+use App\Models\Job;
+use App\Models\Qualification;
 use App\Models\Street;
+use App\Models\Talent;
 use App\Models\Tribe;
 use App\Models\Victim;
 use Filament\Forms;
@@ -283,7 +286,7 @@ class VictimResource extends Resource
         return $table
 
             ->striped()
-
+            ->defaultSort('id','desc')
             ->columns([
 
               Tables\Columns\TextColumn::make('FullName')
@@ -292,19 +295,30 @@ class VictimResource extends Resource
               ->searchable(),
               Tables\Columns\TextColumn::make('Street.StrName')
                 ->label('الشارع'),
-              Tables\Columns\TextColumn::make('Street.Area.AreaName')
-                ->label('المحلة'),
+
               Tables\Columns\TextColumn::make('Family.FamName')
                 ->sortable()
+
                 ->label('العائلة'),
-              Tables\Columns\TextColumn::make('Family.Tribe.TriName')
-                ->sortable()
-                ->label('القبيلة'),
+                Tables\Columns\SelectColumn::make('male')
+                    ->options([
+                        'ذكر' => 'ذكر',
+                        'أنثي' => 'أنثي',
+                    ]),
+
+                Tables\Columns\SelectColumn::make('qualification_id')
+                    ->label('المهنة')
+                    ->options(Qualification::all()->pluck('name','id')),
+                Tables\Columns\SelectColumn::make('job_id')
+                    ->label('الوظيفة')
+                    ->options(Job::all()->pluck('name','id')),
+
+              Tables\Columns\SelectColumn::make('talent_id')
+               ->label('الموهبة')
+               ->options(Talent::all()->pluck('name','id')),
               Tables\Columns\ImageColumn::make('image')
                 ->circular(),
-              Tables\Columns\TextColumn::make('created_at')
-                ->sortable()
-              ->label('تاريخ الادخال')
+
 
             ])
           ->actions([
