@@ -10,15 +10,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use Illuminate\View\View;
+use Filament\Http\Responses\Auth\Contracts\LoginResponse;
+
 
 class AppServiceProvider extends ServiceProvider
 {
+
     /**
      * Register any application services.
      */
     public function register(): void
     {
-        //
+      $this->app->singleton(
+        LoginResponse::class,
+        \App\Http\Responses\LoginResponse::class
+      );
     }
 
     /**
@@ -31,6 +37,8 @@ class AppServiceProvider extends ServiceProvider
         'green' =>  Color::Green,
         'blue' =>  Color::Blue,
         'gray' =>  Color::Gray,
+        'yellow' =>  Color::Yellow,
+        'rose' => Color::Rose,
       ]);
       FilamentView::registerRenderHook(
         'panels::page.end',

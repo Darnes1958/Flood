@@ -184,7 +184,7 @@ class VictimResource extends Resource
                 ->preload()
                 ->reactive()
                 ->createOptionForm([
-                  Forms\Components\TextInput::make('StrName')
+                  TextInput::make('StrName')
                     ->required()
                     ->label('اسم الشارع')
                     ->maxLength(255),
@@ -250,24 +250,8 @@ class VictimResource extends Resource
                     ->maxLength(255),
                 ]),
 
-              Select::make('talent_id')
-                ->label('الموهبة')
-                ->relationship('Talent','name')
-                ->searchable()
-                ->preload()
-                ->reactive()
-                ->createOptionForm([
-                  Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->label('الموهبة')
-                    ->maxLength(255),
-                ])
-                ->editOptionForm([
-                  TextInput::make('name')
-                    ->required()
-                    ->label('الموهبة')
-                    ->maxLength(255),
-                ]),
+
+
               TextInput::make('notes')
                 ->columnSpan(2)
                 ->label('ملاحظات'),
@@ -312,10 +296,9 @@ class VictimResource extends Resource
                 Tables\Columns\SelectColumn::make('job_id')
                     ->label('الوظيفة')
                     ->options(Job::all()->pluck('name','id')),
+                Tables\Columns\TextColumn::make('VicTalent.Talent.name')
+                    ->label('المواهب'),
 
-              Tables\Columns\SelectColumn::make('talent_id')
-               ->label('الموهبة')
-               ->options(Talent::all()->pluck('name','id')),
               Tables\Columns\ImageColumn::make('image')
                 ->circular(),
 
@@ -324,6 +307,12 @@ class VictimResource extends Resource
           ->actions([
             Tables\Actions\EditAction::make(),
             Tables\Actions\ViewAction::make(),
+            Tables\Actions\Action::make('talent')
+              ->label('مواهب')
+              ->icon('heroicon-m-plus')
+              ->color('success')
+              ->url(fn(Model $record) => self::getUrl('createtalent', ['record' => $record])),
+
           ])
 
             ->filters([
@@ -357,6 +346,7 @@ class VictimResource extends Resource
             'createbyfather' => Pages\CreateByFather::route('/createbyfather'),
             'create' => Pages\CreateVictim::route('/create'),
             'edit' => Pages\EditVictim::route('/{record}/edit'),
+            'createtalent' => Pages\CreateTalent::route('/{record}/createtalent'),
         ];
     }
 }

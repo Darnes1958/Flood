@@ -9,6 +9,6 @@ class Talent extends Model
 {
   protected $table='talent';
   public function Victim(){
-    return $this->hasMany(Victim::class);
+   return $this->hasMany(VicTalent::class);
   }
 }

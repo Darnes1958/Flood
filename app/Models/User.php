@@ -6,12 +6,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable;
+  public function canAccessPanel(Panel $panel): bool
+  {
+    if ($panel->getId() === 'admin') {
+      return Auth::user()->is_admin;
+    }
 
+    return true;
+  }
     /**
      * The attributes that are mass assignable.
      *

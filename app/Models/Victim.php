@@ -26,10 +26,10 @@ class Victim extends Model
     return $this->belongsTo(self::class, 'wife_id');
   }
     public function father(){
-     return $this->hasMany(self::class, 'son_id');
+     return $this->hasMany(self::class, 'father_id');
     }
   public function mother(){
-    return $this->hasMany(self::class, 'son_id');
+    return $this->hasMany(self::class, 'mother_id');
   }
 
   public function sonOfFather(){
@@ -45,9 +45,12 @@ class Victim extends Model
   public function Qualification(){
     return    $this->belongsTo(Qualification::class);
   }
-  public function Talent(){
-    return $this->belongsTo(Talent::class);
+
+  public function VicTalent(){
+      return  $this->hasMany(VicTalent::class);
   }
+
+
 
   protected $casts = [
     'is_mother' => 'boolean',
