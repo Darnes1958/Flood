@@ -84,8 +84,6 @@ class CreateTalent extends Page
               ->color('success')
               ->requiresConfirmation()
               ->action(function () {
-
-                info($this->talentData);
                 VicTalent::where('victim_id',$this->getRecord()->id)->delete();
                 foreach ($this->talentData['talent_id'] as $t_id) {
                     VicTalent::create([

@@ -16,6 +16,7 @@ use Illuminate\Support\HtmlString;
 class TriWidget extends BaseWidget
 {
     protected int | string | array $columnSpan=1;
+    protected static ?int $sort=2;
     public function table(Table $table): Table
     {
         return $table
