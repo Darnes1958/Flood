@@ -108,13 +108,14 @@ class VictimResource extends Resource
                 ->reactive()
                 ->afterStateUpdated(function (Forms\Set $set, ?string $state) {
                   $rec=Victim::where('id',$state)->first();
-                  $set('Name2',$rec->Name1);
-                  $set('Name3',$rec->Name2);
-                  $set('Name4',$rec->Name4);
-                  $set('family_id',$rec->family_id);
-                  $set('street_id',$rec->street_id);
-                  if ($rec->wife_id) $set('mother_id',$rec->wife_id);
-
+                  if ($rec) {
+                      $set('Name2', $rec->Name1);
+                      $set('Name3', $rec->Name2);
+                      $set('Name4', $rec->Name4);
+                      $set('family_id', $rec->family_id);
+                      $set('street_id', $rec->street_id);
+                      if ($rec->wife_id) $set('mother_id', $rec->wife_id);
+                  }
                 })
                 ->preload(),
               Select::make('mother_id')
