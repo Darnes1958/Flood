@@ -22,6 +22,7 @@ use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class Modifies extends Page implements HasTable,HasForms
@@ -40,6 +41,8 @@ class Modifies extends Page implements HasTable,HasForms
 
   public $street_id;
   public $newFamily_id;
+  public $newFather_id;
+  public $newMother_id;
 
   public $familyData;
 
@@ -63,7 +66,6 @@ class Modifies extends Page implements HasTable,HasForms
     return [
       Section::make()
         ->schema([
-
           Select::make('family_id')
             ->hiddenLabel()
             ->prefix('العائلة')
@@ -86,7 +88,6 @@ class Modifies extends Page implements HasTable,HasForms
             ->preload()
             ->live()
             ->searchable()
-            ->columnSpan(2)
             ->afterStateUpdated( function($state){
               $this->mother_id=null;
               $this->father_id=$state;
@@ -102,14 +103,13 @@ class Modifies extends Page implements HasTable,HasForms
             ->preload()
             ->live()
             ->searchable()
-            ->columnSpan(2)
             ->afterStateUpdated( function($state){
               $this->father_id=null;
               $this->mother_id=$state;
             }),
 
 
-        ])->columns(6),
+        ])->columns(4),
       Section::make()
          ->schema([
 
@@ -122,7 +122,7 @@ class Modifies extends Page implements HasTable,HasForms
              ->preload()
              ->live()
              ->searchable()
-             ->columnSpan(2)
+
              ->afterStateUpdated(function ($state){
                $this->street_id=$state;
              }),
@@ -136,13 +136,41 @@ class Modifies extends Page implements HasTable,HasForms
              ->preload()
              ->live()
              ->searchable()
-             ->columnSpan(2)
+
              ->afterStateUpdated(function ($state){
                $this->newFamily_id=$state;
              }),
+             Select::make('newFather_id')
+                 ->hiddenLabel()
+                 ->prefix('تعديل الأب')
+                 ->prefixIcon('heroicon-m-pencil')
+                 ->prefixIconColor('info')
+                 ->options(Victim::where('is_father',1)->pluck('FullName','id'))
+                 ->preload()
+                 ->live()
+                 ->searchable()
+
+                 ->afterStateUpdated(function ($state){
+                     $this->newFather_id=$state;
+                 }),
+
+             Select::make('newMother_id')
+                 ->hiddenLabel()
+                 ->prefix('تعديل الأم')
+                 ->prefixIcon('heroicon-m-pencil')
+                 ->prefixIconColor('info')
+
+                 ->options(Victim::where('is_mother',1)->pluck('FullName','id'))
+                 ->preload()
+                 ->live()
+                 ->searchable()
+
+                 ->afterStateUpdated(function ($state){
+                     $this->newMother_id=$state;
+                 }),
 
 
-         ])->columns(6)
+         ])->columns(4)
     ];
   }
 
@@ -186,12 +214,13 @@ class Modifies extends Page implements HasTable,HasForms
           ->toggleable()
           ->label('القبيلة'),
         IconColumn::make('is_father')
+            ->action(function (Victim $record): void {
+                if ($record->is_father==1) $newFather=null;else $newFather=1;
+                $record->update(['is_father'=>$newFather]);
+            })
          ->boolean(),
         IconColumn::make('is_mother')
-
           ->action(function (Victim $record): void {
-            if ($record->male=='ذكر') return;
-            if (($record->husband_id || Victim::where('mother_id',$record->id)->exists()) && $record->is_mother) return;
             if ($record->is_mother==1) $newMother=null;else $newMother=1;
             $record->update(['is_mother'=>$newMother]);
           })
@@ -202,8 +231,6 @@ class Modifies extends Page implements HasTable,HasForms
           ->sortable()
           ->action(function (Victim $record): void {
             if ($record->male=='ذكر') $newMale='أنثي'; else $newMale='ذكر';
-            if ($record->is_father==1 && $newMale=='أنثي') return;
-            if ($record->is_mother==1 && $newMale=='ذكر') return;
             $record->update(['male'=>$newMale]);
           })
           ->badge()
@@ -215,6 +242,7 @@ class Modifies extends Page implements HasTable,HasForms
       ->bulkActions([
         BulkActionGroup::make([
           BulkAction::make('editStreet')
+              ->deselectRecordsAfterCompletion()
             ->label('تعديل الشارع')
             ->hidden(!$this->street_id)
             ->requiresConfirmation()
@@ -222,14 +250,66 @@ class Modifies extends Page implements HasTable,HasForms
               'street_id'=>$this->street_id
             ])),
           BulkAction::make('editFamily')
+              ->deselectRecordsAfterCompletion()
             ->label('تعديل العائلة')
             ->hidden(!$this->newFamily_id)
             ->requiresConfirmation()
             ->action(fn (Collection $records) => $records->each->update([
               'family_id'=>$this->newFamily_id
             ])),
+        BulkAction::make('editFather')
+            ->deselectRecordsAfterCompletion()
+            ->label('تعديل الاب')
+            ->hidden(!$this->newFather_id)
+            ->requiresConfirmation()
+            ->action(function (Collection $records) {
+                $records->each(
+                    fn (Model $record) => $record->update([
+                        'father_id'=>$this->newFather_id,
+                    ]),
+                );
+            }),
 
-        ])
+        BulkAction::make('delFather')
+                ->deselectRecordsAfterCompletion()
+                ->label('الغاء الاب')
+                ->hidden(function(){
+                    return  $this->father_id || $this->mother_id;
+                })
+                ->requiresConfirmation()
+            ->action(function (Collection $records) {
+                $records->each(
+                    fn (Model $record) => $record->update([
+                        'father_id'=>null,
+                    ]),
+                );
+            }),
+        BulkAction::make('editMother')
+            ->deselectRecordsAfterCompletion()
+            ->label('تعديل الأم')
+            ->hidden(!$this->newMother_id)
+            ->requiresConfirmation()
+            ->action(fn (Collection $records) => $records->each->update([
+                'mother_id'=>$this->newMother_id
+            ])),
+
+
+        ]),
+          BulkAction::make('delMother')
+              ->deselectRecordsAfterCompletion()
+              ->label('الغاء الأم')
+              ->hidden(function(){
+                  return  $this->father_id || $this->mother_id;
+              })
+              ->requiresConfirmation()
+              ->action(function (Collection $records) {
+                  $records->each(
+                      fn (Model $record) => $record->update([
+                          'mother_id'=>null,
+                      ]),
+                  );
+              }),
+
       ])
       ;
   }
