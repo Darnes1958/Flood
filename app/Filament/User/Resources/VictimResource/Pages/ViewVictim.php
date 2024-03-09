@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 class ViewVictim extends ViewRecord
 {
     protected static string $resource = VictimResource::class;
-    protected ?string $heading="";
+
     public $n=0;
 
   public function infolist(Infolist $infolist): Infolist

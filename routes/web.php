@@ -13,4 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::controller(\App\Http\Controllers\PdfController::class)->group(function (){
+  route::get('/pdffamily/{family_id}', 'PdfFamily')->name('pdffamily') ;
+});
 

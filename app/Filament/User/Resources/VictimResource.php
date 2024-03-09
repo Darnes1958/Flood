@@ -2,9 +2,12 @@
 
 namespace App\Filament\User\Resources;
 
+use App\Filament\Exports\ByFamilyExporter;
 use App\Filament\User\Resources\VictimResource\Pages;
 use App\Filament\User\Resources\VictimResource\RelationManagers;
 use App\Models\Victim;
+use Filament\Actions\Action;
+use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -24,6 +27,9 @@ class VictimResource extends Resource
 
 
   protected static ?string $navigationLabel='كشف تفصيلي بالضحايا';
+
+  public $family_id;
+  public $filters;
 
     public static function form(Form $form): Form
     {
@@ -86,7 +92,8 @@ class VictimResource extends Resource
           ])
 
             ->filters([
-              SelectFilter::make('فلترة بالعائلة')
+              SelectFilter::make('family')
+                ->label('فلترة بالعائلة')
                 ->searchable()
                 ->preload()
                 ->relationship('Family','FamName'),
@@ -109,7 +116,6 @@ class VictimResource extends Resource
               ->button()
               ->label('إضفط هنا لفتح واغلاق الفلترة'),
           )
-
             ->actions([
                 Tables\Actions\ViewAction::make(),
 
@@ -122,6 +128,7 @@ class VictimResource extends Resource
             //
         ];
     }
+
 
     public static function getPages(): array
     {
