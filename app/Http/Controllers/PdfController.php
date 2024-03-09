@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Family;
 use App\Models\Victim;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ class PdfController extends Controller
 {
  public function PdfFamily($family_id){
 
+   $family_name=Family::find($family_id)->FamName;
    $victim_father=Victim::with('father')
      ->where('family_id',$family_id)
      ->where('is_father','1')->get();
@@ -43,7 +45,9 @@ class PdfController extends Controller
 
    $html = view('PDF.PdfVictimFamily',
      ['victim_father'=>$victim_father,'victim_mother'=>$victim_mother,
-       'victim_husband'=>$victim_husband,'victim_wife'=>$victim_wife,'victim_only'=>$victim_only,])->toArabicHTML();
+       'victim_husband'=>$victim_husband,'victim_wife'=>$victim_wife,
+
+       'victim_only'=>$victim_only,'family_name'=>$family_name])->toArabicHTML();
 
    $pdf = Pdf::loadHTML($html)->output();
    $headers = array(

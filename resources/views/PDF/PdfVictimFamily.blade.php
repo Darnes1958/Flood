@@ -2,6 +2,16 @@
 
 @section('mainrep')
     <div style="position: relative;">
+        <div style="text-align: center;font-size: 12pt;">
+
+            <label>شهداء فيضان وادي درنه</label>
+        </div>
+        <div style="text-align: center;font-size: 14pt;">
+            <label  > {{$family_name}} </label>
+            <label> عائلة</label>
+        </div>
+
+        <br>
       @foreach($victim_father as $victim)
         <div  style="text-align: right;font-size: 11pt;">
             <label  >{{$victim->Street->StrName}}</label>
