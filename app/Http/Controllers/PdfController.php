@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Family;
+use App\Models\Tribe;
 use App\Models\Victim;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Query\Builder;
@@ -12,7 +13,10 @@ class PdfController extends Controller
 {
  public function PdfFamily($family_id){
 
-   $family_name=Family::find($family_id)->FamName;
+   $fam=Family::find($family_id);
+   $family_name=$fam->FamName;
+   $tribe_name=Tribe::find($fam->tribe_id)->first()->TriName;
+   $count=Victim::where('family_id',$family_id)->count();
    $victim_father=Victim::with('father')
      ->where('family_id',$family_id)
      ->where('is_father','1')->get();
@@ -50,13 +54,14 @@ class PdfController extends Controller
      ->where('mother_id',null)
      ->get();
 
-   info($victim_only);
+
 
    $html = view('PDF.PdfVictimFamily',
      ['victim_father'=>$victim_father,'victim_mother'=>$victim_mother,
        'victim_husband'=>$victim_husband,'victim_wife'=>$victim_wife,
-
-       'victim_only'=>$victim_only,'family_name'=>$family_name])->toArabicHTML();
+       'victim_only'=>$victim_only,
+       'tribe_name'=>$tribe_name,'count'=>$count,
+       'family_name'=>$family_name])->toArabicHTML();
 
    $pdf = Pdf::loadHTML($html)->output();
    $headers = array(

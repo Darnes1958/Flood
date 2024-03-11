@@ -10,6 +10,15 @@
             <label  > {{$family_name}} </label>
             <label> عائلة</label>
         </div>
+        <div style="text-align: center;font-size: 14pt;">
+            <label  >{{$tribe_name}}</label>
+            <label  > القبيلة :  </label>
+        </div>
+        <div style="text-align: center;font-size: 14pt;">
+
+            <label  > {{$count}} </label>
+            <label>العدد : </label>
+        </div>
 
         <br>
       @foreach($victim_father as $victim)
