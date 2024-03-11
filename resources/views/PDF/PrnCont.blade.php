@@ -74,6 +74,7 @@
       @page {
           size: 21cm 29.7cm ;
           margin: 30px 40px 30px 40px;
+          padding: 10px 10px 10px 10px;
       }
       table {
           width: 96%;

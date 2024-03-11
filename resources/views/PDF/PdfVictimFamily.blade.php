@@ -107,7 +107,7 @@
                 <label  > العنوان </label>
                 <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                 <label  >{{$victim->FullName}}</label>
-
+                <label>&nbsp;&nbsp;</label>
             </div>
         @endforeach
     </div>

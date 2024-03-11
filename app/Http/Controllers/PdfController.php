@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Family;
 use App\Models\Victim;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 
 class PdfController extends Controller
@@ -35,13 +36,21 @@ class PdfController extends Controller
      ->get();
    $victim_only=Victim::
    where('family_id',$family_id)
-     ->where('is_father',null)
-     ->where('is_mother',null)
+       ->Where(function ( $query) {
+           $query->where('is_father',null)
+               ->orwhere('is_father',0);
+       })
+       ->Where(function ( $query) {
+           $query->where('is_mother',null)
+               ->orwhere('is_mother',0);
+       })
      ->where('husband_id',null)
      ->where('wife_id',null)
      ->where('father_id',null)
      ->where('mother_id',null)
      ->get();
+
+   info($victim_only);
 
    $html = view('PDF.PdfVictimFamily',
      ['victim_father'=>$victim_father,'victim_mother'=>$victim_mother,
