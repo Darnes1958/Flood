@@ -15,7 +15,9 @@ class PdfController extends Controller
 
    $fam=Family::find($family_id);
    $family_name=$fam->FamName;
-   $tribe_name=Tribe::find($fam->tribe_id)->first()->TriName;
+
+   $tribe_name=Tribe::find($fam->tribe_id)->TriName;
+
    $count=Victim::where('family_id',$family_id)->count();
    $victim_father=Victim::with('father')
      ->where('family_id',$family_id)
