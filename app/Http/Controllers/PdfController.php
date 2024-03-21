@@ -53,7 +53,7 @@ class PdfController extends Controller
      ->where('husband_id',null)
      ->where('wife_id',null)
      ->where('father_id',null)
-     ->where('mother_id',null)
+
      ->get();
 
 
