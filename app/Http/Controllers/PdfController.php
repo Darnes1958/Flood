@@ -5,12 +5,27 @@ namespace App\Http\Controllers;
 use App\Models\Family;
 use App\Models\Tribe;
 use App\Models\Victim;
+use App\Models\Video;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 class PdfController extends Controller
 {
+  public function getVideo(Video $video)
+  {
+    $name1 = $video->attachment;
+    $name =storage_path() ."/app/public/".$video->attachment;
+
+
+    $headers = array(
+      'Content-type'          => 'video/mp4',
+      'Content-Disposition'   => 'inline; filename="' . $name . '"'
+    );
+    return Response::make( file_get_contents($name), 200, $headers);
+  }
  public function PdfFamily($family_id){
 
    $fam=Family::find($family_id);

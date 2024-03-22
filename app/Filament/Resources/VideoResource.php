@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Subjects;
 use App\Filament\Resources\VideoResource\Pages;
 use App\Filament\Resources\VideoResource\RelationManagers;
 use App\Models\Video;
+use Doctrine\Inflector\Rules\Substitution;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -23,10 +25,19 @@ class VideoResource extends Resource
     {
         return $form
             ->schema([
+
+              Forms\Components\Select::make('subject')
+               ->options(Subjects::class)
+               ->label('التصنيف'),
+              Forms\Components\TextInput::make('title')
+                ->label('العنوان'),
+              Forms\Components\TextInput::make('description')
+                ->label('الشرح'),
               Forms\Components\FileUpload::make('attachment')
                 ->required()
                 ->preserveFilenames()
                 ->maxSize(20000),
+
             ]);
     }
 
@@ -34,7 +45,16 @@ class VideoResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('attachment')
+              Tables\Columns\TextColumn::make('subject')
+              ->formatStateUsing(fn (Video $record) => Subjects::from($record->subject)->getLabel())
+
+                ->badge()
+               ->label('التصنيف'),
+              Tables\Columns\TextColumn::make('title')
+                ->description(function (Video $record){
+                  return $record->description;
+                })
+                ->label('البيان'),
             ])
             ->filters([
                 //

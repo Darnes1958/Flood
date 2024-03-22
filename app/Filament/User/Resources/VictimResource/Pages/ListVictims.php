@@ -23,9 +23,7 @@ class ListVictims extends ListRecords
          $this->filters=$this->table->getFilters();
          $this->family_id=$this->filters['family']->getState()['value'];
          if (!$this->family_id) {
-           Notification::make()
-             ->title('يجب اختيار العائلة')
-             ->send();
+
            return false;
          }
 
