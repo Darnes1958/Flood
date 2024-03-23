@@ -32,6 +32,25 @@ class ViewVictim extends ViewRecord
            ->weight(FontWeight::ExtraBold)
            ->size(TextEntry\TextEntrySize::Large)
            ->label(''),
+           TextEntry::make('sonOfFather.FullName')
+             ->visible(function (Victim $record){
+               return $record->father_id;
+             })
+             ->color('info')
+             ->label('والده')
+             ->size(TextEntry\TextEntrySize::Large)
+
+             ->columnSpanFull(),
+           TextEntry::make('sonOfMother.FullName')
+             ->visible(function (Victim $record){
+               return $record->mother_id;
+             })
+             ->color('Fuchsia')
+             ->label('والدته')
+             ->size(TextEntry\TextEntrySize::Large)
+
+             ->columnSpanFull(),
+
           TextEntry::make('husband.FullName')
             ->visible(function (Victim $record){
                return $record->wife_id;
@@ -41,6 +60,14 @@ class ViewVictim extends ViewRecord
             ->size(TextEntry\TextEntrySize::Large)
             ->separator(',')
             ->columnSpanFull(),
+           TextEntry::make('husband2.FullName')
+             ->visible(function (Victim $record){
+               return $record->wife2_id;
+             })
+             ->color('Fuchsia')
+             ->label('زوجته الثانية')
+             ->size(TextEntry\TextEntrySize::Large)
+             ->columnSpanFull(),
            TextEntry::make('wife.FullName')
              ->visible(function (Victim $record){
                return $record->husband_id;
