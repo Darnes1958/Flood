@@ -14,6 +14,10 @@ class MaleFemale extends BaseWidget
     protected function getStats(): array
     {
         return [
+          Stat::make('','')
+            ->label(new HtmlString('<span class="text-white">العدد الكلي</span>'))
+            ->value(new HtmlString('<span class="text-primary-500">'.Victim::count().'</span>')),
+
             Stat::make('','')
                 ->label(new HtmlString('<span class="text-white">ذكور</span>'))
                 ->value(new HtmlString('<span class="text-primary-500">'.Victim::where('male','ذكر')->count().'</span>')),
