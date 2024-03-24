@@ -10,7 +10,7 @@ class ViewVideo extends ViewRecord
 {
     protected static string $resource = VideoResource::class;
 
-  protected static string $view = 'filament.pages.view-video';
+  protected static string $view = 'filament.pages.see-video';
 
   protected function getHeaderActions(): array
   {

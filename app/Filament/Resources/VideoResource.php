@@ -33,10 +33,10 @@ class VideoResource extends Resource
                 ->label('العنوان'),
               Forms\Components\TextInput::make('description')
                 ->label('الشرح'),
-              Forms\Components\FileUpload::make('attachment')
+              Forms\Components\TextInput::make('attachment')
+                ->label('link')
                 ->required()
-                ->preserveFilenames()
-                ->maxSize(20000),
+                ,
 
             ]);
     }

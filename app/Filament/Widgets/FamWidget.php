@@ -10,6 +10,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\HtmlString;
 
 
@@ -34,13 +35,15 @@ class FamWidget extends BaseWidget
                 TextColumn::make('FamName')
                 ->sortable()
                 ->color('blue')
+                ->searchable()
                 ->label('العائلة'),
                 TextColumn::make('victims_count')
-                 ->counts('victims')
+                  ->color('warning')
+                  ->sortable()
+                  ->label('العدد')
+                 ->counts('victims'),
 
-                 ->color('warning')
-                 ->sortable()
-                 ->label('العدد')
+
             ]);
     }
 }

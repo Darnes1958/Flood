@@ -7,6 +7,7 @@ use App\Models\Tribe;
 use App\Models\Victim;
 use App\Models\Video;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Cohensive\OEmbed\Facades\OEmbed;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -26,7 +27,13 @@ class PdfController extends Controller
     );
     return Response::make( file_get_contents($name), 200, $headers);
   }
- public function PdfFamily($family_id){
+  public function setVideo(Video $video)
+  {
+    $name = 'https://www.youtube.com/watch?v=mCOOddO4kkY';
+    $embed = OEmbed::get($name);
+    return $embed;
+  }
+  public function PdfFamily($family_id){
 
    $fam=Family::find($family_id);
    $family_name=$fam->FamName;

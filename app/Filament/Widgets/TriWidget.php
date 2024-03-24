@@ -34,6 +34,7 @@ class TriWidget extends BaseWidget
                 TextColumn::make('TriName')
                 ->sortable()
                 ->color('blue')
+                ->searchable()
                 ->label('القبيلة'),
                 TextColumn::make('victim_count')
                  ->counts('Victim')

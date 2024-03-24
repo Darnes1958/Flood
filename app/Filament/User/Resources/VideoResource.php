@@ -22,6 +22,7 @@ class VideoResource extends Resource
 
     protected static ?string $navigationLabel='فيدو';
 
+    public Video $video;
     public static function form(Form $form): Form
     {
         return $form
