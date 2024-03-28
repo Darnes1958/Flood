@@ -8,11 +8,11 @@
         </div>
         <div style="text-align: center;font-size: 14pt;">
             <label  > {{$family_name}} </label>
-            <label> عائلة</label>
+            <label> العائلة أو القبيلة : </label>
         </div>
         <div style="text-align: center;font-size: 14pt;">
             <label  >{{$tribe_name}}</label>
-            <label  > القبيلة :  </label>
+            <label  > القبيلة أو التركيبة الإجتماعية :  </label>
         </div>
         <div style="text-align: center;font-size: 14pt;">
 

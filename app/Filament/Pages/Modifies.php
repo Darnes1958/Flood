@@ -199,20 +199,29 @@ class Modifies extends Page implements HasTable,HasForms
         TextColumn::make('FullName')
           ->label('الاسم بالكامل')
           ->searchable(),
-        TextColumn::make('Street.StrName')
-          ->toggleable()
-          ->label('الشارع'),
-        TextColumn::make('Street.Area.AreaName')
-          ->toggleable()
-          ->label('المحلة'),
         TextColumn::make('Family.FamName')
           ->sortable()
           ->toggleable()
           ->label('العائلة'),
-        TextColumn::make('Family.Tribe.TriName')
+        TextColumn::make('Street.StrName')
+          ->toggleable()
+          ->label('الشارغ'),
+        TextColumn::make('sonOfFather.FullName')
+          ->toggleable()
+          ->label('الأب'),
+        TextColumn::make('sonOfMother.FullName')
           ->sortable()
           ->toggleable()
-          ->label('القبيلة'),
+          ->label('الأم'),
+        TextColumn::make('husband.FullName')
+          ->sortable()
+          ->toggleable()
+          ->label('الزوجة'),
+        TextColumn::make('wife.FullName')
+          ->sortable()
+          ->toggleable()
+          ->label('الزوج'),
+
         IconColumn::make('is_father')
             ->action(function (Victim $record): void {
                 if ($record->is_father==1) $newFather=null;else $newFather=1;

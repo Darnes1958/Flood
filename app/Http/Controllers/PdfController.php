@@ -8,6 +8,7 @@ use App\Models\Victim;
 use App\Models\Video;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Cohensive\OEmbed\Facades\OEmbed;
+
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -45,9 +46,19 @@ class PdfController extends Controller
      ->where('family_id',$family_id)
      ->where('is_father','1')->get();
 
+   $fathers=Victim::where('family_id',$family_id)->where('is_father',1)->select('id');
+    $mothers=Victim::where('family_id',$family_id)->where('is_mother',1)->select('id');
+
    $victim_mother=Victim::with('mother')
      ->where('family_id',$family_id)
-     ->where('is_mother','1')->get();
+     ->where('is_mother','1')
+     ->where(function ( $query) use($fathers) {
+       $query->where('husband_id', null)
+         ->orwhere('husband_id', 0)
+         ->orwhereNotIn('husband_id',$fathers);
+     })
+
+     ->get();
 
    $victim_husband=Victim::
      where('family_id',$family_id)
@@ -75,6 +86,12 @@ class PdfController extends Controller
      ->where('husband_id',null)
      ->where('wife_id',null)
      ->where('father_id',null)
+     ->where(function ( $query) use($mothers) {
+       $query->where('mother_id', null)
+         ->orwhere('mother_id', 0)
+         ->orwhereNotIn('mother_id',$mothers);
+     })
+
 
      ->get();
 
