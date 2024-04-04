@@ -195,7 +195,9 @@ class Modifies extends Page implements HasTable,HasForms
 
 
       ->columns([
-
+        TextColumn::make('index')
+          ->label('ت')
+          ->rowIndex(),
         TextColumn::make('FullName')
           ->label('الاسم بالكامل')
           ->searchable(),
