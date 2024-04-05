@@ -42,7 +42,11 @@ class VictimResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-
+          ->query(function (Victim $victim) {
+            $victim = Victim::where('family_id',1)
+             ;
+            return $victim;
+          })
           ->striped()
           ->defaultPaginationPageOption(10)
           ->columns([
