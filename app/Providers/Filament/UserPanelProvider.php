@@ -4,8 +4,10 @@ namespace App\Providers\Filament;
 
 use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Pages\Auth\Login;
+use App\Filament\Widgets\AreaWidget;
 use App\Filament\Widgets\FamWidget;
 use App\Filament\Widgets\MaleFemale;
+use App\Filament\Widgets\StreetWidget;
 use App\Filament\Widgets\TriWidget;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -51,6 +53,8 @@ class UserPanelProvider extends PanelProvider
               MaleFemale::class,
               TriWidget::class,
               FamWidget::class,
+              StreetWidget::class,
+              AreaWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
