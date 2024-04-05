@@ -44,6 +44,7 @@ class VictimResource extends Resource
         return $table
 
           ->striped()
+          ->defaultPaginationPageOption(10)
           ->columns([
             TextColumn::make('FullName')
               ->label('الاسم بالكامل')
