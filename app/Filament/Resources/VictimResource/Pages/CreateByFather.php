@@ -131,9 +131,10 @@ class CreateByFather extends Page implements HasTable
     else
     $this->victimForm->fill([
       'Name1'=>'',
-      'Name2'=>$this->victimData['Name2'],'Name3'=>$this->victimData['Name3'],'Name4'=>$this->victimData['Name4'],
+      'Name2'=>'','Name3'=>'','Name4'=>'',
+  //    'Name2'=>$this->victimData['Name2'],'Name3'=>$this->victimData['Name3'],'Name4'=>$this->victimData['Name4'],
       'family_id'=>$this->victimData['family_id'],'street_id'=>$this->victimData['street_id'],
-      'father_id'=>$this->victimData['father_id'],'mother_id'=>$this->victimData['mother_id'],
+    //  'father_id'=>$this->victimData['father_id'],'mother_id'=>$this->victimData['mother_id'],
       'male'=>'ذكر',
     ]);
     $this->dispatch('gotoitem', test: 'Name1');
