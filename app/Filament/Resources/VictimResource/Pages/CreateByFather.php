@@ -456,7 +456,19 @@ class CreateByFather extends Page implements HasTable
       ->query(function (Victim $victim)  {
 
          $victim=Victim::
-         when($this->family_id,function ($q){
+         when($this->name1 && $this->name2 && !$this->name3,function ($q){
+           $q->where('family_id',$this->family_id)
+              ->where('Name1',$this->name1)
+             ->where('Name2',$this->name2);
+         })
+         ->when($this->name1 && $this->name2 && $this->name3,function ($q){
+           $q->where('family_id',$this->family_id)
+             ->where('Name1',$this->name1)
+             ->where('Name2',$this->name2)
+             ->where('Name3',$this->name3);
+         })
+
+         ->when($this->family_id,function ($q){
            $q->where('family_id',$this->family_id) ;
          })
          ->when($this->father_id,function ($q){
