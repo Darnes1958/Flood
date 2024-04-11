@@ -133,7 +133,7 @@ class CreateByFather extends Page implements HasTable
     }
     else {
       if ($this->withDelete) {
-        $this->name1='';$this->name2='';$this->name3='';git
+        $this->name1='';$this->name2='';$this->name3='';
         $this->victimForm->fill([
           'Name1'=>'',
           'Name2'=>'','Name3'=>'','Name4'=>'',
