@@ -8,6 +8,7 @@ use App\Models\Street;
 use App\Models\Victim;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
@@ -39,6 +40,8 @@ class CreateByFather extends Page implements HasTable
     public $family_id='';
     public $father_id='';
     public $mother_id='';
+
+    public $withDelete=false;
 
     public $family;
     public $victim;
@@ -128,15 +131,26 @@ class CreateByFather extends Page implements HasTable
         'male' => 'ذكر',
       ]);
     }
-    else
-    $this->victimForm->fill([
-      'Name1'=>'',
-      'Name2'=>'','Name3'=>'','Name4'=>'',
-  //    'Name2'=>$this->victimData['Name2'],'Name3'=>$this->victimData['Name3'],'Name4'=>$this->victimData['Name4'],
-      'family_id'=>$this->victimData['family_id'],'street_id'=>$this->victimData['street_id'],
-    //  'father_id'=>$this->victimData['father_id'],'mother_id'=>$this->victimData['mother_id'],
-      'male'=>'ذكر',
-    ]);
+    else {
+      if ($this->withDelete)
+        $this->victimForm->fill([
+          'Name1'=>'',
+          'Name2'=>'','Name3'=>'','Name4'=>'',
+      //    'Name2'=>$this->victimData['Name2'],'Name3'=>$this->victimData['Name3'],'Name4'=>$this->victimData['Name4'],
+          'family_id'=>$this->victimData['family_id'],'street_id'=>$this->victimData['street_id'],
+        //  'father_id'=>$this->victimData['father_id'],'mother_id'=>$this->victimData['mother_id'],
+          'male'=>'ذكر',
+        ]);
+      else
+        $this->victimForm->fill([
+          'Name1'=>'',
+          'Name2'=>$this->victimData['Name2'],'Name3'=>$this->victimData['Name3'],'Name4'=>$this->victimData['Name4'],
+          'family_id'=>$this->victimData['family_id'],'street_id'=>$this->victimData['street_id'],
+          'father_id'=>$this->victimData['father_id'],'mother_id'=>$this->victimData['mother_id'],
+          'male'=>'ذكر',
+        ]);
+
+    }
     $this->dispatch('gotoitem', test: 'Name1');
   }
   protected function getVictimFormSchema(): array
@@ -312,13 +326,13 @@ class CreateByFather extends Page implements HasTable
               ])
             ->searchable()
             ->preload()
-            ->required(),
-
-          TextInput::make('FullName')
-            ->label('الاسم بالكامل')
-            ->unique()
             ->columnSpan(2)
-            ->disabled(),
+            ->required(),
+          TextInput::make('FullName')
+           ->label('الاسم بالكامل')
+            ->columnSpan(2)
+          ->readOnly(),
+
 
         ])->columns(4)
     ];
@@ -399,7 +413,15 @@ class CreateByFather extends Page implements HasTable
              ->color('Fuchsia')
              ->action(function (){$this->InpMother();}),
 
-         ])->columnSpan(6),
+
+         ])->columnSpan(3),
+         Checkbox::make('withDelete')
+           ->label('مسح البيانات بعد التحزين')
+           ->default(false)
+           ->columnSpan(3)
+           ->afterStateUpdated(function ($state){
+             $this->withDelete=$state;
+           }),
 
          Select::make('family_id')
            ->hiddenLabel()

@@ -17,6 +17,13 @@ class MaleFemale extends BaseWidget
           Stat::make('','')
             ->label(new HtmlString('<span class="text-white">العدد الكلي</span>'))
             ->value(new HtmlString('<span class="text-primary-500">'.Victim::count().'</span>')),
+          Stat::make('','')
+            ->label(new HtmlString('<span class="text-white">ليبيين</span>'))
+            ->value(new HtmlString('<span class="text-primary-500">'.Victim::whereNotin('family_id',[120,162,207,250,303,306,308,343,344,345,346,347])->count().'</span>')),
+          Stat::make('','')
+            ->label(new HtmlString('<span class="text-white">أجانب</span>'))
+            ->value(new HtmlString('<span class="text-primary-500">'.Victim::whereIn('family_id',[120,162,207,250,303,306,308,343,344,345,346,347])->count().'</span>')),
+
 
             Stat::make('','')
                 ->label(new HtmlString('<span class="text-white">ذكور</span>'))
