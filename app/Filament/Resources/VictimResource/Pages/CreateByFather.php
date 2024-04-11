@@ -132,7 +132,8 @@ class CreateByFather extends Page implements HasTable
       ]);
     }
     else {
-      if ($this->withDelete)
+      if ($this->withDelete) {
+        $this->name1='';$this->name2='';$this->name3='';git
         $this->victimForm->fill([
           'Name1'=>'',
           'Name2'=>'','Name3'=>'','Name4'=>'',
@@ -140,7 +141,7 @@ class CreateByFather extends Page implements HasTable
           'family_id'=>$this->victimData['family_id'],'street_id'=>$this->victimData['street_id'],
         //  'father_id'=>$this->victimData['father_id'],'mother_id'=>$this->victimData['mother_id'],
           'male'=>'ذكر',
-        ]);
+        ]);}
       else
         $this->victimForm->fill([
           'Name1'=>'',
@@ -479,16 +480,16 @@ class CreateByFather extends Page implements HasTable
       ->query(function (Victim $victim)  {
 
          $victim=Victim::
-         when($this->name1 && $this->name2 && !$this->name3,function ($q){
+         when($this->name1 && $this->name2 ,function ($q){
            $q->where('family_id',$this->family_id)
-              ->where('Name1',$this->name1)
-             ->where('Name2',$this->name2);
+              ->where('Name1','like','%'.$this->name1.'%')
+             ->where('Name2','like','%'.$this->name2.'%');
          })
          ->when($this->name1 && $this->name2 && $this->name3,function ($q){
            $q->where('family_id',$this->family_id)
-             ->where('Name1',$this->name1)
-             ->where('Name2',$this->name2)
-             ->where('Name3',$this->name3);
+             ->where('Name1','like','%'.$this->name1.'%')
+             ->where('Name2','like','%'.$this->name2.'%')
+             ->where('Name3','like','%'.$this->name3.'%');
          })
 
          ->when($this->family_id,function ($q){
