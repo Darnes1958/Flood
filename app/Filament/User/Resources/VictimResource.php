@@ -99,18 +99,12 @@ class VictimResource extends Resource
                 ->searchable()
                 ->preload()
                 ->relationship('Family','FamName'),
-              SelectFilter::make('فلترة بالقبيلة')
-                ->searchable()
-                ->preload()
-                ->relationship('Family','Tribe.TriName'),
+
               SelectFilter::make('فلترة بالشارع')
                 ->searchable()
                 ->preload()
                 ->relationship('Street','StrName'),
-              SelectFilter::make('فلترة بالمحلة')
-                ->searchable()
-                ->preload()
-                ->relationship('Street','Area.AreaName'),
+
 
             ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
           ->filtersTriggerAction(

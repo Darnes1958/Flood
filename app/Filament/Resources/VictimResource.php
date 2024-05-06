@@ -318,12 +318,19 @@ class VictimResource extends Resource
 
             ->filters([
                 Tables\Filters\SelectFilter::make('فلترة بالعائلة')
+                  ->searchable()
+                  ->preload()
                   ->relationship('Family','FamName'),
                 Tables\Filters\SelectFilter::make('فلترة بالقبيلة')
+                  ->searchable()
+                  ->preload()
                   ->relationship('Family','Tribe.TriName'),
                 Tables\Filters\SelectFilter::make('فلترة بالشارع')
+                  ->searchable()
+                  ->preload()
                    ->relationship('Street','StrName'),
                 Tables\Filters\SelectFilter::make('فلترة بالمحلة')
+                  ->searchable()
                   ->relationship('Street','Area.AreaName'),
             ])
             ->bulkActions([
@@ -348,6 +355,7 @@ class VictimResource extends Resource
             'create' => Pages\CreateVictim::route('/create'),
             'edit' => Pages\EditVictim::route('/{record}/edit'),
             'createtalent' => Pages\CreateTalent::route('/{record}/createtalent'),
+
         ];
     }
 }

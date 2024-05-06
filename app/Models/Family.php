@@ -10,9 +10,15 @@ class Family extends Model
     use HasFactory;
 
 
-    public function victims(){
+    public function Victim(){
       return $this->hasMany(Victim::class);
     }
+  public function Mafkoden(){
+    return $this->hasMany(Mafkoden::class);
+  }
+  public function Bedon(){
+    return $this->hasMany(Bedon::class);
+  }
     public function Tribe(){
       return $this->belongsTo(Tribe::class);
     }

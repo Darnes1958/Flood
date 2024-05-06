@@ -32,6 +32,8 @@ class FamilyResource extends Resource
                 Forms\Components\TextInput::make('FamName')
                 ->label('اسم العائلة'),
                 Forms\Components\Select::make('tribe_id')
+                  ->searchable()
+                  ->preload()
                  ->relationship('Tribe','TriName')
                   ->label('القبيلة'),
             ]);

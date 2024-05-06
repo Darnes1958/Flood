@@ -20,7 +20,8 @@ class ListVictims extends ListRecords
           ->label('ادحال يالعائلات')
           ->icon('heroicon-m-users')
             ->color('success')
-          ->url('victims/createbyfather')
+          ->url('victims/createbyfather'),
+
         ];
     }
 }
