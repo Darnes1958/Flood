@@ -29,7 +29,7 @@ class FamWidget extends BaseWidget
             ->heading(new HtmlString('<div class="text-primary-400 text-lg">العدد حسب العائلات</div>'))
             ->defaultPaginationPageOption(5)
 
-            ->defaultSort('victims_count','desc')
+            ->defaultSort('victim_count','desc')
             ->striped()
             ->columns([
                 TextColumn::make('FamName')
@@ -37,11 +37,11 @@ class FamWidget extends BaseWidget
                 ->color('blue')
                 ->searchable()
                 ->label('العائلة'),
-                TextColumn::make('victims_count')
+                TextColumn::make('victim_count')
                   ->color('warning')
                   ->sortable()
                   ->label('العدد')
-                 ->counts('victims'),
+                 ->counts('Victim'),
 
 
             ]);
