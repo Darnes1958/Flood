@@ -112,6 +112,11 @@ class HadamResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+          ->toggleColumnsTriggerAction(
+            fn (Action $action) => $action
+              ->button()
+              ->label('إخفاء وإظهار الا‘عمدة'),
+          )
             ->columns([
               TextColumn::make('no')
                 ->label('الرقم'),
@@ -164,6 +169,11 @@ class HadamResource extends Resource
                 ->label('موقع قوقل'),
 
             ])
+            ->filtersTriggerAction(
+              fn (Action $action) => $action
+                ->button()
+                ->label('إضغط هنا للفلترة'),
+            )
             ->filters([
                 SelectFilter::make('H_area')
                     ->label('محل الاقامة')

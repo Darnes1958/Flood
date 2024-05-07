@@ -70,8 +70,10 @@ class MafkodenResource extends Resource
               Tables\Columns\TextColumn::make('birth')
                 ->label('مواليد'),
               Tables\Columns\TextColumn::make('mother')
+                ->searchable()
                 ->label('الام'),
               Tables\Columns\TextColumn::make('who')
+                ->searchable()
                 ->label('المبلغ'),
 
               Tables\Columns\TextColumn::make('tel')

@@ -321,17 +321,12 @@ class VictimResource extends Resource
                   ->searchable()
                   ->preload()
                   ->relationship('Family','FamName'),
-                Tables\Filters\SelectFilter::make('فلترة بالقبيلة')
-                  ->searchable()
-                  ->preload()
-                  ->relationship('Family','Tribe.TriName'),
+
                 Tables\Filters\SelectFilter::make('فلترة بالشارع')
                   ->searchable()
                   ->preload()
                    ->relationship('Street','StrName'),
-                Tables\Filters\SelectFilter::make('فلترة بالمحلة')
-                  ->searchable()
-                  ->relationship('Street','Area.AreaName'),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

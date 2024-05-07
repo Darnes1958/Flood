@@ -18,13 +18,14 @@ class ListBedons extends ListRecords
         return [
             Actions\CreateAction::make(),
           Actions\Action::make('Modifymafkoden')
-            ->visible(false)
+
             ->label('تعديل ')
             ->icon('heroicon-m-users')
             ->color('danger')
             ->url('bedons/modifybedon'),
           Actions\Action::make('setfamily')
             ->label('set family')
+            ->visible(false)
             ->action(function (){
               $fam=Family::all();
               foreach ($fam as $item){
