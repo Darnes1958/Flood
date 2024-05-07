@@ -9,6 +9,7 @@ use Filament\Resources\Pages\EditRecord;
 class EditBedon extends EditRecord
 {
     protected static string $resource = BedonResource::class;
+    protected ?string $heading='تعديل بيانات بدون تصريح';
 
     protected function getHeaderActions(): array
     {

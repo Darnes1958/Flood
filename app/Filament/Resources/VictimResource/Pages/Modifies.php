@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Filament\Pages;
+namespace App\Filament\Resources\VictimResource\Pages;
 
+use App\Filament\Resources\VictimResource;
 use App\Models\Family;
 use App\Models\Street;
 use App\Models\Victim;
@@ -13,7 +14,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
-use Filament\Pages\Page;
+use Filament\Resources\Pages\Page;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Columns\IconColumn;
@@ -28,9 +29,11 @@ use Illuminate\Support\Collection;
 class Modifies extends Page implements HasTable,HasForms
 {
    use InteractsWithTable,InteractsWithForms;
+
+    protected static string $resource = VictimResource::class;
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static string $view = 'filament.pages.modifies';
+    protected static string $view = 'filament.resources.victim-resource.pages.modifies';
 
   protected static ?string $navigationLabel='تعديلات';
   protected ?string $heading="";

@@ -16,10 +16,11 @@ class ListBedons extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('إضافة'),
           Actions\Action::make('Modifymafkoden')
 
-            ->label('تعديل ')
+            ->label('تعديلات ')
             ->icon('heroicon-m-users')
             ->color('danger')
             ->url('bedons/modifybedon'),
@@ -29,16 +30,35 @@ class ListBedons extends ListRecords
             ->action(function (){
               $fam=Family::all();
               foreach ($fam as $item){
+                  if ($item->FamName=='اسماعيل') continue;
+                  if ($item->FamName=='عزوز') continue;
+                  if ($item->FamName=='بدر') continue;
+                  if ($item->FamName=='نو') continue;
+                  if ($item->FamName=='غفير') continue;
+                  if ($item->FamName=='رافع') continue;
                 Bedon::
                 where('name','like','%'.$item->FamName.'%')
-                  ->where('nation','ليبيا')
-                  ->update(['family_id'=>$item->id]) ;
-                Bedon::
-                where('family_id',null)
-                  ->where('nation','ليبيا')
-                  ->update(['family_id'=>45]) ;
+                    ->where('nation','ليبيا')
+                    ->update(['family_id'=>$item->id]) ;
 
               }
+                Bedon::where('name','like','%'.'اسماعيل'.'%')->where('nation','ليبيا')->where('family_id',null)
+                    ->update(['family_id'=>109]) ;
+                Bedon::where('name','like','%'.'عزوز'.'%')->where('nation','ليبيا')->where('family_id',null)
+                    ->update(['family_id'=>40]) ;
+                Bedon::where('name','like','%'.'غفير'.'%')->where('nation','ليبيا')->where('family_id',null)
+                    ->update(['family_id'=>132]) ;
+                Bedon::where('name','like','%'.'بدر'.'%')->where('nation','ليبيا')->where('family_id',null)
+                    ->update(['family_id'=>51]) ;
+                Bedon::where('name','like','%'.'رافع'.'%')->where('nation','ليبيا')->where('family_id',null)
+                    ->update(['family_id'=>184]) ;
+                Bedon::where('name','like','%'.'نو'.'%')->where('nation','ليبيا')->where('family_id',null)
+                    ->update(['family_id'=>130]) ;
+
+
+                Bedon::where('family_id',null)
+                    ->where('nation','ليبيا')
+                    ->update(['family_id'=>45]) ;
             })
         ];
     }

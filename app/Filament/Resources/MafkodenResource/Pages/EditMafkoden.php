@@ -9,6 +9,7 @@ use Filament\Resources\Pages\EditRecord;
 class EditMafkoden extends EditRecord
 {
     protected static string $resource = MafkodenResource::class;
+    protected ?string $heading='تعديل بيانات مفقود';
 
     protected function getHeaderActions(): array
     {

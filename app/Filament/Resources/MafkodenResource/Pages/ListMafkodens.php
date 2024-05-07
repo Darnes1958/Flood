@@ -15,9 +15,10 @@ protected ?string $heading='مفقودين';
     protected function getHeaderActions(): array
     {
         return [
-          Actions\CreateAction::make(),
+          Actions\CreateAction::make()
+            ->label('إضافة'),
           Actions\Action::make('Modifymafkoden')
-            ->label('تعديل مفقودين')
+            ->label('تعديلات')
             ->icon('heroicon-m-users')
             ->color('danger')
             ->url('mafkodens/modifymafkoden'),
@@ -41,7 +42,7 @@ protected ?string $heading='مفقودين';
           Actions\Action::make('Comparemafkoden')
             ->label('مقارنة')
             ->icon('heroicon-m-users')
-            ->color('danger')
+            ->color('info')
             ->url('mafkodens/comparemafkoden'),
         ];
     }

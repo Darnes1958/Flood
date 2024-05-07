@@ -43,6 +43,8 @@ class FamilyResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->label('id'),
                 Tables\Columns\TextColumn::make('FamName')
                  ->searchable()
                  ->label('الاسم'),

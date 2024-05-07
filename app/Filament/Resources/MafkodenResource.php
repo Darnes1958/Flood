@@ -13,12 +13,20 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class MafkodenResource extends Resource
 {
     protected static ?string $model = Mafkoden::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $pluralLabel='مفقودين';
+    public static function getNavigationBadge(): ?string
+    {
+        if (Auth::user()->id==1)
+        return static::getModel()::count();
+        else return ' ';
+    }
 
     public static function form(Form $form): Form
     {

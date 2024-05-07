@@ -28,6 +28,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DatePicker;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
 
 class HadamResource extends Resource
@@ -38,6 +39,13 @@ class HadamResource extends Resource
 
     protected static ?string $navigationLabel='محاضر الهدم';
     protected static ?string $pluralLabel='محاضر الهدم';
+
+    public static function getNavigationBadge(): ?string
+    {
+
+            return static::getModel()::count();
+
+    }
 
 
     public static function form(Form $form): Form

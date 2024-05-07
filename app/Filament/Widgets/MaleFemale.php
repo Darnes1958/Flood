@@ -5,12 +5,21 @@ namespace App\Filament\Widgets;
 use App\Models\Victim;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
 
 class MaleFemale extends BaseWidget
 {
     protected int | string | array $columnSpan=2;
     protected static ?int $sort=1;
+    public static function canView(): bool
+    {
+        if (Auth::user()->id==1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     protected function getStats(): array
     {
         return [

@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Get;
+use Illuminate\Support\Facades\Auth;
 
 class VictimResource extends Resource
 {
@@ -35,7 +36,9 @@ class VictimResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        if (Auth::user()->id==1)
+            return static::getModel()::count();
+        else return ' ';
     }
 
     public static function form(Form $form): Form
@@ -350,6 +353,7 @@ class VictimResource extends Resource
             'create' => Pages\CreateVictim::route('/create'),
             'edit' => Pages\EditVictim::route('/{record}/edit'),
             'createtalent' => Pages\CreateTalent::route('/{record}/createtalent'),
+            'modifyvictim' =>Pages\Modifies::route('/modifyvictim')
 
         ];
     }

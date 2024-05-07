@@ -31,12 +31,13 @@ class CompareMaf extends Page implements HasForms
   public $family_id;
   public $with_victim=false;
   public $show_description=false;
+  public $show_other=false;
 
   public $familyData;
 
   public function mount(): void
   {
-    $this->familyForm->fill([]);
+      $this->familyForm->fill(['show_other'=>true,]);
   }
 
   protected function getForms(): array
@@ -67,7 +68,8 @@ class CompareMaf extends Page implements HasForms
             ->columnSpan(4)
             ->afterStateUpdated(function ($state){
               $this->family_id=$state;
-              $this->dispatch('updatefamily', family_id: $this->family_id,with_victim : $this->with_victim,show_description: $this->show_description);
+              $this->dispatch('updatefamily', family_id: $this->family_id,with_victim : $this->with_victim,
+                  show_description: $this->show_description,who: 'maf',show_other: $this->show_other );
             }),
         Checkbox::make('with_victim')
           ->label('إظهار المتطابق')
@@ -75,7 +77,8 @@ class CompareMaf extends Page implements HasForms
 
           ->afterStateUpdated(function ($state){
             $this->with_victim=$state;
-            $this->dispatch('updatefamily', family_id: $this->family_id,with_victim : $this->with_victim,show_description: $this->show_description);
+            $this->dispatch('updatefamily', family_id: $this->family_id,with_victim : $this->with_victim,
+                show_description: $this->show_description,who: 'maf',show_other: $this->show_other);
           }),
         Checkbox::make('show_description')
           ->label('إظهار التفاصيل')
@@ -83,8 +86,18 @@ class CompareMaf extends Page implements HasForms
 
           ->afterStateUpdated(function ($state){
             $this->show_description=$state;
-            $this->dispatch('updatefamily', family_id: $this->family_id,with_victim : $this->with_victim,show_description: $this->show_description);
-          })
+            $this->dispatch('updatefamily', family_id: $this->family_id,with_victim : $this->with_victim,
+                show_description: $this->show_description,who: 'maf',show_other: $this->show_other);
+          }),
+             Checkbox::make('show_other')
+                 ->label('إظهار بتصريح')
+                 ->reactive()
+
+                 ->afterStateUpdated(function ($state){
+                     $this->show_other=$state;
+                     $this->dispatch('updatefamily', family_id: $this->family_id,with_victim : $this->with_victim,
+                         show_description: $this->show_description,who: 'maf',show_other: $this->show_other);
+                 })
 
         ])->columns(8)
     ];
@@ -104,7 +117,7 @@ class CompareMaf extends Page implements HasForms
         'family_id'=>$this->family_id,'without'=>$this->with_victim,
       ]),
       VictimWidget::make([
-        'family_id'=>$this->family_id,'without'=>$this->with_victim,
+        'family_id'=>$this->family_id,'without'=>$this->with_victim,'who'=>'maf','show_other'=> $this->show_other,
       ])
     ];
   }
