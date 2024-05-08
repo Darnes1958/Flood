@@ -55,7 +55,7 @@ class CompareTas extends Page implements HasForms
                         ->prefix('العائلة')
 
                         ->optionsLimit(500)
-                        ->options(Family::all()->pluck('FamName','id'))
+                        ->options(Family::has('Tasreeh')->pluck('FamName','id'))
                         ->preload()
                         ->live()
                         ->searchable()

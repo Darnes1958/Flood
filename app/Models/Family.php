@@ -19,6 +19,9 @@ class Family extends Model
   public function Tasreeh(){
     return $this->hasMany(Tasreeh::class);
   }
+    public function Bedon(){
+        return $this->hasMany(Bedon::class);
+    }
     public function Tribe(){
       return $this->belongsTo(Tribe::class);
     }

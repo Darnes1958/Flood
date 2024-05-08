@@ -126,7 +126,8 @@ class BedonResource extends Resource
             'index' => Pages\ListBedons::route('/'),
             'create' => Pages\CreateBedon::route('/create'),
             'edit' => Pages\EditBedon::route('/{record}/edit'),
-          'modifybedon' => Pages\ModifyBedon::route('/modifybedon')
+            'modifybedon' => Pages\ModifyBedon::route('/modifybedon'),
+            'comparebedon' => Pages\CompareBed::route('/comparebedon')
 
         ];
     }

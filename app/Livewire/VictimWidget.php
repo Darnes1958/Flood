@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Bedon;
 use App\Models\Mafkoden;
 use App\Models\Tasreeh;
 use App\Models\Victim;
@@ -19,7 +20,7 @@ class VictimWidget extends BaseWidget
   public $with_victim;
   public $show_description=false;
   public $who;
-  public $show_other;
+  public $show_other=true;
 
   #[On('updatefamily')]
   public function updatefamily($family_id,$with_victim,$show_description,$who,$show_other)
@@ -29,6 +30,8 @@ class VictimWidget extends BaseWidget
     $this->show_description=$show_description;
     $this->who=$who;
     $this->show_other=$show_other;
+
+
   }
 
   #[On('take_mod_id')]
@@ -52,13 +55,24 @@ class VictimWidget extends BaseWidget
               ->when(!$this->with_victim && $this->who=='tas',function ($q){
                     $q->where('tasreeh',null);
                 })
+              ->when(!$this->with_victim && $this->who=='bed',function ($q){
+                    $q->where('bedon',null);
+                })
 
                 ->when(!$this->show_other && $this->who=='maf',function ($q){
-                    $q->where('tasreeh',null);
+
+                    $q->where('tasreeh',null)->where('bedon',null);
                 })
                 ->when(!$this->show_other && $this->who=='tas',function ($q){
-                    $q->where('mafkoden',null);
+
+                    $q->where('mafkoden',null)->where('bedon',null);
                 })
+                ->when(!$this->show_other && $this->who=='bed',function ($q){
+
+                    $q->where('mafkoden',null)->where('tasreeh',null);
+                })
+
+
             ;
 
             return $victim;
@@ -84,6 +98,11 @@ class VictimWidget extends BaseWidget
                         $record->update(['tasreeh'=>$this->mod_id]);
                     }
 
+                    if ($this->who=='bed') {
+                        Bedon::find($this->mod_id)->update(['victim_id'=>$record->id]);
+                        $record->update(['bedon'=>$this->mod_id]);
+                    }
+
                   $this->dispatch('reset_mod');
 
                 })
@@ -95,7 +114,7 @@ class VictimWidget extends BaseWidget
                       return $record->mafkoden!=null;
                   })
                   ->visible( function (){
-                      return $this->who=='tas' && $this->show_other==true;
+                      return $this->who!='maf' && $this->show_other==true;
                   })
                   ->boolean()
                   ->label('مفقود'),
@@ -104,10 +123,19 @@ class VictimWidget extends BaseWidget
                         return $record->tasreeh!=null;
                     })
                     ->visible( function (){
-                        return $this->who=='maf' && $this->show_other==true;
+                        return $this->who!='tas' && $this->show_other==true;
                     })
                     ->boolean()
                     ->label('بتصريح'),
+                Tables\Columns\IconColumn::make('bedon')
+                    ->state(function (Victim $record){
+                        return $record->bedon!=null;
+                    })
+                    ->visible( function (){
+                        return $this->who !='bed' && $this->show_other==true;
+                    })
+                    ->boolean()
+                    ->label('بدون تصريح'),
               TextColumn::make('wife.FullName')
                 ->state(function (Victim $record) : string {
                   if ($record->husband_id ) {

@@ -18,7 +18,7 @@ class ListBedons extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->label('إضافة'),
-          Actions\Action::make('Modifymafkoden')
+          Actions\Action::make('Modifybedon')
 
             ->label('تعديلات ')
             ->icon('heroicon-m-users')
@@ -59,7 +59,12 @@ class ListBedons extends ListRecords
                 Bedon::where('family_id',null)
                     ->where('nation','ليبيا')
                     ->update(['family_id'=>45]) ;
-            })
+            }),
+            Actions\Action::make('Comparebedon')
+                ->label('مقارنة')
+                ->icon('heroicon-m-users')
+                ->color('info')
+                ->url('bedons/comparebedon'),
         ];
     }
 }
