@@ -26,7 +26,7 @@ class CompareMaf extends Page implements HasForms
     protected static string $resource = MafkodenResource::class;
 
     protected static string $view = 'filament.resources.mafkoden-resource.pages.compare-maf';
-  protected ?string $heading="";
+  protected ?string $heading="مقارنة للمفقودبن";
 
   public $family_id;
   public $with_victim=false;

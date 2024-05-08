@@ -18,12 +18,12 @@ class ListTasreehs extends ListRecords
         return [
             Actions\CreateAction::make()
              ->label('إضافة'),
-            Actions\Action::make('Modifymafkoden')
+            Actions\Action::make('Modifytasreeh')
 
                 ->label('تعديلات ')
                 ->icon('heroicon-m-users')
                 ->color('danger')
-                ->url('bedons/modifybedon'),
+                ->url('tasreehs/modifytasreeh'),
             Actions\Action::make('setfamily')
                 ->label('set family')
                 ->visible(false)

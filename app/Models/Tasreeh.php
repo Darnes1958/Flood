@@ -11,4 +11,7 @@ class Tasreeh extends Model
     public function Family(){
         return $this->belongsTo(Family::class);
     }
+  public function Victim(){
+    return $this->belongsTo(Victim::class);
+  }
 }

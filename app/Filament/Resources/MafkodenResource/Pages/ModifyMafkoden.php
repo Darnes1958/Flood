@@ -30,7 +30,7 @@ class ModifyMafkoden extends Page implements HasTable,HasForms
 
     protected static string $view = 'filament.resources.mafkoden-resource.pages.modify-mafkoden';
 
-  protected ?string $heading="";
+  protected ?string $heading="مفقودين";
 
   public $family_id;
   public $newFamily_id;
