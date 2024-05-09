@@ -31,7 +31,7 @@ class CompareMaf extends Page implements HasForms
   public $family_id;
   public $with_victim=false;
   public $show_description=false;
-  public $show_other=false;
+  public $show_other=true;
 
   public $familyData;
 
@@ -59,9 +59,8 @@ class CompareMaf extends Page implements HasForms
           Select::make('family_id')
             ->hiddenLabel()
             ->prefix('العائلة')
-
             ->optionsLimit(500)
-            ->options(Family::all()->pluck('FamName','id'))
+            ->options(Family::has('mafkoden')->pluck('FamName','id'))
             ->preload()
             ->live()
             ->searchable()
@@ -90,7 +89,7 @@ class CompareMaf extends Page implements HasForms
                 show_description: $this->show_description,who: 'maf',show_other: $this->show_other);
           }),
              Checkbox::make('show_other')
-                 ->label('إظهار بتصريح')
+                 ->label('إظهار بتصريح وبدون')
                  ->reactive()
 
                  ->afterStateUpdated(function ($state){
