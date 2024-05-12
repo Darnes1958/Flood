@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 class ListVictims extends ListRecords
 {
     protected static string $resource = VictimResource::class;
+    protected ?string $heading='';
   public $family_id;
 
   public function getTabs(): array

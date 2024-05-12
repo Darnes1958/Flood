@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Allview;
+use App\Models\Bedmafview;
 use App\Models\Family;
+use App\Models\Tasbedview;
+use App\Models\Tasmafview;
+use App\Models\Tasreeh;
 use App\Models\Tribe;
 use App\Models\Victim;
 use App\Models\Video;
@@ -34,6 +39,48 @@ class PdfController extends Controller
     $embed = OEmbed::get($name);
     return $embed;
   }
+
+  public function PdfTekrar($what){
+      info($what);
+      if ($what=='inTasAndBed')   $TableName = Tasbedview::query()->orderBy('nameTas')->get();
+      if ($what=='inTasAndMaf')   $TableName = Tasmafview::query()->orderBy('nameTas')->get();
+      if ($what=='inBedAndMaf')   $TableName = Bedmafview::query()->orderBy('nameBed')->get();
+      if ($what=='inAll')   $TableName = Allview::query()->orderBy('nameTas')->get();
+info('here');
+      $html = view('PDF.PdfTekrar',
+          ['TableName'=>$TableName,'what'=>$what])->toArabicHTML();
+
+      $pdf = Pdf::loadHTML($html)->output();
+      $headers = array(
+          "Content-type" => "application/pdf",
+      );
+      return response()->streamDownload(
+          fn () => print($pdf),
+          "tekrar.pdf",
+          $headers
+      );
+
+  }
+    public function PdfRepeted($what){
+        if ($what=='inTas')   $TableName = Tasreeh::where('repeted',1)->orderBy('name')->get();
+        if ($what=='inMaf')   $TableName = Tasmafview::where('repeted',1)->orderBy('name')->get();
+        if ($what=='inBed')   $TableName = Bedmafview::where('repeted',1)->orderBy('name')->get();
+
+
+        $html = view('PDF.PdfRepeted',
+            ['TableName'=>$TableName,'what'=>$what])->toArabicHTML();
+
+        $pdf = Pdf::loadHTML($html)->output();
+        $headers = array(
+            "Content-type" => "application/pdf",
+        );
+        return response()->streamDownload(
+            fn () => print($pdf),
+            "repeted.pdf",
+            $headers
+        );
+
+    }
   public function PdfFamily($family_id){
 
    $fam=Family::find($family_id);
