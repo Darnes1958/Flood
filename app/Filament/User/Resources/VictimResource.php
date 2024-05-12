@@ -49,6 +49,7 @@ class VictimResource extends Resource
 
   protected static ?string $navigationLabel='كشف تفصيلي بالضحايا';
 
+
   public $family_name;
   static $family_id;
   public $filters;
