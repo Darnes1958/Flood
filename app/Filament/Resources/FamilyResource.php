@@ -6,6 +6,7 @@ use App\Filament\Resources\FamilyResource\Pages;
 use App\Filament\Resources\FamilyResource\RelationManagers;
 use App\Models\Family;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -29,12 +30,26 @@ class FamilyResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('FamName')
+                TextInput::make('FamName')
                 ->label('اسم العائلة'),
                 Forms\Components\Select::make('tribe_id')
                   ->searchable()
                   ->preload()
-                 ->relationship('Tribe','TriName')
+                  ->relationship('Tribe','TriName')
+                  ->createOptionForm([
+                    TextInput::make('TriName')
+                      ->required()
+                      ->label('اسم القبيلة')
+                      ->maxLength(255)
+                      ->required(),
+                  ])
+                  ->editOptionForm([
+                    TextInput::make('TriName')
+                      ->required()
+                      ->label('اسم القبيلة')
+                      ->maxLength(255)
+                      ->required(),
+                  ])
                   ->label('القبيلة'),
             ]);
     }
@@ -50,6 +65,49 @@ class FamilyResource extends Resource
                  ->label('الاسم'),
                 Tables\Columns\TextColumn::make('Tribe.TriName')
                   ->label('القبيلة'),
+                Tables\Columns\IconColumn::make('ok')
+                 ->label('انتهت مراجعتها')
+                 ->action(function (Family $record){
+                   if ($record->ok==0) $record->update(['ok'=>1]) ;else $record->update(['ok'=>0]);
+                 })
+                 ->boolean(),
+              Tables\Columns\TextColumn::make('who')
+               ->action(
+                 Tables\Actions\Action::make('updateBy')
+                  ->form([
+                    Forms\Components\TextInput::make('who')
+                     ->label('بمعرفة')
+                  ])
+                   ->fillForm(fn (Family $record): array => [
+                     'who' => $record->who,
+                   ])
+                 ->modalCancelActionLabel('عودة')
+                 ->modalSubmitActionLabel('تحزين')
+                 ->modalHeading('ادحال وتعديل بمعرفة')
+                 ->action(function (array $data,Family $record,){
+                   $record->update(['who'=>$data['who']]);
+                 })
+               )
+               ->label('بمعرفة'),
+              Tables\Columns\TextColumn::make('nation')
+                ->action(
+                  Tables\Actions\Action::make('updatenation')
+                    ->form([
+                      Forms\Components\TextInput::make('nation')
+                        ->label('الجنسية')
+                    ])
+                    ->fillForm(fn (Family $record): array => [
+                      'nation' => $record->nation,
+                    ])
+                    ->modalCancelActionLabel('عودة')
+                    ->modalSubmitActionLabel('تحزين')
+                    ->modalHeading('ادحال وتعديل بمعرفة')
+                    ->action(function (array $data,Family $record,){
+                      $record->update(['nation'=>$data['nation']]);
+                    })
+                )
+                ->label('الجنسية'),
+
             ])
             ->filters([
               Tables\Filters\SelectFilter::make('فلترة بالقبيلة')

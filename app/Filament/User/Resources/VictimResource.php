@@ -347,7 +347,6 @@ class VictimResource extends Resource
             Action::make('updateBed')
               ->requiresConfirmation()
               ->modalHeading('هل انت متأكد من تعديل الإسم')
-
               ->action(function (Victim $record){
                 $rec=Bedon::find($record->bedon);
                 $record->update([
@@ -451,7 +450,6 @@ class VictimResource extends Resource
       ], layout: Tables\Enums\FiltersLayout::AboveContentCollapsible)
       ->filtersTriggerAction(
         fn (Tables\Actions\Action $action) => $action
-
           ->button()
           ->label('إضفط هنا لفتح واغلاق الفلترة'),
       )
@@ -460,7 +458,6 @@ class VictimResource extends Resource
           ->icon('heroicon-s-pencil')
           ->iconButton()
           ->color('blue'),
-
         Action::make('View Information')
           ->iconButton()
           ->modalHeading('')
@@ -605,8 +602,6 @@ class VictimResource extends Resource
 
 
               ])->columns(4)
-
-
           ])
           ->slideOver(),
         Action::make('RetTasreeh')
