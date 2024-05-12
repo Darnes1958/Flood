@@ -147,7 +147,7 @@ class ViewVictim extends ViewRecord
          ->columns(2)
          ->columnSpan(2),
 
-           ImageEntry::make('image')
+       ImageEntry::make('image')
            ->label('')
            ->size('10')
         ->columnSpan(2)

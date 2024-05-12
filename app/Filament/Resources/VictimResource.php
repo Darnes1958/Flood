@@ -61,10 +61,7 @@ class VictimResource extends Resource
                 ->offColor(function (Get $get){
                   if ($get('male')=='أنثي') return 'danger';
                   else return 'gray';})
-
                 ->label('أم'),
-
-
               Radio::make('male')
                 ->label('الجنس')
                 ->inline()
@@ -127,7 +124,6 @@ class VictimResource extends Resource
                   ->where('male','أنثي'))
                 ->searchable()
                 ->reactive()
-
                 ->preload(),
 
               TextInput::make('Name1')
@@ -264,6 +260,8 @@ class VictimResource extends Resource
                 ->directory('form-attachments'),
               TextInput::make('FullName')
               ->hidden(),
+              TextInput::make('user_id')
+                ->hidden(),
 
             ])->columns(4)
           ;

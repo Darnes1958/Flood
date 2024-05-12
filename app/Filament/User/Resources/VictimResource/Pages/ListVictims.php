@@ -3,34 +3,36 @@
 namespace App\Filament\User\Resources\VictimResource\Pages;
 
 use App\Filament\User\Resources\VictimResource;
-use App\Models\Victim;
 use Filament\Actions;
-use Filament\Actions\Action;
-use Filament\Notifications\Notification;
+
+use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListVictims extends ListRecords
 {
     protected static string $resource = VictimResource::class;
-    public $family_id;
-    protected ?string $heading=' ';
-  protected function getHeaderActions(): array
+  public $family_id;
+
+  public function getTabs(): array
   {
     return [
-     Action::make('طباعة')
-       ->icon('heroicon-m-printer')
-       ->url(function () {
-         $this->filters=$this->table->getFilters();
-         $this->family_id=$this->filters['family']->getState()['value'];
-         if (!$this->family_id) {
-
-           return false;
-         }
-
-         return route('pdffamily', ['family_id' => $this->family_id]);
-       } ),
+      'all' => Tab::make('الجميع')
+      ,
+      'mysystem' => Tab::make('المنظومة')
+        ->modifyQueryUsing(fn (Builder $query) => $query->where('fromwho', 'المنظومة')),
+      'tasreeh' => Tab::make('بتصريح')
+        ->modifyQueryUsing(fn (Builder $query) => $query->where('fromwho', 'بتصريح')),
+      'bedon' => Tab::make('بدون')
+        ->modifyQueryUsing(fn (Builder $query) => $query->where('fromwho', 'بدون')),
+      'mafkoden' => Tab::make('مفقودين')
+        ->modifyQueryUsing(fn (Builder $query) => $query->where('fromwho', 'مفقودين')),
+      'sysOnly' => Tab::make(' في المنظومة فقط')
+        ->modifyQueryUsing(fn (Builder $query) => $query->where('bedon', null)
+          ->where('mafkoden', null)->where('tasreeh', null)),
+      'other' => Tab::make('غير موجود بالمنظومة')
+        ->modifyQueryUsing(fn (Builder $query) => $query->where('fromwho','!=', 'المنظومة')),
     ];
   }
-
 
 }

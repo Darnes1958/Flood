@@ -25,6 +25,7 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class CreateByFather extends Page implements HasTable
 {
@@ -67,6 +68,7 @@ class CreateByFather extends Page implements HasTable
       'male'=>'ذكر',
       'family_id'=>$this->family_id,
       'street_id'=>Street::where('StrName','غير محدد')->first()->id,
+      'user_id'=>Auth::id(),
       ]);
 
   }
@@ -112,6 +114,7 @@ class CreateByFather extends Page implements HasTable
           $this->victimData['Name2'].' '.
           $this->victimData['Name3'].' '.
           $this->victimData['Name4'];
+    $this->victimData['user_id']=Auth::id();
     $this->victim=Victim::create($this->victimData);
     if ($this->victim->wife_id) Victim::find($this->victim->wife_id)->update(['husband_id'=>$this->victim->id]);
     if ($this->victim->husband_id) Victim::find($this->victim->husband_id)->update(['wife_id'=>$this->victim->id]);
@@ -129,6 +132,7 @@ class CreateByFather extends Page implements HasTable
         'family_id' => $this->victimData['family_id'], 'street_id' => $this->victimData['street_id'],
         'father_id' => $this->victim->id, 'mother_id' => $mother,
         'male' => 'ذكر',
+        'user_id'=>Auth::id(),
       ]);
     }
     else {
@@ -141,6 +145,7 @@ class CreateByFather extends Page implements HasTable
           'family_id'=>$this->victimData['family_id'],'street_id'=>$this->victimData['street_id'],
         //  'father_id'=>$this->victimData['father_id'],'mother_id'=>$this->victimData['mother_id'],
           'male'=>'ذكر',
+          'user_id'=>Auth::id(),
         ]);}
       else
         $this->victimForm->fill([
@@ -149,6 +154,7 @@ class CreateByFather extends Page implements HasTable
           'family_id'=>$this->victimData['family_id'],'street_id'=>$this->victimData['street_id'],
           'father_id'=>$this->victimData['father_id'],'mother_id'=>$this->victimData['mother_id'],
           'male'=>'ذكر',
+          'user_id'=>Auth::id(),
         ]);
 
     }
@@ -333,6 +339,9 @@ class CreateByFather extends Page implements HasTable
            ->label('الاسم بالكامل')
             ->columnSpan(2)
           ->readOnly(),
+          TextInput::make('user_id')
+
+            ->readOnly(),
 
 
         ])->columns(4)
