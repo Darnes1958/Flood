@@ -15,6 +15,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Pages\Page;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -212,16 +213,52 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->searchable(),
                 TextColumn::make('Family.FamName')
                     ->label('العائلة')
-                    ->visible(function (){
-                      return $this->family_id==null ;
-                    })
+                    ->action(
+                    Action::make('updateFamily')
+                      ->form([
+                        Select::make('family_id')
+                          ->options(Family::all()->pluck('FamName','id'))
+                          ->label('العائلة')
+                          ->searchable()
+                          ->preload()
+                          ->live()
+                      ])
+                      ->fillForm(fn (Victim $record): array => [
+                        'family_id' => $record->family_id,
+                      ])
+                      ->modalCancelActionLabel('عودة')
+                      ->modalSubmitActionLabel('تحزين')
+                      ->modalHeading('تعديل العائلة')
+                      ->action(function (array $data,Victim $record,){
+                        $record->update(['family_id'=>$data['family_id']]);
+                      })
+                  )
                     ->sortable()
+                    ->toggleable()
                     ->searchable(),
               TextColumn::make('Street.StrName')
                 ->label('العنوان')
-                ->visible(function (){
-                  return $this->street_id==null ;
-                })
+                ->action(
+                  Action::make('updateٍStreet')
+                    ->form([
+                      Select::make('street_id')
+                        ->options(Street::all()->pluck('StrName','id'))
+                        ->label('العنوان')
+                        ->searchable()
+                        ->preload()
+                        ->live()
+                    ])
+                    ->fillForm(fn (Victim $record): array => [
+                      'street_id' => $record->street_id,
+                    ])
+                    ->modalCancelActionLabel('عودة')
+                    ->modalSubmitActionLabel('تحزين')
+                    ->modalHeading('تعديل العنوان')
+                    ->action(function (array $data,Victim $record,){
+                      $record->update(['street_id'=>$data['street_id']]);
+                    })
+                )
+                ->toggleable()
                 ->sortable()
                 ->searchable(),
 
