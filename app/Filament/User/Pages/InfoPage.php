@@ -2,7 +2,10 @@
 
 namespace App\Filament\User\Pages;
 
+use App\Models\Bedon;
 use App\Models\Family;
+use App\Models\Mafkoden;
+use App\Models\Street;
 use App\Models\Victim;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
@@ -31,6 +34,7 @@ class InfoPage extends Page implements HasTable,HasForms
     protected static ?string $navigationLabel='استفسار وبحث';
 
     public $family_id=null;
+    public $street_id=null;
     public $show='all';
     public $mother;
     public $count;
@@ -55,26 +59,40 @@ class InfoPage extends Page implements HasTable,HasForms
                             $this->family_id=$state;
                             $this->mother=Victim::where('family_id',$state)->where('is_mother',1)->pluck('id')->all();
                         }),
-                    Radio::make('show')
-                     ->inline()
+                  Select::make('street_id')
                     ->hiddenLabel()
-                        ->reactive()
+                    ->prefix('العنوان')
+                    ->options(Street::all()->pluck('StrName','id'))
+                    ->preload()
                     ->live()
-                        ->columnSpan(3)
-                    ->default('all')
+                    ->searchable()
+                    ->columnSpan(2)
                     ->afterStateUpdated(function ($state){
-                        $this->show=$state;
-                    })
-                    ->options([
-                       'all'=>'الكل',
-                        'parent'=> 'الوالدين',
-                        'single'=>'افراد فقط',
-                      'father_only'=>'أباء فقط',
-                      'mother_only'=>'أمهات فقط',
-                    ])
-
+                      $this->street_id=$state;
+                    }),
                 ])
-                ->columns(5)
+                ->columns(4),
+              Section::make()
+               ->schema([
+                 Radio::make('show')
+                   ->inline()
+                   ->hiddenLabel()
+                   ->reactive()
+                   ->live()
+                   ->columnSpan(3)
+                   ->default('all')
+                   ->afterStateUpdated(function ($state){
+                     $this->show=$state;
+                   })
+                   ->options([
+                     'all'=>'الكل',
+                     'parent'=> 'أباء وأمهات',
+                     'single'=>'افراد فقط',
+                     'father_only'=>'أباء فقط',
+                     'mother_only'=>'أمهات فقط',
+                   ])
+
+               ])
             ]);
     }
 
@@ -87,11 +105,13 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->when($this->family_id,function($q){
                        $q->where('family_id',$this->family_id);
                     })
+                  ->when($this->street_id,function($q){
+                    $q->where('street_id',$this->street_id);
+                  })
                     ->when($this->show=='parent',function ($q){
                         $q->where(function ($q){
                             $q->where('is_father',1)
-                                ->orwhere('is_mother',1)
-                                ;
+                                ->orwhere('is_mother',1);
                         });
                     })
                   ->when($this->show=='father_only',function ($q){
@@ -129,6 +149,23 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->label('الاسم بالكامل')
                     ->sortable()
                     ->searchable()
+                    ->description(function (Victim $record){
+                      $who='';
+                      $bed=null;
+                      $maf=null;
+                      if ($record->bedon) $bed=Bedon::find($record->bedon);
+                      if ($record->mafkoden) $maf=Mafkoden::find($record->mafkoden);
+                      if ($bed) {$slash=null; if ($bed->tel) $slash=' / ';
+                                 $who= "المبلغ ->   بدون : ".$bed->who.$slash.$bed->tel;}
+                      if ($maf)
+                        if ($bed) {$slash=null; if ($maf->tel) $slash=' / ';
+                                   $who=$who.'   مفقودين : '.$maf->who.$slash.$maf->tel;}
+                        else {$slash=null; if ($maf->tel) $slash=' / ';
+                              $who=$who.' المبلغ ->   مفقودين : '.$maf->who.$slash.$maf->tel;}
+
+                        return $who;
+
+                    })
                     ->formatStateUsing(fn (Victim $record): View => view(
                         'filament.user.pages.full-data',
                         ['record' => $record],
@@ -140,8 +177,15 @@ class InfoPage extends Page implements HasTable,HasForms
                       return $this->family_id==null ;
                     })
                     ->sortable()
-
                     ->searchable(),
+              TextColumn::make('Street.StrName')
+                ->label('العنوان')
+                ->visible(function (){
+                  return $this->street_id==null ;
+                })
+                ->sortable()
+                ->searchable(),
+
             ]);
     }
 }
