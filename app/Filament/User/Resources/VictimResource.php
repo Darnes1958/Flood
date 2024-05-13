@@ -328,7 +328,6 @@ class VictimResource extends Resource
             Action::make('updateTas')
               ->requiresConfirmation()
               ->modalHeading('هل انت متأكد من تعديل الإسم')
-
               ->action(function (Victim $record){
                 $rec=Tasreeh::find($record->tasreeh);
                 $record->update([

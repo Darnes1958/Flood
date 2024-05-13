@@ -38,6 +38,7 @@ class InfoPage extends Page implements HasTable,HasForms
     public $show='all';
     public $mother;
     public $count;
+    public $from='all';
 
 
 
@@ -70,27 +71,44 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->afterStateUpdated(function ($state){
                       $this->street_id=$state;
                     }),
+                  Radio::make('show')
+                    ->inline()
+                    ->hiddenLabel()
+                    ->reactive()
+                    ->live()
+                    ->columnSpan(2)
+                    ->default('all')
+                    ->afterStateUpdated(function ($state){
+                      $this->show=$state;
+                    })
+                    ->options([
+                      'all'=>'الكل',
+                      'parent'=> 'أباء وأمهات',
+                      'single'=>'افراد',
+                      'father_only'=>'أباء',
+                      'mother_only'=>'أمهات',
+                    ]),
+                  Radio::make('from')
+                    ->inline()
+                    ->hiddenLabel()
+                    ->reactive()
+                    ->live()
+                    ->columnSpan(2)
+                    ->default('all')
+                    ->afterStateUpdated(function ($state){
+                      $this->from=$state;
+                    })
+                    ->options([
+                      'all'=>'الكل',
+                      'tasreeh'=>'بتصريح',
+                      'bedon'=>'بدون',
+                      'mafkoden'=>'مفقودين',
+                    ]),
                 ])
                 ->columns(4),
               Section::make()
                ->schema([
-                 Radio::make('show')
-                   ->inline()
-                   ->hiddenLabel()
-                   ->reactive()
-                   ->live()
-                   ->columnSpan(3)
-                   ->default('all')
-                   ->afterStateUpdated(function ($state){
-                     $this->show=$state;
-                   })
-                   ->options([
-                     'all'=>'الكل',
-                     'parent'=> 'أباء وأمهات',
-                     'single'=>'افراد فقط',
-                     'father_only'=>'أباء فقط',
-                     'mother_only'=>'أمهات فقط',
-                   ])
+
 
                ])
             ]);
@@ -120,6 +138,16 @@ class InfoPage extends Page implements HasTable,HasForms
                   ->when($this->show=='mother_only',function ($q){
                         $q->where('is_mother',1);
                   })
+                  ->when($this->from=='bedon'  ,function ($q){
+                    $q->where('fromwho','بدون');
+                  })
+                  ->when($this->from=='tasreeh',function ($q){
+                    $q->where('fromwho','بتصريح');
+                  })
+                  ->when($this->from=='mafkoden',function ($q){
+                    $q->where('fromwho','مفقودين');
+                  })
+
                     ->when($this->show=='single',function ($q){
                             $q->where(function ($q){
                                   $q->where('is_father',null)->orwhere('is_father',0);
@@ -144,7 +172,18 @@ class InfoPage extends Page implements HasTable,HasForms
 
             })
             ->columns([
-
+              TextColumn::make('fromwho')
+                ->color(function ($state){
+                  switch ($state){
+                    case 'المنظومة': $c='info';break;
+                    case 'مفقودين': $c='rose';break;
+                    case 'بتصريح': $c='success';break;
+                    case 'بدون': $c='primary';break;
+                  }
+                  return $c;
+                })
+                ->toggleable()
+                ->label('بواسطة'),
                 TextColumn::make('FullName')
                     ->label('الاسم بالكامل')
                     ->sortable()
