@@ -41,15 +41,12 @@ class PdfController extends Controller
   }
 
   public function PdfTekrar($what){
-      info($what);
       if ($what=='inTasAndBed')   $TableName = Tasbedview::query()->orderBy('nameTas')->get();
       if ($what=='inTasAndMaf')   $TableName = Tasmafview::query()->orderBy('nameTas')->get();
       if ($what=='inBedAndMaf')   $TableName = Bedmafview::query()->orderBy('nameBed')->get();
       if ($what=='inAll')   $TableName = Allview::query()->orderBy('nameTas')->get();
-info('here');
       $html = view('PDF.PdfTekrar',
           ['TableName'=>$TableName,'what'=>$what])->toArabicHTML();
-
       $pdf = Pdf::loadHTML($html)->output();
       $headers = array(
           "Content-type" => "application/pdf",
@@ -59,7 +56,6 @@ info('here');
           "tekrar.pdf",
           $headers
       );
-
   }
     public function PdfRepeted($what){
         if ($what=='inTas')   $TableName = Tasreeh::where('repeted',1)->orderBy('name')->get();

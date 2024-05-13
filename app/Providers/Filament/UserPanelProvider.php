@@ -30,7 +30,7 @@ class UserPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-          ->viteTheme('resources/css/filament/admin/theme.css')
+          ->viteTheme('resources/css/filament/user/theme.css')
           ->brandName('فيضان درنه')
           ->profile(EditProfile::class)
 
@@ -41,6 +41,12 @@ class UserPanelProvider extends PanelProvider
             ->path('')
             ->colors([
                 'primary' => Color::Amber,
+                'danger' => Color::Rose,
+                'gray' => Color::Gray,
+                'info' => Color::Blue,
+
+                'success' => Color::Emerald,
+                'warning' => Color::Orange,
             ])
           ->login(Login::class)
             ->discoverResources(in: app_path('Filament/User/Resources'), for: 'App\\Filament\\User\\Resources')
