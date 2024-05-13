@@ -25,8 +25,6 @@ class PdfController extends Controller
   {
     $name1 = $video->attachment;
     $name =storage_path() ."/app/public/".$video->attachment;
-
-
     $headers = array(
       'Content-type'          => 'video/mp4',
       'Content-Disposition'   => 'inline; filename="' . $name . '"'
