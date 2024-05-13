@@ -262,6 +262,15 @@ class InfoPage extends Page implements HasTable,HasForms
                 ->sortable()
                 ->searchable(),
 
+            ])
+            ->actions([
+              Action::make('delete')
+               ->iconButton()
+               ->icon('heroicon-s-trash')
+               ->requiresConfirmation()
+               ->action(function (Victim $record){
+                 $record->delete();
+               })
             ]);
     }
 }
