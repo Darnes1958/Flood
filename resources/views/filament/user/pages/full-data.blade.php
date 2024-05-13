@@ -39,7 +39,7 @@
         @php
             $i=0;
             foreach($record->father as $item){
-                 if ($i == 0) echo "<p>{$item->Name1}</p>"; else echo "<p style=\"color: aqua;font-weight: bold\">&nbsp;|&nbsp;</p><p>{$item->Name1}</p>";
+                 if ($i == 0) echo "<p>{$item->Name1}</p>"; else echo "<p style=\"color: aqua;font-weight: bold\">&nbsp;,&nbsp;</p><p>{$item->Name1}</p>";
                  $i++;}
         @endphp
     @endif
@@ -48,8 +48,9 @@
             @php
                 $i=0;
                 foreach($record->mother as $item){
-                     if ($i == 0) echo "<p>{$item->Name1}</p>"; else echo "<p style=\"color: aqua;font-weight: bold\">&nbsp;|&nbsp;</p><p>{$item->Name1}</p>";
+                     if ($i == 0) echo "<p>{$item->Name1}</p>"; else echo "<p style=\"color: aqua;font-weight: bold\">&nbsp;,&nbsp;</p><p>{$item->Name1}</p>";
                      $i++;}
+                if (!$record->husband) echo "<p>&nbsp&nbsp;(من : &nbsp {$item->Name2}&nbsp;{$item->Name3}&nbsp;{$item->Name4})</p>"
             @endphp
         @endif
 </div>
