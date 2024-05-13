@@ -23,6 +23,7 @@ use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class InfoPage extends Page implements HasTable,HasForms
 {
@@ -266,6 +267,7 @@ class InfoPage extends Page implements HasTable,HasForms
             ->actions([
               Action::make('delete')
                ->iconButton()
+               ->visible(Auth::user()->can('delete victim'))
                ->icon('heroicon-s-trash')
                ->requiresConfirmation()
                ->action(function (Victim $record){
