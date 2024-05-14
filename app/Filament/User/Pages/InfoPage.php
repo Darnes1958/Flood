@@ -8,6 +8,7 @@ use App\Models\Mafkoden;
 use App\Models\Street;
 use App\Models\Tasreeh;
 use App\Models\Victim;
+use Filament\Actions\StaticAction;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -17,6 +18,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Pages\Page;
+use Filament\Support\Enums\ActionSize;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -53,18 +55,18 @@ class InfoPage extends Page implements HasTable,HasForms
             ->schema([
                Section::make()
                 ->schema([
-                    Select::make('family_id')
-                        ->hiddenLabel()
-                        ->prefix('العائلة')
-                        ->options(Family::all()->pluck('FamName','id'))
-                        ->preload()
-                        ->live()
-                        ->searchable()
-                        ->columnSpan(2)
-                        ->afterStateUpdated(function ($state){
-                            $this->family_id=$state;
-                            $this->mother=Victim::where('family_id',$state)->where('is_mother',1)->pluck('id')->all();
-                        }),
+                  Select::make('family_id')
+                      ->hiddenLabel()
+                      ->prefix('العائلة')
+                      ->options(Family::all()->pluck('FamName','id'))
+                      ->preload()
+                      ->live()
+                      ->searchable()
+                      ->columnSpan(3)
+                      ->afterStateUpdated(function ($state){
+                          $this->family_id=$state;
+                          $this->mother=Victim::where('family_id',$state)->where('is_mother',1)->pluck('id')->all();
+                      }),
                   Select::make('street_id')
                     ->hiddenLabel()
                     ->prefix('العنوان')
@@ -72,16 +74,30 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->preload()
                     ->live()
                     ->searchable()
-                    ->columnSpan(2)
+                    ->columnSpan(3)
                     ->afterStateUpdated(function ($state){
                       $this->street_id=$state;
                     }),
+
+                  \Filament\Forms\Components\Actions::make([
+                    \Filament\Forms\Components\Actions\Action::make('SerWho')
+                      ->label('بحث عن المبلغين')
+                      ->badge()
+                      ->icon('heroicon-s-magnifying-glass')
+                      ->color('success')
+                      ->modalContent(view('filament.user.pages.who-search-widget'))
+                      ->modalCancelAction(fn (StaticAction $action) => $action->label('عودة')->icon('heroicon-s-arrow-uturn-left'))
+                      ->modalSubmitAction(false)
+
+                    ,
+                  ])->columnSpan(2)->alignCenter()->verticallyAlignCenter(),
                   Radio::make('show')
                     ->inline()
                     ->hiddenLabel()
+                    ->inlineLabel(false)
                     ->reactive()
                     ->live()
-                    ->columnSpan(2)
+                    ->columnSpan(4)
                     ->default('all')
                     ->afterStateUpdated(function ($state){
                       $this->show=$state;
@@ -96,9 +112,10 @@ class InfoPage extends Page implements HasTable,HasForms
                   Radio::make('from')
                     ->inline()
                     ->hiddenLabel()
+                    ->inlineLabel(false)
                     ->reactive()
                     ->live()
-                    ->columnSpan(2)
+                    ->columnSpan(4)
                     ->default('all')
                     ->afterStateUpdated(function ($state){
                       $this->from=$state;
@@ -110,7 +127,7 @@ class InfoPage extends Page implements HasTable,HasForms
                       'mafkoden'=>'مفقودين',
                     ]),
                 ])
-                ->columns(4),
+                ->columns(8),
 
             ]);
     }
@@ -296,6 +313,13 @@ class InfoPage extends Page implements HasTable,HasForms
 
             ])
             ->actions([
+              Action::make('edit')
+               ->iconButton()
+                ->color('info')
+               ->icon('heroicon-s-pencil')
+                ->url(fn (Victim $record): string => route('filament.user.resources.victims.edit', ['record' => $record]))
+
+               ,
               Action::make('delete')
                ->iconButton()
                ->visible(Auth::user()->can('delete victim'))

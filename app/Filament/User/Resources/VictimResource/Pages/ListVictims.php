@@ -2,6 +2,7 @@
 
 namespace App\Filament\User\Resources\VictimResource\Pages;
 
+use App\Filament\User\Pages\Mysearch;
 use App\Filament\User\Resources\VictimResource;
 use Filament\Actions;
 
@@ -12,10 +13,12 @@ use Illuminate\Database\Eloquent\Builder;
 class ListVictims extends ListRecords
 {
     protected static string $resource = VictimResource::class;
-    protected ?string $heading='';
+    protected ?string $heading=' ';
     protected static ?int $navigationSort =2;
 
   public $family_id;
+
+
 
   public function getTabs(): array
   {

@@ -51,6 +51,9 @@ class FamilyResource extends Resource
                       ->required(),
                   ])
                   ->label('القبيلة'),
+              TextInput::make('nation')
+                ->default('ليبيا')
+                ->label('الجنسية'),
             ]);
     }
 
@@ -67,6 +70,7 @@ class FamilyResource extends Resource
                   ->label('القبيلة'),
                 Tables\Columns\IconColumn::make('ok')
                  ->label('انتهت مراجعتها')
+                  ->sortable()
                  ->action(function (Family $record){
                    if ($record->ok==0) $record->update(['ok'=>1]) ;else $record->update(['ok'=>0]);
                  })
@@ -88,6 +92,7 @@ class FamilyResource extends Resource
                    $record->update(['who'=>$data['who']]);
                  })
                )
+                ->sortable()
                ->label('بمعرفة'),
               Tables\Columns\TextColumn::make('nation')
                 ->action(

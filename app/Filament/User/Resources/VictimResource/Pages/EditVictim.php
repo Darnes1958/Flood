@@ -5,6 +5,7 @@ namespace App\Filament\User\Resources\VictimResource\Pages;
 use App\Filament\User\Resources\VictimResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use http\Url;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,7 +30,7 @@ class EditVictim extends EditRecord
   protected function getRedirectUrl(): string
   {
 
-    return $this->getResource()::getUrl('index');
+    return $this->previousUrl;
   }
 
   protected function getHeaderActions(): array

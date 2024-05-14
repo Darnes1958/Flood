@@ -6,6 +6,7 @@ use App\Filament\Resources\BedonResource;
 use App\Livewire\BedonWidget;
 use App\Livewire\MafkodenWidget;
 use App\Livewire\VictimWidget;
+use App\Livewire\WhoWidget;
 use App\Models\Family;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Section;
@@ -102,6 +103,7 @@ class CompareBed extends Page implements HasForms
         return [
             BedonWidget::class,
             VictimWidget::class,
+            WhoWidget::class,
         ];
     }
     protected function getFooterWidgets(): array
@@ -112,7 +114,8 @@ class CompareBed extends Page implements HasForms
             ]),
             VictimWidget::make([
                 'family_id'=>$this->family_id,'without'=>$this->with_victim,'who'=>'bed','show_other'=> $this->show_other,
-            ])
+            ]),
+           WhoWidget::make(),
         ];
     }
 }

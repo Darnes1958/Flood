@@ -2,6 +2,7 @@
 
 namespace App\Filament\User\Resources;
 
+use App\Filament\User\Pages\Mysearch;
 use App\Filament\User\Resources\VictimResource\Pages;
 use App\Filament\User\Resources\VictimResource\RelationManagers;
 use App\Models\Bedon;
@@ -58,7 +59,6 @@ class VictimResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-
           ->schema([
             Forms\Components\Toggle::make('is_father')
               ->onColor(function (Get $get){
@@ -432,8 +432,19 @@ class VictimResource extends Resource
                  ->url(function (Get $get) {
                    return route('pdffamily', ['family_id' => $get('family_id')]);
                  } ),
+              Forms\Components\Actions\Action::make('whoSer')
+                ->label('بحث عن المبلغين')
+                ->size(ActionSize::ExtraLarge)
+                ->badge()
+                ->icon('heroicon-s-magnifying-glass')
+                ->color('success')
+                ->modalContent(view('filament.user.pages.who-search-widget'))
+                ->modalCancelAction(fn (StaticAction $action) => $action->label('عودة')->icon('heroicon-s-arrow-uturn-left'))
+                ->modalSubmitAction(false)
 
-              ]),
+
+
+              ])->verticallyAlignCenter()->columnSpan(2),
           ])
           ->columns(6)
           ->columnSpanFull()
@@ -666,8 +677,6 @@ class VictimResource extends Resource
             'create' => Pages\CreateVictim::route('/create'),
             'edit' => Pages\EditVictim::route('/{record}/edit'),
           'view' => Pages\ViewVictim::route('/{record}'),
-          'vieweditvictim' =>Pages\ViewEditVictim::route('/vieweditvictim'),
-
         ];
     }
 }
