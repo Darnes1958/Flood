@@ -335,6 +335,7 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->modalCancelActionLabel('لا')
                     ->fillForm(fn (Victim $record): array => [
                         'family_id' => $record->family_id,
+                         'id' => $record->id,
                     ])
                     ->form([
                       TextInput::make('family_id')
