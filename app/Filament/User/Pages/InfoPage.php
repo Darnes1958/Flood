@@ -10,6 +10,7 @@ use App\Models\Victim;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
@@ -34,6 +35,7 @@ class InfoPage extends Page implements HasTable,HasForms
     protected static string $view = 'filament.user.pages.info-page';
     protected ?string $heading='';
     protected static ?string $navigationLabel='استفسار وبحث';
+    protected static ?int $navigationSort=1;
 
     public $family_id=null;
     public $street_id=null;
@@ -190,6 +192,31 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->label('الاسم بالكامل')
                     ->sortable()
                     ->searchable()
+                    ->action(
+                        Action::make('updateName')
+                            ->form([
+                                TextInput::make('Name1')
+                                    ->label('الإسم الاول')
+                                    ->required(),
+                                TextInput::make('Name2')
+                                    ->label('الإسم الثاني')
+                                    ->required(),
+                                TextInput::make('Name3')
+                                    ->label('الإسم الثالث'),
+                                TextInput::make('Name4')
+                                    ->label('الإسم الرابع'),
+                                ])
+                            ->fillForm(fn (Victim $record): array => [
+                                'Name1' => $record->Name1,'Name2' => $record->Name2,'Name3' => $record->Name3,'Name4' => $record->Name4
+                            ])
+                            ->modalCancelActionLabel('عودة')
+                            ->modalSubmitActionLabel('تحزين')
+                            ->modalHeading('تعديل الإسم')
+                            ->action(function (array $data,Victim $record,){
+                                $record->update(['Name1'=>$data['Name1'],'Name2'=>$data['Name2'],'Name3'=>$data['Name3'],'Name4'=>$data['Name4'],
+                                    'FullName'=>$data['Name1'].' '.$data['Name2'].' '.$data['Name3'].' '.$data['Name4'], ]);
+                            })
+                    )
                     ->description(function (Victim $record){
                       $who='';
                       $bed=null;
@@ -197,12 +224,19 @@ class InfoPage extends Page implements HasTable,HasForms
                       if ($record->bedon) $bed=Bedon::find($record->bedon);
                       if ($record->mafkoden) $maf=Mafkoden::find($record->mafkoden);
                       if ($bed) {$slash=null; if ($bed->tel) $slash=' / ';
-                                 $who= "المبلغ ->   بدون : ".$bed->who.$slash.$bed->tel;}
+                                 $who= "المبلغ ->   بدون : ".$bed->who.$slash.$bed->tel; if ($bed->ship) $who=$who.' ('.$bed->ship.') ';}
                       if ($maf)
                         if ($bed) {$slash=null; if ($maf->tel) $slash=' / ';
                                    $who=$who.'   مفقودين : '.$maf->who.$slash.$maf->tel;}
                         else {$slash=null; if ($maf->tel) $slash=' / ';
                               $who=$who.' المبلغ ->   مفقودين : '.$maf->who.$slash.$maf->tel;}
+
+                       if ($bed || $maf) {
+                           $who=$who.' الأم -> ';
+                           if ($bed && $bed->mother) $who=$who.'بدون : '.$bed->mother;
+                           if ($maf && $maf->mother) $who=$who.'مفقودين : '.$maf->mother;
+                       }
+
 
                         return $who;
 

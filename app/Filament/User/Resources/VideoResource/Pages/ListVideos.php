@@ -10,5 +10,6 @@ class ListVideos extends ListRecords
 {
     protected static string $resource = VideoResource::class;
     protected ?string $heading='';
+    protected static ?int $navigationSort=5;
 
 }

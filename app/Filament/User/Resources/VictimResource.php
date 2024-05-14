@@ -48,7 +48,7 @@ class VictimResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
   protected static ?string $navigationLabel='كشف تفصيلي بالضحايا';
-
+    protected static ?int $navigationSort=2;
 
   public $family_name;
   static $family_id;

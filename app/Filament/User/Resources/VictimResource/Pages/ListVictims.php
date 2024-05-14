@@ -13,6 +13,8 @@ class ListVictims extends ListRecords
 {
     protected static string $resource = VictimResource::class;
     protected ?string $heading='';
+    protected static ?int $navigationSort =2;
+
   public $family_id;
 
   public function getTabs(): array

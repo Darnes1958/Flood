@@ -29,6 +29,7 @@ class Repeted extends Page implements HasForms,HasTable
     protected static string $view = 'filament.user.pages.repeted';
     protected static ?string $navigationLabel='التكرار';
     protected ?string $heading='';
+    protected static ?int $navigationSort=4;
 
     public $what='inTas';
 
