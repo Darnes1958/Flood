@@ -385,6 +385,7 @@ class VictimResource extends Resource
         ImageColumn::make('image')
           ->toggleable()
           ->placeholder('الصورة')
+          ->tooltip('اضغط للإدخال او التعديل')
           ->action(
             Action::make('Upload')
             ->form([

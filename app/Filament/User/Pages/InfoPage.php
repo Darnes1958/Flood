@@ -111,11 +111,7 @@ class InfoPage extends Page implements HasTable,HasForms
                     ]),
                 ])
                 ->columns(4),
-              Section::make()
-               ->schema([
 
-
-               ])
             ]);
     }
 
