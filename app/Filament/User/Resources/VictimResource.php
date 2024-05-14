@@ -627,12 +627,19 @@ class VictimResource extends Resource
           ->modalCancelActionLabel('لا')
           ->fillForm(fn (Victim $record): array => [
             'family_id' => $record->family_id,
+            'id' => $record->id,
           ])
           ->form([
             Forms\Components\TextInput::make('family_id')
              ->label('كود العائلة')
+             ->hidden()
              ->live()
              ->readOnly(),
+            Forms\Components\TextInput::make('id')
+              ->label('id')
+              ->hidden()
+              ->live()
+              ->readOnly(),
             Forms\Components\Select::make('victim_id')
             ->label('فالمنظومة')
             ->searchable()
@@ -641,7 +648,7 @@ class VictimResource extends Resource
             ->required()
               ->options(fn (Forms\Get $get): Collection => Victim::query()
                 ->where('family_id', $get('family_id'))
-                ->where('fromwho','المنظومة')
+                ->where('id','!=',$get('id'))
                 ->pluck('FullName', 'id'))
           ])
           ->visible(fn(Victim $record)=>$record->fromwho!='المنظومة')
