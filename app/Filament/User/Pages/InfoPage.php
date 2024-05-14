@@ -6,6 +6,7 @@ use App\Models\Bedon;
 use App\Models\Family;
 use App\Models\Mafkoden;
 use App\Models\Street;
+use App\Models\Tasreeh;
 use App\Models\Victim;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
@@ -306,7 +307,46 @@ class InfoPage extends Page implements HasTable,HasForms
                ->requiresConfirmation()
                ->action(function (Victim $record){
                  $record->delete();
-               })
+               }),
+                Action::make('RetTasreeh')
+                    ->label('ارجاع')
+                    ->requiresConfirmation()
+                    ->modalSubmitActionLabel('نعم')
+                    ->modalCancelActionLabel('لا')
+                    ->fillForm(fn (Victim $record): array => [
+                        'family_id' => $record->family_id,
+                    ])
+                    ->form([
+                        TextInput::make('family_id')
+                            ->label('كود العائلة')
+                            ->live()
+                            ->readOnly(),
+                        Select::make('victim_id')
+                            ->label('فالمنظومة')
+                            ->searchable()
+                            ->autofocus()
+                            ->preload()
+                            ->required()
+                            ->options(fn (Get $get): Collection => Victim::query()
+                                ->where('family_id', $get('family_id'))
+                                ->where('fromwho','المنظومة')
+                                ->pluck('FullName', 'id'))
+                    ])
+                    ->visible(fn(Victim $record)=>$record->fromwho!='المنظومة')
+                    ->action(function (array $data,Victim $record): void {
+                        if ($record->fromwho=='بتصريح')
+                        {Tasreeh::find($record->tasreeh)->update(['victim_id'=>$data['victim_id']]);
+                            Victim::find($data['victim_id'])->update(['tasreeh'=>$record->tasreeh]);}
+                        if ($record->fromwho=='بدون')
+                        {Bedon::find($record->bedon)->update(['victim_id'=>$data['victim_id']]);
+                            Victim::find($data['victim_id'])->update(['bedon'=>$record->bedon]);}
+                        if ($record->fromwho=='مفقودين')
+                        {Mafkoden::find($record->mafkoden)->update(['victim_id'=>$data['victim_id']]);
+                            Victim::find($data['victim_id'])->update(['mafkoden'=>$record->mafkoden]);}
+
+
+                        $record->delete();
+                    })
             ]);
     }
 }
