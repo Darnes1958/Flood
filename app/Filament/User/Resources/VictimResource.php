@@ -384,12 +384,16 @@ class VictimResource extends Resource
          ->label('By'),
         ImageColumn::make('image')
           ->toggleable()
+          ->placeholder('الصورة')
           ->action(
             Action::make('Upload')
             ->form([
               Forms\Components\FileUpload::make('image')
                 ->directory('form-attachments'),
             ])
+            ->action(function (array $data,Victim $record,){
+                $record->update(['image'=>$data['image'], ]);
+            })
           )
           ->label('')
           ->circular(),
