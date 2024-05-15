@@ -13,19 +13,24 @@ use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Pages\Page;
 use Filament\Support\Enums\ActionSize;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -46,7 +51,6 @@ class InfoPage extends Page implements HasTable,HasForms
     public $mother;
     public $count;
     public $from='all';
-
 
 
     public function form(Form $form): Form
@@ -128,7 +132,6 @@ class InfoPage extends Page implements HasTable,HasForms
                     ]),
                 ])
                 ->columns(8),
-
             ]);
     }
 
@@ -310,6 +313,39 @@ class InfoPage extends Page implements HasTable,HasForms
                 ->toggleable()
                 ->sortable()
                 ->searchable(),
+               IconColumn::make('is_mother')
+                    ->label('أم')
+                    ->color(function ($state){
+                        if ($state) return 'Fuchsia'; else return 'yellow';
+                    })
+                    ->action(
+                        Action::make('ismother')
+                            ->action(function (Victim $record,){
+                                if ($record->is_mother)
+                                 $record->update(['is_mother'=>false]);
+                                else {
+                                 if ($record->male=='أنثي') $record->update(['is_mother'=>true]);
+                                }
+
+                            })
+                    )
+                    ->boolean(),
+                IconColumn::make('is_father')
+                    ->label('أب')
+                    ->color(function ($state){
+                        if ($state) return 'success'; else return 'gray';
+                    })
+                    ->action(
+                        Action::make('isfather')
+                            ->action(function (Victim $record,){
+                                if ($record->is_father)
+                                    $record->update(['is_father'=>false]);
+                                else {
+                                    if ($record->male=='ذكر') $record->update(['is_father'=>true]);
+                                }
+                            })
+                    )
+                    ->boolean(),
 
             ])
             ->actions([
@@ -318,7 +354,6 @@ class InfoPage extends Page implements HasTable,HasForms
                 ->color('info')
                ->icon('heroicon-s-pencil')
                 ->url(fn (Victim $record): string => route('filament.user.resources.victims.edit', ['record' => $record]))
-
                ,
               Action::make('delete')
                ->iconButton()
@@ -373,7 +408,106 @@ class InfoPage extends Page implements HasTable,HasForms
 
 
                         $record->delete();
-                    })
+                    }),
+                Action::make('Updparent')
+                    ->label('ربط')
+                    ->modalWidth(MaxWidth::ThreeExtraLarge)
+
+                    ->modalSubmitActionLabel('نعم')
+                    ->modalCancelActionLabel('لا')
+                    ->fillForm(fn (Victim $record): array => [
+                        'family_id' => $record->family_id,
+                        'male' => $record->male,
+                        'is_mother' => $record->is_mother,
+                        'is_father' => $record->is_father,
+                        'mother_id' => $record->mother_id,
+                        'father_id' => $record->father_id,
+                        'husband_id' => $record->husband_id,
+                        'wife_id' => $record->wife_id,
+                    ])
+                    ->form([
+                        Section::make()
+                         ->schema([
+                             TextInput::make('family_id')
+                              ->hidden()
+                              ->readOnly(),
+
+                             Radio::make('male')
+                                 ->label('الجنس')
+                                 ->inline()
+                                 ->default('ذكر')
+
+                                 ->reactive()
+                                 ->afterStateUpdated(function(Set $set,$state) {
+                                     if ($state=='ذكر')  $set('is_mother',0);
+                                     else $set('is_father',0);})
+                                 ->options([
+                                     'ذكر' => 'ذكر',
+                                     'أنثي' => 'أنثى',
+                                 ]),
+                             Toggle::make('is_father')
+                                 ->onColor(function (Get $get){
+                                     if ($get('male')=='ذكر') return 'success';
+                                     else return 'gray';})
+                                 ->offColor(function (Get $get){
+                                     if ($get('male')=='ذكر') return 'danger';
+                                     else return 'gray';})
+                                 ->disabled(fn(Get $get): bool=>$get('male')=='أنثي')
+                                 ->label('أب'),
+                             Toggle::make('is_mother')
+                                 ->onColor(function (Get $get){
+                                     if ($get('male')=='أنثي') return 'success';
+                                     else return 'gray';})
+                                 ->offColor(function (Get $get){
+                                     if ($get('male')=='أنثي') return 'danger';
+                                     else return 'gray';})
+                                 ->label('أم'),
+                             Select::make('husband_id')
+                                 ->label('زوجة')
+                                 ->relationship('husband', 'FullName', fn (Builder $query) => $query
+                                     ->where('male','ذكر'))
+                                 ->searchable()
+                                 ->reactive()
+                                 ->preload()
+                                 ->visible(fn (Get $get) => $get('male') == 'أنثي'),
+
+                             Select::make('wife_id')
+                                 ->label('زوج')
+                                 ->relationship('wife','FullName', fn (Builder $query) => $query
+                                     ->where('male','أنثي'))
+                                 ->searchable()
+                                 ->reactive()
+                                 ->preload()
+                                 ->visible(fn (Get $get) => $get('male') == 'ذكر'),
+                             Select::make('father_id')
+                                 ->label('والده')
+                                 ->options(fn (Get $get): Collection => Victim::query()
+                                     ->where('family_id', $get('family_id'))
+                                     ->where('is_father',1)
+                                     ->where('id','!=',$get('id'))
+                                     ->pluck('FullName', 'id'))
+
+                                 ->searchable()
+                                 ->preload(),
+                             Select::make('mother_id')
+                                 ->label('والدته')
+                                 ->relationship('sonOfMother','FullName', fn (Builder $query) => $query
+                                     ->where('male','أنثي'))
+                                 ->searchable()
+                                 ->reactive()
+                                 ->preload(),
+                         ])
+                            ->columns(3)
+                            ->columnSpanFull()
+
+                    ])
+
+                    ->action(function (array $data,Victim $record): void {
+                        if ($data['male']=='ذكر') $data = Arr::add($data,'husband_id', null);
+                        if ($data['male']=='أنثي') $data = Arr::add($data,'wife_id', null);
+                        $record->update(['mother_id'=>$data['mother_id'],'father_id'=>$data['father_id'],'husband_id'=>$data['husband_id'],
+                            'wife_id'=>$data['wife_id'],'male'=>$data['male'],]);
+                    }),
             ]);
     }
 }
