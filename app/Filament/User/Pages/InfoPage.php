@@ -9,6 +9,7 @@ use App\Models\Street;
 use App\Models\Tasreeh;
 use App\Models\Victim;
 use Filament\Actions\StaticAction;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -62,7 +63,9 @@ class InfoPage extends Page implements HasTable,HasForms
                   Select::make('family_id')
                       ->hiddenLabel()
                       ->prefix('العائلة')
-                      ->options(Family::all()->pluck('FamName','id'))
+                      ->options(fn (Get $get): Collection => Victim::query()
+                          ->where('ok','!=', $get('ok'))
+                          ->pluck('FamName', 'id'))
                       ->preload()
                       ->live()
                       ->searchable()
@@ -71,6 +74,9 @@ class InfoPage extends Page implements HasTable,HasForms
                           $this->family_id=$state;
                           $this->mother=Victim::where('family_id',$state)->where('is_mother',1)->pluck('id')->all();
                       }),
+                  Checkbox::make('ok')
+
+                   ->label('لم تراجع'),
                   Select::make('street_id')
                     ->hiddenLabel()
                     ->prefix('العنوان')
@@ -91,10 +97,8 @@ class InfoPage extends Page implements HasTable,HasForms
                       ->color('success')
                       ->modalContent(view('filament.user.pages.who-search-widget'))
                       ->modalCancelAction(fn (StaticAction $action) => $action->label('عودة')->icon('heroicon-s-arrow-uturn-left'))
-                      ->modalSubmitAction(false)
-
-                    ,
-                  ])->columnSpan(2)->alignCenter()->verticallyAlignCenter(),
+                      ->modalSubmitAction(false),
+                  ])->alignCenter()->verticallyAlignCenter(),
                   Radio::make('show')
                     ->inline()
                     ->hiddenLabel()
@@ -436,7 +440,6 @@ class InfoPage extends Page implements HasTable,HasForms
                                  ->label('الجنس')
                                  ->inline()
                                  ->default('ذكر')
-
                                  ->reactive()
                                  ->afterStateUpdated(function(Set $set,$state) {
                                      if ($state=='ذكر')  $set('is_mother',0);
@@ -486,8 +489,11 @@ class InfoPage extends Page implements HasTable,HasForms
                                      ->where('is_father',1)
                                      ->where('id','!=',$get('id'))
                                      ->pluck('FullName', 'id'))
-
                                  ->searchable()
+                                 ->live()
+                                 ->afterStateUpdated(function ($state,Set $set){
+                                     $set('mother_id',Victim::find($state)->wife_id);
+                                 })
                                  ->preload(),
                              Select::make('mother_id')
                                  ->label('والدته')
