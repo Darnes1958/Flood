@@ -9,6 +9,9 @@
         @endif
     @endif
 
+
+        @if ($record->otherName) <p style="color: #9f1239;font-weight: bold"> &nbsp; [{{$record->otherName}}]&nbsp; </p> @endif
+
     @if($record->wife)
       <p style="color: #fbbf24;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;وزوجها :&nbsp;</p>
       <p >{{$record->wife->FullName}}</p>

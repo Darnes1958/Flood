@@ -52,9 +52,12 @@ class InfoPage extends Page implements HasTable,HasForms
     public $mother;
     public $count;
     public $from='all';
+    public $ok=1;
 
-
-    public function form(Form $form): Form
+  public function  mount() {
+    $this->form->fill(['ok'=>1,]);
+  }
+  public function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -63,8 +66,8 @@ class InfoPage extends Page implements HasTable,HasForms
                   Select::make('family_id')
                       ->hiddenLabel()
                       ->prefix('العائلة')
-                      ->options(fn (Get $get): Collection => Victim::query()
-                          ->where('ok','!=', $get('ok'))
+                      ->options(Family::query()
+                          ->where('ok','!=', $this->ok)
                           ->pluck('FamName', 'id'))
                       ->preload()
                       ->live()
@@ -75,7 +78,11 @@ class InfoPage extends Page implements HasTable,HasForms
                           $this->mother=Victim::where('family_id',$state)->where('is_mother',1)->pluck('id')->all();
                       }),
                   Checkbox::make('ok')
-
+                   ->live()
+                   ->default(1)
+                   ->afterStateUpdated(function ($state){
+                     $this->ok=$state;
+                   })
                    ->label('لم تراجع'),
                   Select::make('street_id')
                     ->hiddenLabel()
@@ -211,6 +218,7 @@ class InfoPage extends Page implements HasTable,HasForms
                 ->label('بواسطة'),
                 TextColumn::make('FullName')
                     ->label('الاسم بالكامل')
+
                     ->sortable()
                     ->searchable()
                     ->action(
@@ -226,6 +234,8 @@ class InfoPage extends Page implements HasTable,HasForms
                                     ->label('الإسم الثالث'),
                                 TextInput::make('Name4')
                                     ->label('الإسم الرابع'),
+                              TextInput::make('otherName')
+                                ->label('إسم أخر'),
                                 ])
                             ->fillForm(fn (Victim $record): array => [
                                 'Name1' => $record->Name1,'Name2' => $record->Name2,'Name3' => $record->Name3,'Name4' => $record->Name4

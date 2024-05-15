@@ -228,6 +228,8 @@ class VictimResource extends Resource
             TextInput::make('notes')
               ->columnSpan(2)
               ->label('ملاحظات'),
+            TextInput::make('otherName')
+             ->label('إسم أخر'),
             Forms\Components\FileUpload::make('image')
               ->directory('form-attachments'),
             TextInput::make('FullName')
@@ -266,6 +268,10 @@ class VictimResource extends Resource
 
         TextColumn::make('FullName')
           ->label('الاسم بالكامل')
+          ->state(function (Victim $record){
+            if ($record->otherName) return $record->FullName.' ['.$record->otherName.']';
+            else return $record->FullName;
+          })
           ->sortable()
           ->description(function(Victim $record) {
             if ($record->is_father) {

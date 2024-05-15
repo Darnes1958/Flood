@@ -15,6 +15,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
@@ -255,7 +256,8 @@ class VictimResource extends Resource
               TextInput::make('notes')
                 ->columnSpan(2)
                 ->label('ملاحظات'),
-
+              TextInput::make('otherName')
+                ->label('إسم أخر'),
               Forms\Components\FileUpload::make('image')
                 ->directory('form-attachments'),
               TextInput::make('FullName')
