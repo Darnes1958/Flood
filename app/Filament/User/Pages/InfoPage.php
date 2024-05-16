@@ -2,6 +2,7 @@
 
 namespace App\Filament\User\Pages;
 
+use App\Models\Bait;
 use App\Models\Bedon;
 use App\Models\Family;
 use App\Models\Mafkoden;
@@ -47,6 +48,7 @@ class InfoPage extends Page implements HasTable,HasForms
     protected static ?int $navigationSort=1;
 
     public $family_id=null;
+    public $bait_id=null;
     public $street_id=null;
     public $show='all';
     public $mother;
@@ -72,14 +74,31 @@ class InfoPage extends Page implements HasTable,HasForms
                       ->preload()
                       ->live()
                       ->searchable()
-                      ->columnSpan(3)
+                      ->columnSpan(2)
                       ->afterStateUpdated(function ($state){
                           $this->family_id=$state;
+                          $this->bait_id=null;
                           $this->mother=Victim::where('family_id',$state)->where('is_mother',1)->pluck('id')->all();
                       }),
+                  Select::make('bait_id')
+                    ->hiddenLabel()
+                    ->prefix('البيت')
+                    ->options(Bait::query()
+                      ->where('family_id','!=', $this->family_id)
+                      ->pluck('name', 'id'))
+                    ->preload()
+                    ->live()
+                    ->searchable()
+                    ->columnSpan(2)
+                    ->afterStateUpdated(function ($state){
+                      $this->bait_id=$state;
+                      $this->mother=Victim::where('family_id',$state)->where('bait_id',$this->bait_id)
+                        ->where('is_mother',1)->pluck('id')->all();
+                    }),
                   Checkbox::make('ok')
+                   ->inlineLabel(false)
                    ->live()
-                   ->default(1)
+                   ->default(0)
                    ->afterStateUpdated(function ($state){
                      $this->ok=$state;
                    })
@@ -96,16 +115,7 @@ class InfoPage extends Page implements HasTable,HasForms
                       $this->street_id=$state;
                     }),
 
-                  \Filament\Forms\Components\Actions::make([
-                    \Filament\Forms\Components\Actions\Action::make('SerWho')
-                      ->label('بحث عن المبلغين')
-                      ->badge()
-                      ->icon('heroicon-s-magnifying-glass')
-                      ->color('success')
-                      ->modalContent(view('filament.user.pages.who-search-widget'))
-                      ->modalCancelAction(fn (StaticAction $action) => $action->label('عودة')->icon('heroicon-s-arrow-uturn-left'))
-                      ->modalSubmitAction(false),
-                  ])->alignCenter()->verticallyAlignCenter(),
+
                   Radio::make('show')
                     ->inline()
                     ->hiddenLabel()
@@ -130,7 +140,7 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->inlineLabel(false)
                     ->reactive()
                     ->live()
-                    ->columnSpan(4)
+                    ->columnSpan(3)
                     ->default('all')
                     ->afterStateUpdated(function ($state){
                       $this->from=$state;
@@ -141,6 +151,16 @@ class InfoPage extends Page implements HasTable,HasForms
                       'bedon'=>'بدون',
                       'mafkoden'=>'مفقودين',
                     ]),
+                  \Filament\Forms\Components\Actions::make([
+                    \Filament\Forms\Components\Actions\Action::make('SerWho')
+                      ->label('بحث عن المبلغين')
+                      ->badge()
+                      ->icon('heroicon-s-magnifying-glass')
+                      ->color('success')
+                      ->modalContent(view('filament.user.pages.who-search-widget'))
+                      ->modalCancelAction(fn (StaticAction $action) => $action->label('عودة')->icon('heroicon-s-arrow-uturn-left'))
+                      ->modalSubmitAction(false),
+                  ])->alignCenter()->verticallyAlignCenter(),
                 ])
                 ->columns(8),
             ]);
@@ -155,6 +175,9 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->when($this->family_id,function($q){
                        $q->where('family_id',$this->family_id);
                     })
+                  ->when($this->bait_id,function($q){
+                    $q->where('bait_id',$this->bait_id);
+                  })
                   ->when($this->street_id,function($q){
                     $q->where('street_id',$this->street_id);
                   })
@@ -198,10 +221,7 @@ class InfoPage extends Page implements HasTable,HasForms
                                     ->orwhereNotIn('mother_id',$this->mother);
                                 });
                               });
-
-
                     });
-
             })
             ->columns([
               TextColumn::make('fromwho')

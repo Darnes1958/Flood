@@ -7,18 +7,29 @@
             <label>شهداء فيضان وادي درنه</label>
         </div>
         <div style="text-align: center;font-size: 14pt;">
-            <label  > {{$family_name}} </label>
-            <label> العائلة أو القبيلة : </label>
-        </div>
-        <div style="text-align: center;font-size: 14pt;">
             <label  >{{$tribe_name}}</label>
             <label  > القبيلة أو التركيبة الإجتماعية :  </label>
         </div>
         <div style="text-align: center;font-size: 14pt;">
+            <label  > {{$family_name}} </label>
+            <label> العائلة أو القبيلة : </label>
+        </div>
+        <div style="text-align: center;font-size: 14pt;">
 
             <label  > {{$count}} </label>
-            <label>العدد : </label>
+            <label>عدد الضحايا فالقبيلة : </label>
         </div>
+        @if($bait_name)
+            <div style="text-align: center;font-size: 14pt;">
+                <label  > {{$bait_name}} </label>
+                <label> البيت : </label>
+            </div>
+            <div style="text-align: center;font-size: 14pt;">
+
+                <label  > {{$bait_count}} </label>
+                <label>عدد الضحايا فالبيت : </label>
+            </div>
+        @endif
 
         <br>
       @foreach($victim_father as $victim)

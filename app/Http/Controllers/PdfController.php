@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Allview;
+use App\Models\Bait;
 use App\Models\Bedmafview;
 use App\Models\Family;
 use App\Models\Tasbedview;
@@ -75,23 +76,35 @@ class PdfController extends Controller
         );
 
     }
-  public function PdfFamily($family_id){
+  public function PdfFamily($family_id,$bait_id){
 
    $fam=Family::find($family_id);
    $family_name=$fam->FamName;
+   if ($bait_id) {$bait_name=Bait::find($bait_id)->name;$bait_count=Victim::where('bait_id',$bait_id)->count();}
+   else {$bait_name=null;$bait_count=0;}
 
    $tribe_name=Tribe::find($fam->tribe_id)->TriName;
 
    $count=Victim::where('family_id',$family_id)->count();
    $victim_father=Victim::with('father')
      ->where('family_id',$family_id)
+     ->when($bait_id,function ($q) use ($bait_id) {
+       $q->where('bait_id',$bait_id);
+     })
      ->where('is_father','1')->get();
 
-   $fathers=Victim::where('family_id',$family_id)->where('is_father',1)->select('id');
-    $mothers=Victim::where('family_id',$family_id)->where('is_mother',1)->select('id');
+   $fathers=Victim::where('family_id',$family_id)->when($bait_id,function ($q) use ($bait_id) {
+     $q->where('bait_id',$bait_id);
+   })->where('is_father',1)->select('id');
+    $mothers=Victim::where('family_id',$family_id)->when($bait_id,function ($q) use ($bait_id) {
+      $q->where('bait_id',$bait_id);
+    })->where('is_mother',1)->select('id');
 
    $victim_mother=Victim::with('mother')
      ->where('family_id',$family_id)
+     ->when($bait_id,function ($q) use ($bait_id) {
+       $q->where('bait_id',$bait_id);
+     })
      ->where('is_mother','1')
      ->where(function ( $query) use($fathers) {
        $query->where('husband_id', null)
@@ -103,6 +116,9 @@ class PdfController extends Controller
 
    $victim_husband=Victim::
      where('family_id',$family_id)
+     ->when($bait_id,function ($q) use ($bait_id) {
+       $q->where('bait_id',$bait_id);
+     })
      ->where('male','ذكر')
      ->where('is_father','0')
      ->where('wife_id','!=',null)
@@ -110,12 +126,18 @@ class PdfController extends Controller
 
    $victim_wife=Victim::
    where('family_id',$family_id)
+     ->when($bait_id,function ($q) use ($bait_id) {
+       $q->where('bait_id',$bait_id);
+     })
      ->where('male','أنثي')
      ->where('is_mother','0')
      ->where('husband_id','!=',null)
      ->get();
    $victim_only=Victim::
    where('family_id',$family_id)
+     ->when($bait_id,function ($q) use ($bait_id) {
+       $q->where('bait_id',$bait_id);
+     })
        ->Where(function ( $query) {
            $query->where('is_father',null)
                ->orwhere('is_father',0);
@@ -139,11 +161,16 @@ class PdfController extends Controller
 
 
    $html = view('PDF.PdfVictimFamily',
-     ['victim_father'=>$victim_father,'victim_mother'=>$victim_mother,
+     [
+       'victim_father'=>$victim_father,'victim_mother'=>$victim_mother,
        'victim_husband'=>$victim_husband,'victim_wife'=>$victim_wife,
        'victim_only'=>$victim_only,
        'tribe_name'=>$tribe_name,'count'=>$count,
-       'family_name'=>$family_name])->toArabicHTML();
+       'family_name'=>$family_name,
+       'bait_name'=>$bait_name,
+       'bait_count'=>$bait_count,
+       ]
+       )->toArabicHTML();
 
    $pdf = Pdf::loadHTML($html)->output();
    $headers = array(

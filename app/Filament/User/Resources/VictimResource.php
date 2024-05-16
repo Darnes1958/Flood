@@ -5,6 +5,7 @@ namespace App\Filament\User\Resources;
 use App\Filament\User\Pages\Mysearch;
 use App\Filament\User\Resources\VictimResource\Pages;
 use App\Filament\User\Resources\VictimResource\RelationManagers;
+use App\Models\Bait;
 use App\Models\Bedon;
 use App\Models\Family;
 use App\Models\Mafkoden;
@@ -313,8 +314,7 @@ class VictimResource extends Resource
             Action::make('updateMaf')
              ->requiresConfirmation()
              ->modalHeading('هل انت متأكد من تعديل الإسم')
-
-             ->action(function (Victim $record){
+              ->action(function (Victim $record){
                $rec=Mafkoden::find($record->mafkoden);
                $record->update([
                  'FullName'=>$rec->name,'Name1'=>$rec->Name1,'Name2'=>$rec->Name2,'Name3'=>$rec->Name3,'Name4'=>$rec->Name4,
@@ -414,13 +414,26 @@ class VictimResource extends Resource
                  ->hiddenLabel()
                  ->prefix('العائلة')
                  ->relationship('Family','FamName')
-                 ->afterStateUpdated(function ($state){
+                 ->afterStateUpdated(function (Forms\Set $set,$state){
                    self::$family_id=$state;
+                   $set('bait_id',null);
+
                  })
                  ->searchable()
                  ->preload()
                  ->live()
                  ->columnSpan(2),
+            Select::make('bait_id')
+              ->hiddenLabel()
+              ->prefix('البيت')
+              ->options(Bait::query()
+                ->where('family_id','!=', self::$family_id)
+                ->pluck('name', 'id'))
+
+              ->searchable()
+              ->preload()
+              ->live()
+              ->columnSpan(2),
                Select::make('street_id')
                  ->hiddenLabel()
                  ->prefix('العنوان')
@@ -436,7 +449,9 @@ class VictimResource extends Resource
                  })
                  ->icon('heroicon-m-printer')
                  ->url(function (Get $get) {
-                   return route('pdffamily', ['family_id' => $get('family_id')]);
+                   return route('pdffamily',
+                     ['family_id' => $get('family_id'),
+                      'bait_id' => $get('bait_id'),]);
                  } ),
               Forms\Components\Actions\Action::make('whoSer')
                 ->label('بحث عن المبلغين')
@@ -458,6 +473,7 @@ class VictimResource extends Resource
 
             $family_id = (int) $data['family_id'];
             $street_id   = (int) $data['street_id'];
+            $bait_id   = (int) $data['bait_id'];
 
 
             if (!empty($family_id)) {
@@ -465,6 +481,9 @@ class VictimResource extends Resource
             }
             if (!empty($street_id)) {
               $query->where('street_id',$street_id);
+            }
+            if (!empty($bait_id)) {
+              $query->where('bait_id',$bait_id);
             }
           }),
 

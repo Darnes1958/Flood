@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\VictimResource\Pages;
 
 use App\Filament\Resources\VictimResource;
+use App\Models\Bait;
 use App\Models\Family;
 use App\Models\Street;
 use App\Models\Victim;
@@ -10,6 +11,7 @@ use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Get;
@@ -44,9 +46,10 @@ class Modifies extends Page implements HasTable,HasForms
 
   public $street_id;
   public $newFamily_id;
+  public $bait_id;
   public $newFather_id;
   public $newMother_id;
-
+  public $newBait_id;
   public $familyData;
 
   public function mount(): void
@@ -74,12 +77,28 @@ class Modifies extends Page implements HasTable,HasForms
             ->prefix('العائلة')
             ->options(Family::all()->pluck('FamName','id'))
             ->preload()
+            ->columnSpan(2)
             ->live()
             ->searchable()
-            ->columnSpan(2)
             ->afterStateUpdated(function ($state){
               $this->family_id=$state;
+              $this->bait_id=null;
+              $this->father_id=null;
+              $this->mother_id=null;
             }),
+          Select::make('bait_id')
+            ->hiddenLabel()
+            ->prefix('البيت')
+            ->options(fn (Get $get): Collection => Bait::query()
+              ->where('family_id', $get('family_id'))
+              ->pluck('name', 'id'))
+            ->preload()
+            ->live()
+            ->searchable()
+            ->afterStateUpdated(function ($state){
+              $this->bait_id=$state;
+            }),
+
           Select::make('father_id')
             ->hiddenLabel()
             ->prefix('الأب')
@@ -112,7 +131,7 @@ class Modifies extends Page implements HasTable,HasForms
             }),
 
 
-        ])->columns(4),
+        ])->columns(5),
       Section::make()
          ->schema([
 
@@ -134,14 +153,25 @@ class Modifies extends Page implements HasTable,HasForms
              ->prefix('العائلة الجديدة')
              ->prefixIcon('heroicon-m-pencil')
              ->prefixIconColor('info')
-
              ->options(Family::all()->pluck('FamName','id'))
              ->preload()
              ->live()
              ->searchable()
-
              ->afterStateUpdated(function ($state){
                $this->newFamily_id=$state;
+             }),
+           Select::make('newBait_id')
+             ->hiddenLabel()
+
+             ->prefix('البيت الجديد')
+             ->options(function () { return Bait::query()
+               ->where('family_id', $this->family_id)
+               ->pluck('name', 'id'); })
+             ->preload()
+             ->live()
+             ->searchable()
+             ->afterStateUpdated(function ($state){
+               $this->newBait_id=$state;
              }),
              Select::make('newFather_id')
                  ->hiddenLabel()
@@ -173,7 +203,7 @@ class Modifies extends Page implements HasTable,HasForms
                  }),
 
 
-         ])->columns(4)
+         ])->columns(5)
     ];
   }
 
@@ -182,7 +212,10 @@ class Modifies extends Page implements HasTable,HasForms
     return $table
       ->query(function (Victim $victim) {
         $victim = Victim::where('family_id',$this->family_id)
-        ->when($this->father_id,function ($q){
+          ->when($this->bait_id,function ($q){
+            $q->where('bait_id',$this->bait_id);
+          })
+          ->when($this->father_id,function ($q){
           $q->where('id',$this->father_id)
             ->orwhere('father_id',$this->father_id)
             ->orwhere('husband_id',$this->father_id);
@@ -262,6 +295,14 @@ class Modifies extends Page implements HasTable,HasForms
             ->requiresConfirmation()
             ->action(fn (Collection $records) => $records->each->update([
               'street_id'=>$this->street_id
+            ])),
+          BulkAction::make('editBait')
+            ->deselectRecordsAfterCompletion()
+            ->label('تعديل البيت')
+            ->hidden(!$this->newBait_id)
+            ->requiresConfirmation()
+            ->action(fn (Collection $records) => $records->each->update([
+              'bait_id'=>$this->newBait_id
             ])),
           BulkAction::make('editFamily')
               ->deselectRecordsAfterCompletion()
