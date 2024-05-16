@@ -238,13 +238,15 @@ class InfoPage extends Page implements HasTable,HasForms
                                 ->label('إسم أخر'),
                                 ])
                             ->fillForm(fn (Victim $record): array => [
-                                'Name1' => $record->Name1,'Name2' => $record->Name2,'Name3' => $record->Name3,'Name4' => $record->Name4
+                                'Name1' => $record->Name1,'Name2' => $record->Name2,'Name3' => $record->Name3,
+                              'Name4' => $record->Name4,'otherName' => $record->otherName
                             ])
                             ->modalCancelActionLabel('عودة')
                             ->modalSubmitActionLabel('تحزين')
                             ->modalHeading('تعديل الإسم')
                             ->action(function (array $data,Victim $record,){
-                                $record->update(['Name1'=>$data['Name1'],'Name2'=>$data['Name2'],'Name3'=>$data['Name3'],'Name4'=>$data['Name4'],
+                                $record->update(['Name1'=>$data['Name1'],'Name2'=>$data['Name2'],'Name3'=>$data['Name3'],
+                                  'Name4'=>$data['Name4'],'otherName'=>$data['otherName'],
                                     'FullName'=>$data['Name1'].' '.$data['Name2'].' '.$data['Name3'].' '.$data['Name4'], ]);
                             })
                     )
