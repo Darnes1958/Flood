@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Bait extends Model
 {
-    use HasFactory;
+   public function Family(){
+     return $this->belongsTo(Family::class);
+   }
+   public function Victim(){
+     return $this->hasMany(Victim::class);
+   }
 }

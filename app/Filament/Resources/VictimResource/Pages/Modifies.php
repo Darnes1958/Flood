@@ -9,6 +9,7 @@ use App\Models\Street;
 use App\Models\Victim;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -47,6 +48,7 @@ class Modifies extends Page implements HasTable,HasForms
   public $street_id;
   public $newFamily_id;
   public $bait_id;
+  public $withoutBait=false;
   public $newFather_id;
   public $newMother_id;
   public $newBait_id;
@@ -54,7 +56,7 @@ class Modifies extends Page implements HasTable,HasForms
 
   public function mount(): void
   {
-    $this->familyForm->fill([]);
+    $this->familyForm->fill(['withoutBait'=>$this->withoutBait]);
   }
   protected function getForms(): array
   {
@@ -77,7 +79,7 @@ class Modifies extends Page implements HasTable,HasForms
             ->prefix('العائلة')
             ->options(Family::all()->pluck('FamName','id'))
             ->preload()
-            ->columnSpan(2)
+
             ->live()
             ->searchable()
             ->afterStateUpdated(function ($state){
@@ -98,6 +100,12 @@ class Modifies extends Page implements HasTable,HasForms
             ->afterStateUpdated(function ($state){
               $this->bait_id=$state;
             }),
+          Checkbox::make('withoutBait')
+           ->afterStateUpdated(function ($state){
+             $this->withoutBait=$state;
+           })
+            ->live()
+           ->label('من غير بيت'),
 
           Select::make('father_id')
             ->hiddenLabel()
@@ -215,6 +223,10 @@ class Modifies extends Page implements HasTable,HasForms
           ->when($this->bait_id,function ($q){
             $q->where('bait_id',$this->bait_id);
           })
+          ->when($this->withoutBait,function ($q){
+            $q->where('bait_id',null);
+          })
+
           ->when($this->father_id,function ($q){
           $q->where('id',$this->father_id)
             ->orwhere('father_id',$this->father_id)
@@ -236,6 +248,9 @@ class Modifies extends Page implements HasTable,HasForms
           ->rowIndex(),
         TextColumn::make('FullName')
           ->label('الاسم بالكامل')
+          ->searchable(),
+        TextColumn::make('Bait.name')
+          ->label('البيت')
           ->searchable(),
         TextColumn::make('Family.FamName')
           ->sortable()

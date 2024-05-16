@@ -9,7 +9,9 @@ class Family extends Model
 {
     use HasFactory;
 
-
+  public function Bait(){
+    return $this->hasMany(Bait::class);
+  }
     public function Victim(){
       return $this->hasMany(Victim::class);
     }

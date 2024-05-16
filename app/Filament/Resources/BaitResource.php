@@ -22,6 +22,8 @@ class BaitResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+
+
     public static function form(Form $form): Form
     {
         return $form
@@ -33,6 +35,8 @@ class BaitResource extends Resource
                 ->required(),
               Select::make('family_id')
                 ->label('العائلة')
+                ->default(Bait::orderby('created_at','desc')->first()->family_id)
+
                 ->options(Family::all()->pluck('FamName','id'))
                 ->preload()
                 ->required()

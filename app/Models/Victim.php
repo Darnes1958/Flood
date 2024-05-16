@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Victim extends Model
 {
     use HasFactory;
+  public function Bait(){
+    return $this->belongsTo(Bait::class);
+  }
     public function User(){
       return $this->belongsTo(User::class);
     }

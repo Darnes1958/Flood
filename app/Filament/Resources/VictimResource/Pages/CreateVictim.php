@@ -17,6 +17,7 @@ class CreateVictim extends CreateRecord
         return [""];
     }
     protected static string $resource = VictimResource::class;
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
        if ($data['mother_id']) Victim::find($data['mother_id'])->update(['is_mother'=>1]);
