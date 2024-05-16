@@ -54,10 +54,10 @@ class InfoPage extends Page implements HasTable,HasForms
     public $mother;
     public $count;
     public $from='all';
-    public $ok=1;
+    public $ok=0;
 
   public function  mount() {
-    $this->form->fill(['ok'=>1,]);
+    $this->form->fill(['ok'=>$this->ok,]);
   }
   public function form(Form $form): Form
     {
