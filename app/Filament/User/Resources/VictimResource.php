@@ -638,14 +638,14 @@ class VictimResource extends Resource
           ->form([
             Forms\Components\TextInput::make('family_id')
              ->label('كود العائلة')
-             ->hidden()
+
              ->live()
-             ,
+             ->readOnly(),
             Forms\Components\TextInput::make('id')
               ->label('id')
-              ->hidden()
+
               ->live()
-            ,
+              ->readOnly(),
             Forms\Components\Select::make('victim_id')
             ->label('فالمنظومة')
             ->searchable()
