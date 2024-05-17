@@ -69,7 +69,10 @@ class InfoPage extends Page implements HasTable,HasForms
                       ->hiddenLabel()
                       ->prefix('العائلة')
                       ->options(Family::query()
-                          ->where('ok','!=', $this->ok)
+                           ->when($this->ok,function ($q){
+                             $q->where('ok','=', 1);
+                           })
+
                           ->pluck('FamName', 'id'))
                       ->preload()
                       ->live()
