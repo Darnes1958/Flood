@@ -34,7 +34,7 @@ class AreaWidget extends BaseWidget
               ->color('blue')
               ->searchable()
               ->label('المحلة'),
-            TextColumn::make('victim_count')
+            TextColumn::make('Victim_count')
               ->color('warning')
               ->sortable()
               ->label('العدد')
