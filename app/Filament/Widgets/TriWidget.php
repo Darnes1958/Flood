@@ -21,7 +21,8 @@ class TriWidget extends BaseWidget
     {
         return $table
             ->query(function (Tribe $tribe) {
-                $tribe=Tribe::where('id','!=',null);
+                $family=Family::where('nation','ليبيا')->pluck('tribe_id');
+                $tribe=Tribe::wherein('id',$family);
                 return $tribe;
             }
             )

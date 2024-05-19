@@ -9,6 +9,7 @@ use App\Models\Mafkoden;
 use App\Models\Street;
 use App\Models\Tasreeh;
 use App\Models\Victim;
+use Filament\Actions\ReplicateAction;
 use Filament\Actions\StaticAction;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Radio;
@@ -70,7 +71,7 @@ class InfoPage extends Page implements HasTable,HasForms
                       ->prefix('العائلة')
                       ->options(Family::query()
                            ->when($this->ok,function ($q){
-                             $q->where('ok','=', 1);
+                             $q->where('ok','=', 0);
                            })
 
                           ->pluck('FamName', 'id'))
@@ -247,23 +248,41 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->action(
                         Action::make('updateName')
                             ->form([
-                                TextInput::make('Name1')
-                                    ->label('الإسم الاول')
-                                    ->required(),
-                                TextInput::make('Name2')
-                                    ->label('الإسم الثاني')
-                                    ->required(),
-                                TextInput::make('Name3')
-                                    ->label('الإسم الثالث'),
-                                TextInput::make('Name4')
-                                    ->label('الإسم الرابع'),
-                              TextInput::make('otherName')
-                                ->label('إسم أخر'),
+                               Section::make()
+                                 ->schema([
+                                   TextInput::make('bedon_name')
+                                     ->label('بدون')
+                                     ->disabled(),
+
+                                   TextInput::make('mafkoden_name')
+                                     ->disabled()
+                                     ->label('مفقودين'),
+
+                                   TextInput::make('Name1')
+                                     ->autofocus()
+                                     ->label('الإسم الاول')
+                                     ->required(),
+                                   TextInput::make('Name2')
+                                     ->label('الإسم الثاني')
+                                     ->required(),
+                                   TextInput::make('Name3')
+                                     ->label('الإسم الثالث'),
+                                   TextInput::make('Name4')
+                                     ->label('الإسم الرابع'),
+                                   TextInput::make('otherName')
+                                     ->label('إسم أخر'),
+                                 ])->columns(2)
+
                                 ])
-                            ->fillForm(fn (Victim $record): array => [
+                            ->fillForm(function (Victim $record){
+                              if ($record->bedon) $bed=Bedon::find($record->bedon)->name; else $bed='';
+                              if ($record->mafkoden) $maf=Mafkoden::find($record->mafkoden)->name; else $maf='';
+                              return [
+                                'bedon_name'=>$bed,'mafkoden_name'=>$maf,
                                 'Name1' => $record->Name1,'Name2' => $record->Name2,'Name3' => $record->Name3,
-                              'Name4' => $record->Name4,'otherName' => $record->otherName
-                            ])
+                                'Name4' => $record->Name4,'otherName' => $record->otherName
+                              ];
+                            } )
                             ->modalCancelActionLabel('عودة')
                             ->modalSubmitActionLabel('تحزين')
                             ->modalHeading('تعديل الإسم')
@@ -272,7 +291,40 @@ class InfoPage extends Page implements HasTable,HasForms
                                   'Name4'=>$data['Name4'],'otherName'=>$data['otherName'],
                                     'FullName'=>$data['Name1'].' '.$data['Name2'].' '.$data['Name3'].' '.$data['Name4'], ]);
                             })
+                            ->extraModalFooterActions([
+                              Action::make('changeMaf')
+                                ->label('مفقودين')
+                                ->color('success')
+                                ->action(function (Action $action, Victim $record){
+                                  if ($record->mafkoden) {
+                                    $rec=Mafkoden::find($record->mafkoden);
+                                    $record->update([
+                                      'FullName'=>$rec->name,'Name1'=>$rec->Name1,'Name2'=>$rec->Name2,'Name3'=>$rec->Name3,'Name4'=>$rec->Name4,
+                                    ]);
+                                    $action->cancelParentActions();
+
+                                  }
+
+                                }),
+                              Action::make('changeBed')
+                                ->label('بدون')
+                                ->color('info')
+                                ->action(function (Action $action,Victim $record){
+                                  if ($record->bedon) {
+                                    $rec=Bedon::find($record->bedon);
+                                    $record->update([
+                                      'FullName'=>$rec->name,'Name1'=>$rec->Name1,'Name2'=>$rec->Name2,'Name3'=>$rec->Name3,'Name4'=>$rec->Name4,
+                                    ]);
+                                  }
+                                  $action->cancelParentActions();
+                                }),
+
+
+                          ])
+
                     )
+
+
                     ->description(function (Victim $record){
                       $who='';
                       $bed=null;
@@ -347,6 +399,13 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->modalHeading('تعديل العنوان')
                     ->action(function (array $data,Victim $record,){
                       $record->update(['street_id'=>$data['street_id']]);
+                      Victim::where('father_id',$record->id)
+                        ->orwhere('id',$record->mother_id)
+                        ->orwhere('id',$record->father_id)
+                        ->orwhere('husband_id',$record->id)
+                        ->orwhere('wife_id',$record->id)
+                        ->orwhere('mother_id',$record->id)
+                        ->update(['street_id'=>$data['street_id']]);
                     })
                 )
                 ->toggleable()
@@ -390,9 +449,9 @@ class InfoPage extends Page implements HasTable,HasForms
             ->actions([
               Action::make('edit')
                ->iconButton()
-                ->color('info')
+               ->color('info')
                ->icon('heroicon-s-pencil')
-                ->url(fn (Victim $record): string => route('filament.user.resources.victims.edit', ['record' => $record]))
+               ->url(fn (Victim $record): string => route('filament.user.resources.victims.edit', ['record' => $record]))
                ,
               Action::make('delete')
                ->iconButton()
@@ -548,6 +607,11 @@ class InfoPage extends Page implements HasTable,HasForms
                         if ($data['male']=='أنثي') $data = Arr::add($data,'wife_id', null);
                         $record->update(['mother_id'=>$data['mother_id'],'father_id'=>$data['father_id'],'husband_id'=>$data['husband_id'],
                             'wife_id'=>$data['wife_id'],'male'=>$data['male'],]);
+                        if ($data['male']=='ذكر' && $data['wife_id']!=null)
+                          Victim::find($data['wife_id'])->update(['husband_id'=>$record->id]);
+                      if ($data['male']=='أنثي' && $data['husband_id']!=null)
+                        Victim::find($data['husband_id'])->update(['wife_id'=>$record->id]);
+
                     }),
             ]);
     }

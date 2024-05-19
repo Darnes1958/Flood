@@ -22,7 +22,7 @@ class FamWidget extends BaseWidget
     {
         return $table
             ->query(function (Family $tribe) {
-                $tribe=Family::where('id','!=',null);
+                $tribe=Family::where('nation','ليبيا');
                 return $tribe;
             }
             )
