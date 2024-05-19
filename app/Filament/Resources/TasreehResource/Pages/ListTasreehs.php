@@ -43,7 +43,7 @@ class ListTasreehs extends ListRecords
                     }
                 }),
           Actions\Action::make('insert')
-            //->visible(false)
+            ->visible(false)
             ->label('Insert')
             ->action(function (){
               $res=Tasreeh::where('victim_id',null)
@@ -72,7 +72,7 @@ class ListTasreehs extends ListRecords
             ->visible(false)
             ->label('set Name\'S')
             ->action(function (){
-              $res=Tasreeh::all();
+              $res=Tasreeh::where('nation','!=','ليبيا');
               foreach ($res as $item)
               {
                 $name=$item->name;

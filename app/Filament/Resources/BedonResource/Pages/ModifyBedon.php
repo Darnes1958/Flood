@@ -87,7 +87,7 @@ class ModifyBedon extends Page implements HasTable,HasForms
   {
     return $table
       ->query(function (Bedon $mafkoden) {
-        $mafkoden = Bedon::where('family_id',$this->family_id)->where('nation','ليبيا')
+        $mafkoden = Bedon::where('family_id',$this->family_id)
         ;
         return $mafkoden;
       })

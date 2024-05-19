@@ -41,7 +41,7 @@ protected ?string $heading='مفقودين';
              }
            }),
           Actions\Action::make('insert')
-          //  ->visible(false)
+           ->visible(false)
             ->label('Insert')
             ->action(function (){
               $res=Mafkoden::where('victim_id',null)

@@ -36,7 +36,7 @@ class MafkodenWidget extends BaseWidget
         return $table
           ->query(function (Mafkoden $mafkoden) {
             $mafkoden = Mafkoden::where('family_id',$this->family_id)
-              ->where('nation','ليبيا')
+
 
               ->when(!$this->with_victim,function ($q){
                 $q->where('victim_id',null)->where('repeted',0);

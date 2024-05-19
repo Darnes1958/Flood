@@ -80,7 +80,7 @@ class PdfController extends Controller
 
    $fam=Family::find($family_id);
    $family_name=$fam->FamName;
-   if ($bait_id) {$bait_name=Bait::find($bait_id)->name;$bait_count=Victim::where('bait_id',$bait_id)->count();}
+   if ($bait_id && $bait_id!=0) {$bait_name=Bait::find($bait_id)->name;$bait_count=Victim::where('bait_id',$bait_id)->count();}
    else {$bait_name=null;$bait_count=0;}
 
    $tribe_name=Tribe::find($fam->tribe_id)->TriName;

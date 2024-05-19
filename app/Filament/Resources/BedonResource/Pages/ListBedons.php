@@ -62,7 +62,7 @@ class ListBedons extends ListRecords
                     ->update(['family_id'=>45]) ;
             }),
           Actions\Action::make('insert')
-            //->visible(false)
+            ->visible(false)
             ->label('Insert')
             ->action(function (){
               $res=Bedon::where('victim_id',null)

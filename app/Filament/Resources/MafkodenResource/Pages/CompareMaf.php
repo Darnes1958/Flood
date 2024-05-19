@@ -60,7 +60,7 @@ class CompareMaf extends Page implements HasForms
             ->hiddenLabel()
             ->prefix('العائلة')
             ->optionsLimit(500)
-            ->options(Family::has('mafkoden')->pluck('FamName','id'))
+            ->options(Family::has('mafkoden')->where('nation','!=','ليبيا')->pluck('FamName','id'))
             ->preload()
             ->live()
             ->searchable()
