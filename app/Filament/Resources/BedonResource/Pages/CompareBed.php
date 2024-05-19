@@ -56,7 +56,7 @@ class CompareBed extends Page implements HasForms
                         ->hiddenLabel()
                         ->prefix('العائلة')
                         ->optionsLimit(500)
-                        ->options(Family::has('bedon')->pluck('FamName','id'))
+                        ->options(Family::has('bedon')->where('nation','!=','ليبيا')->pluck('FamName','id'))
                         ->preload()
                         ->live()
                         ->searchable()

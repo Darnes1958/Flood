@@ -85,7 +85,7 @@ class ModifyTasreeh extends Page implements HasTable,HasForms
     {
         return $table
             ->query(function (Tasreeh $mafkoden) {
-                $mafkoden = Tasreeh::where('family_id',$this->family_id)->where('nation','ليبيا')
+                $mafkoden = Tasreeh::where('family_id',$this->family_id)
                 ;
                 return $mafkoden;
             })

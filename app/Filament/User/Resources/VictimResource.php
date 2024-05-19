@@ -449,9 +449,11 @@ class VictimResource extends Resource
                  })
                  ->icon('heroicon-m-printer')
                  ->url(function (Get $get) {
+                     $bait=0;
+                     if ($get('bait_id')) $bait=$get('bait_id');
                    return route('pdffamily',
                      ['family_id' => $get('family_id'),
-                      'bait_id' => $get('bait_id'),]);
+                      'bait_id' => $bait,]);
                  } ),
               Forms\Components\Actions\Action::make('whoSer')
                 ->label('بحث عن المبلغين')
