@@ -12,6 +12,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Get;
 use Filament\Resources\Pages\Page;
 
 class CompareTas extends Page implements HasForms
@@ -26,12 +27,13 @@ class CompareTas extends Page implements HasForms
     public $with_victim=false;
     public $show_description=false;
     public $show_other=true;
+  public $forign_only=true;
 
     public $familyData;
 
     public function mount(): void
     {
-        $this->familyForm->fill(['show_other'=>true,]);
+      $this->familyForm->fill(['show_other'=>true,'forign_only'=>true]);
     }
 
     protected function getForms(): array
@@ -55,7 +57,13 @@ class CompareTas extends Page implements HasForms
                         ->prefix('العائلة')
 
                         ->optionsLimit(500)
-                        ->options(Family::has('Tasreeh')->where('nation','!=','ليبيا')->pluck('FamName','id'))
+                      ->options(function (Get $get) {
+                        return Family::has('tasreeh')
+                          ->when($get('forign_only'),function ($q){
+                            $q->where('nation','!=','ليبيا');
+                          })
+                          ->pluck('FamName','id');
+                      })
                         ->preload()
                         ->live()
                         ->searchable()
@@ -91,9 +99,15 @@ class CompareTas extends Page implements HasForms
                             $this->show_other=$state;
                             $this->dispatch('updatefamily', family_id: $this->family_id,with_victim : $this->with_victim,
                                 show_description: $this->show_description,who: 'tas',show_other: $this->show_other);
-                        })
+                        }),
+                  Checkbox::make('forign_only')
+                    ->label('اجانب فقط')
+                    ->reactive()
+                    ->afterStateUpdated(function ($state){
+                      $this->forign_only=$state;
+                    })
 
-                ])->columns(8)
+                ])->columns(9)
         ];
     }
 

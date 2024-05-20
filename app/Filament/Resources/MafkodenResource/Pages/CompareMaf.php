@@ -16,6 +16,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Get;
 use Filament\Resources\Pages\Page;
 use Filament\Support\Enums\VerticalAlignment;
 use Livewire\Attributes\On;
@@ -32,12 +33,13 @@ class CompareMaf extends Page implements HasForms
   public $with_victim=false;
   public $show_description=false;
   public $show_other=true;
+  public $forign_only=true;
 
   public $familyData;
 
   public function mount(): void
   {
-      $this->familyForm->fill(['show_other'=>true,]);
+    $this->familyForm->fill(['show_other'=>true,'forign_only'=>true]);
   }
 
   protected function getForms(): array
@@ -60,7 +62,14 @@ class CompareMaf extends Page implements HasForms
             ->hiddenLabel()
             ->prefix('العائلة')
             ->optionsLimit(500)
-            ->options(Family::has('mafkoden')->where('nation','!=','ليبيا')->pluck('FamName','id'))
+            ->options(function (Get $get) {
+              return Family::has('mafkoden')
+                ->when($get('forign_only'),function ($q){
+                  $q->where('nation','!=','ليبيا');
+                })
+                ->pluck('FamName','id');
+            })
+
             ->preload()
             ->live()
             ->searchable()
@@ -96,9 +105,16 @@ class CompareMaf extends Page implements HasForms
                      $this->show_other=$state;
                      $this->dispatch('updatefamily', family_id: $this->family_id,with_victim : $this->with_victim,
                          show_description: $this->show_description,who: 'maf',show_other: $this->show_other);
-                 })
+                 }),
+          Checkbox::make('forign_only')
+            ->label('اجانب فقط')
+            ->reactive()
+            ->afterStateUpdated(function ($state){
+              $this->forign_only=$state;
+            })
 
-        ])->columns(8)
+
+        ])->columns(9)
     ];
   }
 

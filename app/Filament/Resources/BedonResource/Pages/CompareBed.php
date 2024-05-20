@@ -13,6 +13,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Get;
 use Filament\Resources\Pages\Page;
 
 class CompareBed extends Page implements HasForms
@@ -28,12 +29,13 @@ class CompareBed extends Page implements HasForms
     public $with_victim=false;
     public $show_description=false;
     public $show_other=true;
+    public $forign_only=true;
 
     public $familyData;
 
     public function mount(): void
     {
-        $this->familyForm->fill(['show_other'=>true,]);
+        $this->familyForm->fill(['show_other'=>true,'forign_only'=>true]);
     }
 
     protected function getForms(): array
@@ -55,8 +57,15 @@ class CompareBed extends Page implements HasForms
                     Select::make('family_id')
                         ->hiddenLabel()
                         ->prefix('العائلة')
+
                         ->optionsLimit(500)
-                        ->options(Family::has('bedon')->where('nation','!=','ليبيا')->pluck('FamName','id'))
+                        ->options(function (Get $get) {
+                          return Family::has('bedon')
+                            ->when($get('forign_only'),function ($q){
+                              $q->where('nation','!=','ليبيا');
+                            })
+                            ->pluck('FamName','id');
+                          })
                         ->preload()
                         ->live()
                         ->searchable()
@@ -69,7 +78,6 @@ class CompareBed extends Page implements HasForms
                     Checkbox::make('with_victim')
                         ->label('إظهار المتطابق')
                         ->reactive()
-
                         ->afterStateUpdated(function ($state){
                             $this->with_victim=$state;
                             $this->dispatch('updatefamily', family_id: $this->family_id,with_victim : $this->with_victim,
@@ -78,7 +86,6 @@ class CompareBed extends Page implements HasForms
                     Checkbox::make('show_description')
                         ->label('إظهار التفاصيل')
                         ->reactive()
-
                         ->afterStateUpdated(function ($state){
                             $this->show_description=$state;
                             $this->dispatch('updatefamily', family_id: $this->family_id,with_victim : $this->with_victim,
@@ -87,14 +94,20 @@ class CompareBed extends Page implements HasForms
                     Checkbox::make('show_other')
                         ->label('إظهار بتصريح ومفقودين')
                         ->reactive()
-
                         ->afterStateUpdated(function ($state){
                             $this->show_other=$state;
                             $this->dispatch('updatefamily', family_id: $this->family_id,with_victim : $this->with_victim,
                                 show_description: $this->show_description,who: 'bed',show_other: $this->show_other);
-                        })->columnSpan(2)
+                        })->columnSpan(2),
+                  Checkbox::make('forign_only')
+                   ->label('اجانب فقط')
+                   ->reactive()
+                   ->afterStateUpdated(function ($state){
+                     $this->forign_only=$state;
+                   })
 
-                ])->columns(8)
+
+                ])->columns(9)
         ];
     }
 
