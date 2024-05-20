@@ -10,6 +10,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
 
 
@@ -17,6 +18,10 @@ class TriWidget extends BaseWidget
 {
     protected int | string | array $columnSpan=1;
     protected static ?int $sort=2;
+  public static function canView(): bool
+  {
+    return Auth::user()->can('show count');
+  }
     public function table(Table $table): Table
     {
         return $table

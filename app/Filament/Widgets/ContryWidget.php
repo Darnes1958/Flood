@@ -8,11 +8,16 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
 
 class ContryWidget extends BaseWidget
 {
   protected static ?int $sort=6;
+  public static function canView(): bool
+  {
+    return Auth::user()->can('show count');
+  }
 
   public function table(Table $table): Table
     {

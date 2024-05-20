@@ -14,11 +14,7 @@ class MaleFemale extends BaseWidget
     protected static ?int $sort=1;
     public static function canView(): bool
     {
-        if (Auth::user()->id==1) {
-            return true;
-        } else {
-            return false;
-        }
+      return Auth::user()->can('show count');
     }
     protected function getStats(): array
     {
