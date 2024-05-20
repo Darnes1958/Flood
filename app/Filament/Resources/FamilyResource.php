@@ -54,6 +54,10 @@ class FamilyResource extends Resource
               TextInput::make('nation')
                 ->default('ليبيا')
                 ->label('الجنسية'),
+              Forms\Components\Select::make('country_id')
+                    ->default(1)
+                    ->relationship('Country','name')
+
             ]);
     }
 

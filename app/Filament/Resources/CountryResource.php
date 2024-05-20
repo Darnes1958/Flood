@@ -15,6 +15,10 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CountryResource extends Resource
 {
+    public static function shouldRegisterNavigation(): bool
+    {
+        return  auth()->user()->id==1;
+    }
     protected static ?string $model = Country::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
