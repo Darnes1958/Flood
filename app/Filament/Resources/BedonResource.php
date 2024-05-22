@@ -5,13 +5,16 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\BedonResource\Pages;
 use App\Filament\Resources\BedonResource\RelationManagers;
 use App\Models\Bedon;
+use App\Models\Victim;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class BedonResource extends Resource
@@ -110,6 +113,29 @@ class BedonResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                BulkAction::make('moveMaf')
+                    ->deselectRecordsAfterCompletion()
+                    ->label('نسخ لملف الضحايا')
+                    ->action(function (Collection $record){
+                        foreach ($record as $item){
+                            if ($item->male=='1') $male='ذكر'; else $male='أنثي';
+                            Victim::create([
+                                'Name1'=>$item->Name1,
+                                'Name2'=>$item->Name2,
+                                'Name3'=>$item->Name3,
+                                'Name4'=>$item->Name4,
+                                'FullName'=>$item->name,
+                                'family_id'=>$item->family_id,
+                                'street_id'=>12,
+                                'male'=>$male,
+                                'notes'=>$item->notes,
+                                'bedon'=>$item->id,
+                                'fromwho'=>'بدون',
+                            ]);
+                        }
+
+                    }
+                    ),
             ]);
     }
 
