@@ -2,6 +2,7 @@
 
 namespace App\Filament\User\Pages;
 
+use App\Models\Archif;
 use App\Models\Bait;
 use App\Models\Bedon;
 use App\Models\Family;
@@ -461,6 +462,26 @@ class InfoPage extends Page implements HasTable,HasForms
                ->action(function (Victim $record){
                  $record->delete();
                }),
+                Action::make('arc')
+                    ->iconButton()
+                    ->visible(Auth::user()->can('delete victim'))
+                    ->icon('heroicon-s-archive-box')
+                    ->requiresConfirmation()
+                    ->modalHeading('نقل السجل للأرشيف')
+                    ->modalDescription('هل انت متأكد من نقل السجل الي الأرشيف ؟')
+                    ->form([
+                        TextInput::make('notes')
+                        ->label('ملاحظات')
+                    ])
+                    ->action(function (Victim $record,array $data){
+                        Mafkoden::where('victim_id',$record->id)->update(['victim_id'=>null]);
+                        Bedon::where('victim_id',$record->id)->update(['victim_id'=>null]);
+                        Tasreeh::where('victim_id',$record->id)->update(['victim_id'=>null]);
+                        $archif=Victim::find($record->id);
+                        $archif->notes=$data['notes'];
+                        Archif::create($archif->toArray());
+
+                    }),
                 Action::make('RetTasreeh')
                     ->label('ارجاع')
                     ->requiresConfirmation()
