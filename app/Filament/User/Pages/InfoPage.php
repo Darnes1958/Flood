@@ -480,6 +480,7 @@ class InfoPage extends Page implements HasTable,HasForms
                         $archif=Victim::find($record->id);
                         $archif->notes=$data['notes'];
                         Archif::create($archif->toArray());
+                        $record->delete();
 
                     }),
                 Action::make('RetTasreeh')
