@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Archif extends Model
 {
-    use HasFactory;
+  public function Family(){
+    return $this->belongsTo(Family::class);
+  }
+  public function Street(){
+    return $this->belongsTo(Street::class);
+  }
 }

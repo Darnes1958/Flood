@@ -469,6 +469,11 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->requiresConfirmation()
                     ->modalHeading('نقل السجل للأرشيف')
                     ->modalDescription('هل انت متأكد من نقل السجل الي الأرشيف ؟')
+                  ->fillForm(fn (Victim $record): array => [
+                    'notes' => $record->notes,
+
+                  ])
+
                     ->form([
                         TextInput::make('notes')
                         ->label('ملاحظات')
