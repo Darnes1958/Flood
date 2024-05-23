@@ -390,6 +390,8 @@ class InfoPage extends Page implements HasTable,HasForms
                         ->label('العنوان')
                         ->searchable()
                         ->preload()
+
+
                         ->live()
                     ])
                     ->fillForm(fn (Victim $record): array => [

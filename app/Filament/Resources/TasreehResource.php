@@ -25,9 +25,9 @@ class TasreehResource extends Resource
     protected static ?string $pluralLabel='بتصريح';
     public static function getNavigationBadge(): ?string
     {
-        if (Auth::user()->id==1)
-            return static::getModel()::count();
-        else return ' ';
+      if (Auth::user()->can('show count'))
+        return static::getModel()::count();
+      else return ' ';
     }
 
     public static function form(Form $form): Form

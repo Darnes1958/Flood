@@ -27,9 +27,9 @@ class MafkodenResource extends Resource
     protected static ?string $pluralLabel='مفقودين';
     public static function getNavigationBadge(): ?string
     {
-        if (Auth::user()->id==1)
+      if (Auth::user()->can('show count'))
         return static::getModel()::count();
-        else return ' ';
+      else return ' ';
     }
 
     public static function form(Form $form): Form

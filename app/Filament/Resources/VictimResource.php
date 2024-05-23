@@ -37,7 +37,7 @@ class VictimResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        if (Auth::user()->id==1)
+        if (Auth::user()->can('show count'))
             return static::getModel()::count();
         else return ' ';
     }
