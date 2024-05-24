@@ -41,7 +41,7 @@ protected ?string $heading='مفقودين';
              }
            }),
           Actions\Action::make('insert')
-        //   ->visible(false)
+           ->visible(false)
             ->label('Insert')
             ->action(function (){
               $res=Mafkoden::where('victim_id',null)
@@ -67,7 +67,7 @@ protected ?string $heading='مفقودين';
               }
             }),
           Actions\Action::make('Naming')
-            ->visible(false)
+           ->visible(false)
             ->label('set Name\'S')
             ->action(function (){
               $res=Mafkoden::all();
