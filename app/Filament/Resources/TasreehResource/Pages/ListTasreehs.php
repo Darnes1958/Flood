@@ -43,7 +43,7 @@ class ListTasreehs extends ListRecords
                     }
                 }),
           Actions\Action::make('insert')
-            ->visible(false)
+          //  ->visible(false)
             ->label('Insert')
             ->action(function (){
               $res=Tasreeh::where('victim_id',null)
