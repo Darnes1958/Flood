@@ -72,7 +72,7 @@ class ListTasreehs extends ListRecords
             //->visible(false)
             ->label('set Name\'S')
             ->action(function (){
-              $res=Tasreeh::where('nation','!=','ليبيا');
+              $res=Tasreeh::where('nation','!=','ليبيا')->get();
               foreach ($res as $item)
               {
                 $name=$item->name;
