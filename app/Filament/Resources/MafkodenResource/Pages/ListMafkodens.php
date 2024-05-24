@@ -46,7 +46,7 @@ protected ?string $heading='مفقودين';
             ->action(function (){
               $res=Mafkoden::where('victim_id',null)
                 ->where('repeted',0)
-                ->where('nation','ليبيا')
+                ->where('nation','!=','ليبيا')
                 ->get();
               foreach ($res as $item)
               {

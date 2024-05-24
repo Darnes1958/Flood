@@ -48,7 +48,7 @@ class ListTasreehs extends ListRecords
             ->action(function (){
               $res=Tasreeh::where('victim_id',null)
                 ->where('repeted',0)
-                ->where('nation','ليبيا')
+                ->where('nation','!=','ليبيا')
                 ->get();
               foreach ($res as $item)
               {
