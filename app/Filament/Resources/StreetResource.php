@@ -27,6 +27,7 @@ class StreetResource extends Resource
             ->schema([
               TextInput::make('StrName')
                 ->required()
+
                 ->label('اسم الشارع')
                 ->maxLength(255),
               Select::make('area_id')
@@ -44,9 +45,11 @@ class StreetResource extends Resource
         return $table
             ->columns([
               Tables\Columns\TextColumn::make('StrName')
+                ->searchable()
                 ->label('اسم الشارع'),
 
               Tables\Columns\TextColumn::make('Tribe.AreaNane')
+                ->searchable()
                 ->label('المحلة')
               ,
             ])
