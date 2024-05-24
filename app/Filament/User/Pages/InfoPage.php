@@ -578,7 +578,6 @@ class InfoPage extends Page implements HasTable,HasForms
                                  ->offColor(function (Get $get){
                                      if ($get('male')=='ذكر') return 'danger';
                                      else return 'gray';})
-                                 ->disabled(fn(Get $get): bool=>$get('male')=='أنثي')
                                  ->label('أب'),
                              Toggle::make('is_mother')
                                  ->onColor(function (Get $get){
