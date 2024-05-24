@@ -37,7 +37,11 @@
             <label  >{{$victim->Street->StrName}}</label>
             <label  > العنوان </label>
             <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            @if($victim->otherName)
+                <label  >{{$victim->FullName}} ({{$victim->otherName}})</label>
+            @else
             <label  >{{$victim->FullName}}</label>
+            @endif
             <label  >الأب : </label>
         </div>
         @if($victim->wife_id)
