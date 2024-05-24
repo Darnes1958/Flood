@@ -91,7 +91,7 @@ class ModifyMafkoden extends Page implements HasTable,HasForms
   {
     return $table
       ->query(function (Mafkoden $mafkoden) {
-        $mafkoden = Mafkoden::where('family_id',$this->family_id)->where('nation','ليبيا')
+        $mafkoden = Mafkoden::where('family_id',$this->family_id)
           ;
         return $mafkoden;
       })
