@@ -634,8 +634,11 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->action(function (array $data,Victim $record): void {
                         if ($data['male']=='ذكر') $data = Arr::add($data,'husband_id', null);
                         if ($data['male']=='أنثي') $data = Arr::add($data,'wife_id', null);
-                        $record->update(['mother_id'=>$data['mother_id'],'father_id'=>$data['father_id'],'husband_id'=>$data['husband_id'],
-                            'wife_id'=>$data['wife_id'],'male'=>$data['male'],]);
+                        $record->update(['mother_id'=>$data['mother_id'],
+                          'father_id'=>$data['father_id'],'husband_id'=>$data['husband_id'],
+                            'wife_id'=>$data['wife_id'],'male'=>$data['male'],
+                            'is_father'=>$data['is_father'],'is_mother'=>$data['is_mother'],
+                          ]);
                         if ($data['male']=='ذكر' && $data['wife_id']!=null)
                           Victim::find($data['wife_id'])->update(['husband_id'=>$record->id]);
                       if ($data['male']=='أنثي' && $data['husband_id']!=null)
