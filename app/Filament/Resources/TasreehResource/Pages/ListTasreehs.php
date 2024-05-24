@@ -69,7 +69,7 @@ class ListTasreehs extends ListRecords
               }
             }),
           Actions\Action::make('Naming')
-            ->visible(false)
+            //->visible(false)
             ->label('set Name\'S')
             ->action(function (){
               $res=Tasreeh::where('nation','!=','ليبيا');
