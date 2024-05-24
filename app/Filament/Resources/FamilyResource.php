@@ -67,6 +67,10 @@ class FamilyResource extends Resource
                  ->label('الاسم'),
                 Tables\Columns\TextColumn::make('Tribe.TriName')
                   ->label('القبيلة'),
+                Tables\Columns\TextColumn::make('victim_count')
+                  ->sortable()
+                  ->label('العدد')
+                  ->counts('Victim'),
                 Tables\Columns\IconColumn::make('ok')
                  ->label('انتهت مراجعتها')
                   ->sortable()
