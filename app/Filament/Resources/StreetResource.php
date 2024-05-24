@@ -49,7 +49,7 @@ class StreetResource extends Resource
                 ->label('اسم الشارع'),
 
               Tables\Columns\TextColumn::make('Tribe.AreaNane')
-                ->searchable()
+
                 ->label('المحلة')
               ,
             ])
