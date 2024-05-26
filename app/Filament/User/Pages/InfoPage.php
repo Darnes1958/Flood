@@ -475,12 +475,7 @@ class InfoPage extends Page implements HasTable,HasForms
                     'notes' => $record->notes,
 
                   ])
-
-                    ->form([
-                        TextInput::make('notes')
-                        ->label('ملاحظات')
-                    ])
-                    ->action(function (Victim $record,array $data){
+                  ->action(function (Victim $record,array $data){
                         Mafkoden::where('victim_id',$record->id)->update(['victim_id'=>null]);
                         Bedon::where('victim_id',$record->id)->update(['victim_id'=>null]);
                         Tasreeh::where('victim_id',$record->id)->update(['victim_id'=>null]);
@@ -490,6 +485,26 @@ class InfoPage extends Page implements HasTable,HasForms
                         $record->delete();
 
                     }),
+
+                    Action::make('note')
+                        ->iconButton()
+                        ->icon('heroicon-s-information-circle')
+                        ->color('info')
+                        ->requiresConfirmation()
+                        ->modalHeading('ملاحظات')
+                        ->fillForm(fn (Victim $record): array => [
+                            'notes' => $record->notes,
+
+                        ])
+                    ->form([
+                        TextInput::make('notes')
+                        ->label('ملاحظات')
+                    ])
+                        ->action(function (Victim $record,array $data){
+                            $record->notes=$data['notes'];
+                            $record->save();
+                        }),
+
                 Action::make('RetTasreeh')
                     ->label('ارجاع')
                     ->requiresConfirmation()
