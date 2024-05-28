@@ -5,13 +5,20 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ArchifResource\Pages;
 use App\Filament\Resources\ArchifResource\RelationManagers;
 use App\Models\Archif;
+use App\Models\Bedon;
+use App\Models\Mafkoden;
+use App\Models\Tasreeh;
+use App\Models\Victim;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class ArchifResource extends Resource
 {
@@ -63,6 +70,34 @@ class ArchifResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Action::make('toVictim')
+                    ->iconButton()
+                    ->visible(Auth::user()->can('delete victim'))
+                    ->icon('heroicon-s-archive-box')
+                    ->requiresConfirmation()
+                    ->modalHeading('إرجاع لملف الضحايا')
+                    ->modalDescription('هل انت متأكد من إرجاعه ؟')
+                    ->fillForm(fn (Archif $record): array => [
+                        'notes' => $record->notes,
+
+                    ])
+                    ->form([
+                        TextInput::make('notes')
+                            ->label('ملاحظات')
+                    ])
+                    ->action(function (Archif $record,array $data){
+
+                        Mafkoden::where('victim_id',$record->id)->update(['victim_id'=>null]);
+                        Bedon::where('victim_id',$record->id)->update(['victim_id'=>null]);
+                        Tasreeh::where('victim_id',$record->id)->update(['victim_id'=>null]);
+
+                        $victim=Archif::find($record->id);
+                        $victim->notes=$data['notes'];
+                        Victim::create(collect($victim)->except(['id'])->toArray());
+                        $record->delete();
+
+                    }),
+
             ])
             ->bulkActions([
                //

@@ -88,9 +88,10 @@ class InfoPage extends Page implements HasTable,HasForms
                   Select::make('bait_id')
                     ->hiddenLabel()
                     ->prefix('البيت')
-                    ->options(Bait::query()
-                      ->where('family_id','!=', $this->family_id)
-                      ->pluck('name', 'id'))
+                      ->options(fn (Get $get): Collection => Bait::query()
+                          ->where('family_id', $get('family_id'))
+                          ->pluck('name', 'id'))
+
                     ->preload()
                     ->live()
                     ->searchable()
