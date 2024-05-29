@@ -244,7 +244,6 @@ class InfoPage extends Page implements HasTable,HasForms
                 ->label('بواسطة'),
                 TextColumn::make('FullName')
                     ->label('الاسم بالكامل')
-
                     ->sortable()
                     ->searchable()
                     ->action(
@@ -325,16 +324,17 @@ class InfoPage extends Page implements HasTable,HasForms
                           ])
 
                     )
-
-
                     ->description(function (Victim $record){
                       $who='';
+                      $tas=null;
                       $bed=null;
                       $maf=null;
+                      if ($record->tasreeh) $who=('(بتصريح) ');
                       if ($record->bedon) $bed=Bedon::find($record->bedon);
                       if ($record->mafkoden) $maf=Mafkoden::find($record->mafkoden);
+
                       if ($bed) {$slash=null; if ($bed->tel) $slash=' / ';
-                                 $who= "المبلغ ->   بدون : ".$bed->who.$slash.$bed->tel; if ($bed->ship) $who=$who.' ('.$bed->ship.') ';}
+                                 $who=$who. "المبلغ ->   بدون : ".$bed->who.$slash.$bed->tel; if ($bed->ship) $who=$who.' ('.$bed->ship.') ';}
                       if ($maf)
                         if ($bed) {$slash=null; if ($maf->tel) $slash=' / ';
                                    $who=$who.'   مفقودين : '.$maf->who.$slash.$maf->tel;}
@@ -474,7 +474,6 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->modalDescription('هل انت متأكد من نقل السجل الي الأرشيف ؟')
                     ->fillForm(fn (Victim $record): array => [
                     'notes' => $record->notes,
-
                   ])
                     ->form([
                     TextInput::make('notes')
@@ -488,7 +487,6 @@ class InfoPage extends Page implements HasTable,HasForms
                         $archif->notes=$data['notes'];
                         Archif::create($archif->toArray());
                         $record->delete();
-
                     }),
 
                 Action::make('note')

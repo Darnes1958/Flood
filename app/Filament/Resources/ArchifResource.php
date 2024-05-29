@@ -79,25 +79,20 @@ class ArchifResource extends Resource
                     ->modalDescription('هل انت متأكد من إرجاعه ؟')
                     ->fillForm(fn (Archif $record): array => [
                         'notes' => $record->notes,
-
                     ])
                     ->form([
                         TextInput::make('notes')
                             ->label('ملاحظات')
                     ])
                     ->action(function (Archif $record,array $data){
-
                         Mafkoden::where('victim_id',$record->id)->update(['victim_id'=>null]);
                         Bedon::where('victim_id',$record->id)->update(['victim_id'=>null]);
                         Tasreeh::where('victim_id',$record->id)->update(['victim_id'=>null]);
-
                         $victim=Archif::find($record->id);
                         $victim->notes=$data['notes'];
                         Victim::create(collect($victim)->except(['id'])->toArray());
                         $record->delete();
-
                     }),
-
             ])
             ->bulkActions([
                //
