@@ -254,10 +254,12 @@ class InfoPage extends Page implements HasTable,HasForms
                                    TextInput::make('bedon_name')
                                      ->label('بدون')
                                      ->disabled(),
-
                                    TextInput::make('mafkoden_name')
                                      ->disabled()
                                      ->label('مفقودين'),
+                                     TextInput::make('tasreeh_name')
+                                         ->disabled()
+                                         ->label('بتصريح'),
 
                                    TextInput::make('Name1')
                                      ->autofocus()
@@ -278,8 +280,9 @@ class InfoPage extends Page implements HasTable,HasForms
                             ->fillForm(function (Victim $record){
                               if ($record->bedon) $bed=Bedon::find($record->bedon)->name; else $bed='';
                               if ($record->mafkoden) $maf=Mafkoden::find($record->mafkoden)->name; else $maf='';
+                              if ($record->tasreeh) $tas=Tasreeh::find($record->tasreeh)->name; else $tas='';
                               return [
-                                'bedon_name'=>$bed,'mafkoden_name'=>$maf,
+                                'bedon_name'=>$bed,'mafkoden_name'=>$maf,'tasreeh_name'=>$tas,
                                 'Name1' => $record->Name1,'Name2' => $record->Name2,'Name3' => $record->Name3,
                                 'Name4' => $record->Name4,'otherName' => $record->otherName
                               ];
@@ -319,6 +322,18 @@ class InfoPage extends Page implements HasTable,HasForms
                                   }
                                   $action->cancelParentActions();
                                 }),
+                                Action::make('changeTas')
+                                    ->label('تصريح')
+                                    ->color('info')
+                                    ->action(function (Action $action,Victim $record){
+                                        if ($record->tasreeh) {
+                                            $rec=Tasreeh::find($record->tasreeh);
+                                            $record->update([
+                                                'FullName'=>$rec->name,'Name1'=>$rec->Name1,'Name2'=>$rec->Name2,'Name3'=>$rec->Name3,'Name4'=>$rec->Name4,
+                                            ]);
+                                        }
+                                        $action->cancelParentActions();
+                                    }),
 
 
                           ])
@@ -340,16 +355,12 @@ class InfoPage extends Page implements HasTable,HasForms
                                    $who=$who.'   مفقودين : '.$maf->who.$slash.$maf->tel;}
                         else {$slash=null; if ($maf->tel) $slash=' / ';
                               $who=$who.' المبلغ ->   مفقودين : '.$maf->who.$slash.$maf->tel;}
-
                        if ($bed || $maf) {
                            $who=$who.' الأم -> ';
                            if ($bed && $bed->mother) $who=$who.'بدون : '.$bed->mother;
                            if ($maf && $maf->mother) $who=$who.'مفقودين : '.$maf->mother;
                        }
-
-
                         return $who;
-
                     })
                     ->formatStateUsing(fn (Victim $record): View => view(
                         'filament.user.pages.full-data',

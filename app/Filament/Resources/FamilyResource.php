@@ -119,6 +119,7 @@ class FamilyResource extends Resource
             ])
             ->filters([
               Tables\Filters\SelectFilter::make('فلترة بالقبيلة')
+                ->searchable()
                 ->relationship('Tribe','TriName'),
             ])
             ->actions([
