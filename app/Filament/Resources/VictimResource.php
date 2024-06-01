@@ -264,6 +264,8 @@ class VictimResource extends Resource
               ->hidden(),
               TextInput::make('user_id')
                 ->hidden(),
+              TextInput::make('fromwho')
+                ->hidden(),
 
             ])->columns(4)
           ;

@@ -69,6 +69,7 @@ class CreateByFather extends Page implements HasTable
       'family_id'=>$this->family_id,
       'street_id'=>Street::where('StrName','غير محدد')->first()->id,
       'user_id'=>Auth::id(),
+
       ]);
 
   }
