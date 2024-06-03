@@ -165,6 +165,7 @@ class InfoPage extends Page implements HasTable,HasForms
                       ->color('success')
                       ->modalContent(view('filament.user.pages.who-search-widget'))
                       ->modalCancelAction(fn (StaticAction $action) => $action->label('عودة')->icon('heroicon-s-arrow-uturn-left'))
+                      ->modalWidth(MaxWidth::FiveExtraLarge)
                       ->modalSubmitAction(false),
                   ])->alignCenter()->verticallyAlignCenter(),
                 ])

@@ -33,13 +33,13 @@ class CompareMaf extends Page implements HasForms
   public $with_victim=false;
   public $show_description=false;
   public $show_other=true;
-  public $forign_only=true;
+  public $forign_only=false;
 
   public $familyData;
 
   public function mount(): void
   {
-    $this->familyForm->fill(['show_other'=>true,'forign_only'=>true]);
+    $this->familyForm->fill(['show_other'=>true,'forign_only'=>false]);
   }
 
   protected function getForms(): array

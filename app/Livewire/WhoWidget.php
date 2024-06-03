@@ -36,17 +36,22 @@ class WhoWidget extends BaseWidget
             ->columns([
                 Tables\Columns\TextColumn::make('who')
                  ->sortable()
-                 ->color('info')
                  ->searchable()
+                 ->color('info')
+
                  ->label('المبلغ'),
               Tables\Columns\TextColumn::make('name')
                 ->label('الاسم'),
               Tables\Columns\TextColumn::make('FullName')
                 ->label('اسم المنظومة'),
               Tables\Columns\TextColumn::make('tel')
+                  ->searchable(isIndividual: true, isGlobal: false)
                 ->label('هاتف'),
               Tables\Columns\TextColumn::make('ship')
                 ->label('القرابة'),
+              Tables\Columns\TextColumn::make('mother')
+                  ->searchable(isIndividual: true, isGlobal: false)
+                    ->label('الأم'),
 
             ]);
     }
