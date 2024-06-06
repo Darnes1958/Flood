@@ -33,6 +33,8 @@ class ContryWidget extends BaseWidget
           ->defaultSort('victim_count','desc')
           ->striped()
             ->columns([
+              TextColumn::make('ت')
+               ->rowIndex(),
               TextColumn::make('name')
                 ->sortable()
                 ->color('blue')
