@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\FamilyResource\Pages;
 use App\Filament\Resources\FamilyResource\RelationManagers;
+use App\Models\BigFamily;
 use App\Models\Family;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
@@ -32,8 +33,29 @@ class FamilyResource extends Resource
             ->schema([
                 TextInput::make('FamName')
                 ->label('اسم العائلة'),
+                Forms\Components\Select::make('big_family_id')
+                    ->searchable()
+                    ->required()
+                    ->preload()
+                    ->relationship('Big_Family','name')
+                    ->createOptionForm([
+                        TextInput::make('name')
+                            ->required()
+                            ->label('اسم القبيلة')
+                            ->maxLength(255)
+                            ->required(),
+                    ])
+                    ->editOptionForm([
+                        TextInput::make('name')
+                            ->required()
+                            ->label('اسم القبيلة')
+                            ->maxLength(255)
+                            ->required(),
+                    ])
+                    ->label('القبيلة'),
                 Forms\Components\Select::make('tribe_id')
                   ->searchable()
+                  ->required()
                   ->preload()
                   ->relationship('Tribe','TriName')
                   ->createOptionForm([
@@ -50,7 +72,7 @@ class FamilyResource extends Resource
                       ->maxLength(255)
                       ->required(),
                   ])
-                  ->label('القبيلة'),
+                  ->label('التركيبة الاجتماعية'),
 
 
             ]);
@@ -65,8 +87,11 @@ class FamilyResource extends Resource
                 Tables\Columns\TextColumn::make('FamName')
                  ->searchable()
                  ->label('الاسم'),
-                Tables\Columns\TextColumn::make('Tribe.TriName')
+                Tables\Columns\SelectColumn::make('big_family_id')
+                  ->options(BigFamily::all()->pluck('name','id'))
                   ->label('القبيلة'),
+                Tables\Columns\TextColumn::make('Tribe.TriName')
+                    ->label('التركيبة الاجتماعية'),
                 Tables\Columns\TextColumn::make('victim_count')
                   ->sortable()
                   ->label('العدد')

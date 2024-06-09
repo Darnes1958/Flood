@@ -27,7 +27,10 @@ class Family extends Model
     public function Tribe(){
       return $this->belongsTo(Tribe::class);
     }
+    public function Big_family(){
+        return $this->belongsTo(BigFamily::class);
+    }
     public function Country(){
-        return $this->belongsTo(Tribe::class);
+        return $this->belongsTo(Country::class);
     }
 }
