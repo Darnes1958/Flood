@@ -8,6 +8,7 @@ use App\Filament\Widgets\AreaWidget;
 use App\Filament\Widgets\ContryWidget;
 use App\Filament\Widgets\FamWidget;
 use App\Filament\Widgets\MaleFemale;
+use App\Filament\Widgets\Roadwidget;
 use App\Filament\Widgets\StreetWidget;
 use App\Filament\Widgets\TriWidget;
 use Filament\Http\Middleware\Authenticate;
@@ -63,6 +64,7 @@ class UserPanelProvider extends PanelProvider
               StreetWidget::class,
               AreaWidget::class,
               ContryWidget::class,
+              Roadwidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

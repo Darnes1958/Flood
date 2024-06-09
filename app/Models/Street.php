@@ -12,6 +12,9 @@ class Street extends Model
     public function Area(){
       return $this->belongsTo(Area::class);
     }
+    public function road(){
+        return $this->belongsTo(Road::class);
+    }
     public function Victim(){
       return $this->hasMany(Victim::class);
     }

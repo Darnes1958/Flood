@@ -4,13 +4,18 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\StreetResource\Pages;
 use App\Filament\Resources\StreetResource\RelationManagers;
+use App\Models\Road;
 use App\Models\Street;
+use App\Models\Victim;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -27,7 +32,6 @@ class StreetResource extends Resource
             ->schema([
               TextInput::make('StrName')
                 ->required()
-
                 ->label('اسم الشارع')
                 ->maxLength(255),
               Select::make('area_id')
@@ -37,6 +41,15 @@ class StreetResource extends Resource
                 ->preload()
                 ->reactive()
                 ->required(),
+              Select::make('road_id')
+                    ->searchable()
+                    ->relationship('Road','name')
+                    ->preload(),
+                Forms\Components\Toggle::make('building')
+                    ->label('عمارة')
+                    ->onColor( 'success')
+                    ->offColor( 'gray')
+
             ]);
     }
 
@@ -48,10 +61,18 @@ class StreetResource extends Resource
                 ->searchable()
                 ->label('اسم الشارع'),
 
-              Tables\Columns\TextColumn::make('Tribe.AreaNane')
+              Tables\Columns\TextColumn::make('Area.AreaName')
+                ->label('المحلة'),
+              Tables\Columns\SelectColumn::make('road_id')
+                ->options(Road::all()->pluck('name','id'))
+                  ->searchable()
+                    ->label('الشارع الرئيسي'),
+              Tables\Columns\ToggleColumn::make('building')
+                    ->label('عمارة')
 
-                ->label('المحلة')
-              ,
+
+                    ,
+
             ])
             ->filters([
                 //
