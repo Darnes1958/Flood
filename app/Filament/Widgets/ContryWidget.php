@@ -13,7 +13,7 @@ use Illuminate\Support\HtmlString;
 
 class ContryWidget extends BaseWidget
 {
-  protected static ?int $sort=7;
+  protected static ?int $sort=8;
   public static function canView(): bool
   {
     return Auth::user()->can('show count');

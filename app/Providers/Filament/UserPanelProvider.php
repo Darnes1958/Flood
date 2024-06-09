@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Pages\Auth\Login;
 use App\Filament\Widgets\AreaWidget;
+use App\Filament\Widgets\Buildingwidget;
 use App\Filament\Widgets\ContryWidget;
 use App\Filament\Widgets\FamWidget;
 use App\Filament\Widgets\MaleFemale;
@@ -65,6 +66,7 @@ class UserPanelProvider extends PanelProvider
               AreaWidget::class,
               ContryWidget::class,
               Roadwidget::class,
+                Buildingwidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
