@@ -11,9 +11,12 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Collection;
+use Livewire\Attributes\On;
 
 class FamilyResource extends Resource
 {
@@ -21,6 +24,10 @@ class FamilyResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel='اسماء العائلات';
+
+
+
+
 
     public static function getNavigationBadge(): ?string
     {
@@ -73,8 +80,6 @@ class FamilyResource extends Resource
                       ->required(),
                   ])
                   ->label('التركيبة الاجتماعية'),
-
-
             ]);
     }
 
@@ -150,11 +155,7 @@ class FamilyResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ;
     }
 
     public static function getRelations(): array
@@ -170,6 +171,7 @@ class FamilyResource extends Resource
             'index' => Pages\ListFamilies::route('/'),
             'create' => Pages\CreateFamily::route('/create'),
             'edit' => Pages\EditFamily::route('/{record}/edit'),
+            'modifyfamily' => Pages\ModifyFam::route('/modifyfamily'),
         ];
     }
 }

@@ -27,23 +27,23 @@ class BigFamilyResource extends Resource
             ->schema([
                 TextInput::make('name')
                     ->required()
-                    ->unique()
+                    ->unique(ignoreRecord: true)
                     ->label('اسم العائلة'),
                 Forms\Components\Select::make('tarkeba_id')
                     ->searchable()
                     ->preload()
                     ->relationship('Tarkeba','name')
                     ->createOptionForm([
-                        TextInput::make('TriName')
+                        TextInput::make('name')
                             ->required()
-                            ->label('اسم القبيلة')
+                            ->label('اسم التركيبة الاجتماعية')
                             ->maxLength(255)
                             ->required(),
                     ])
                     ->editOptionForm([
-                        TextInput::make('TriName')
+                        TextInput::make('name')
                             ->required()
-                            ->label('اسم القبيلة')
+                            ->label('اسم التركيبة الاجتماعية ')
                             ->maxLength(255)
                             ->required(),
                     ])

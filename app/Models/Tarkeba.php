@@ -12,7 +12,7 @@ class Tarkeba extends Model
    }
     public function Victim()
     {
-        return $this->hasManyThrough('App\Models\Family_count', 'App\Models\Big_family');
+        return $this->hasManyThrough('App\Models\Family_count', 'App\Models\BigFamily');
     }
 
 }

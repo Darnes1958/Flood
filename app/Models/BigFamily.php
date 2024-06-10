@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BigFamily extends Model
 {
-    public function Tarkiba(){
+    public function Tarkeba(){
         return $this->belongsTo(Tarkeba::class);
     }
     public function Family_count(){
