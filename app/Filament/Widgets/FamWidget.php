@@ -12,17 +12,30 @@ use Filament\Widgets\TableWidget as BaseWidget;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\HtmlString;
+use Livewire\Attributes\On;
 
 
 class FamWidget extends BaseWidget
 {
     protected int | string | array $columnSpan=1;
     protected static ?int $sort=3;
+  public $big_family_id=null;
+
+  #[On('take_big_family')]
+  public function take_big_family($big_family_id){
+    $this->big_family_id=$big_family_id;
+  }
     public function table(Table $table): Table
     {
         return $table
             ->query(function (Family $tribe) {
-                $tribe=Family::where('nation','ليبيا');
+                $tribe=Family::query()
+                  ->when($this->big_family_id,function ($q){
+                    $q->where('big_family_id',$this->big_family_id);
+                  })
+                  ->when(!$this->big_family_id,function ($q){
+                    $q->where('big_family_id',1);
+                  });
                 return $tribe;
             }
             )

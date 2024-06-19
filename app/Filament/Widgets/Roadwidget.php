@@ -10,19 +10,20 @@ use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
+use Livewire\Attributes\On;
 
 class Roadwidget extends BaseWidget
 {
-    protected static ?int $sort=6;
-    public static function canView(): bool
-    {
-        return Auth::user()->can('show count');
-    }
+  protected int | string | array $columnSpan = 1;
+    protected static ?int $sort=4;
+
+
     public function table(Table $table): Table
     {
         return $table
             ->query(function (Road $tribe) {
-                $tribe=Road::where('id','!=',null);
+                $tribe=Road::query()
+                  ;
                 return $tribe;
             }
             )
@@ -34,6 +35,10 @@ class Roadwidget extends BaseWidget
             ->columns([
                 TextColumn::make('name')
                     ->sortable()
+                  ->action(function (Road $record){
+
+                    $this->dispatch('take_road',road_id: $record->id,areaName: $record->name);
+                  })
                     ->color('blue')
                     ->searchable()
                     ->label('الشارع'),

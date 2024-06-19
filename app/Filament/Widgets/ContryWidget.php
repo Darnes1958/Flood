@@ -13,6 +13,7 @@ use Illuminate\Support\HtmlString;
 
 class ContryWidget extends BaseWidget
 {
+  protected int | string | array $columnSpan = 1;
   protected static ?int $sort=8;
   public static function canView(): bool
   {

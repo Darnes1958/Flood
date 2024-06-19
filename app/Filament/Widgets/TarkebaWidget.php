@@ -14,11 +14,9 @@ use Illuminate\Support\HtmlString;
 
 class TarkebaWidget extends BaseWidget
 {
-  protected static ?int $sort=9;
-  public static function canView(): bool
-  {
-    return Auth::user()->can('show count');
-  }
+  protected int | string | array $columnSpan = 1;
+  protected static ?int $sort=1;
+
   public function table(Table $table): Table
   {
     return $table
@@ -35,6 +33,9 @@ class TarkebaWidget extends BaseWidget
       ->columns([
         TextColumn::make('name')
           ->sortable()
+          ->action(function (Tarkeba $record){
+             $this->dispatch('take_tarkeba',tarkeba_id: $record->id);
+          })
           ->color('blue')
           ->searchable()
           ->label('القبيلة'),

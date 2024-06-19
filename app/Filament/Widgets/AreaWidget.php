@@ -14,7 +14,7 @@ use Illuminate\Support\HtmlString;
 class AreaWidget extends BaseWidget
 {
   protected int | string | array $columnSpan=1;
-  protected static ?int $sort=5;
+  protected static ?int $sort=6;
   public static function canView(): bool
   {
     return Auth::user()->can('show count');
@@ -36,6 +36,9 @@ class AreaWidget extends BaseWidget
           ->columns([
             TextColumn::make('AreaName')
               ->sortable()
+              ->action(function (Area $record){
+                $this->dispatch('take_area',area_id: $record->id,areaName: $record->AreaName);
+              })
               ->color('blue')
               ->searchable()
               ->label('المحلة'),

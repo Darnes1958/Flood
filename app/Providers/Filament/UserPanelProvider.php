@@ -5,13 +5,16 @@ namespace App\Providers\Filament;
 use App\Filament\Pages\Auth\EditProfile;
 use App\Filament\Pages\Auth\Login;
 use App\Filament\Widgets\AreaWidget;
+use App\Filament\Widgets\BigFamWidget;
 use App\Filament\Widgets\Buildingwidget;
 use App\Filament\Widgets\ContryWidget;
 use App\Filament\Widgets\FamWidget;
 use App\Filament\Widgets\MaleFemale;
 use App\Filament\Widgets\Roadwidget;
 use App\Filament\Widgets\StreetWidget;
+use App\Filament\Widgets\TarkebaWidget;
 use App\Filament\Widgets\TriWidget;
+use App\Models\BigFamily;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -55,18 +58,21 @@ class UserPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/User/Resources'), for: 'App\\Filament\\User\\Resources')
             ->discoverPages(in: app_path('Filament/User/Pages'), for: 'App\\Filament\\User\\Pages')
             ->pages([
-                Pages\Dashboard::class,
+
             ])
             ->discoverWidgets(in: app_path('Filament/User/Widgets'), for: 'App\\Filament\\User\\Widgets')
             ->widgets([
               MaleFemale::class,
-              TriWidget::class,
+              TarkebaWidget::class,
+              BigFamWidget::class,
               FamWidget::class,
-              StreetWidget::class,
               AreaWidget::class,
-              ContryWidget::class,
               Roadwidget::class,
-                Buildingwidget::class,
+              StreetWidget::class,
+              Buildingwidget::class,
+              ContryWidget::class,
+
+
             ])
             ->middleware([
                 EncryptCookies::class,

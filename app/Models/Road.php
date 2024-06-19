@@ -11,6 +11,7 @@ class Road extends Model
     public function Street(){
         return $this->hasMany(Street::class);
     }
+
     public function Victim()
     {
         return $this->hasManyThrough('App\Models\Victim', 'App\Models\Street');

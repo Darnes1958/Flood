@@ -16,4 +16,8 @@ class BigFamily extends Model
     public function Family(){
         return $this->hasMany(Family::class);
     }
+  public function Victim()
+  {
+    return $this->hasManyThrough('App\Models\Victim', 'App\Models\Family');
+  }
 }
