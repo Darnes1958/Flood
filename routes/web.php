@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(\App\Http\Controllers\PdfController::class)->group(function (){
   route::get('/pdffamily/{family_id?},{bait_id?}', 'PdfFamily')->name('pdffamily') ;
+  route::get('/pdfbigfamily/{big_family?}', 'PdfBigFamily')->name('pdfbigfamily') ;
   route::get('/pdftekrar/{what}', 'PdfTekrar')->name('pdftekrar') ;
   route::get('/pdfrepeted/{what}', 'PdfRepeted')->name('pdfrepeted') ;
   Route::get('get-video/{video}', 'getVideo')->name('getVideo');

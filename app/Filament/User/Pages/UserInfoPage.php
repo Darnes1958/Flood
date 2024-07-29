@@ -5,9 +5,11 @@ namespace App\Filament\User\Pages;
 use App\Models\Archif;
 use App\Models\Bait;
 use App\Models\Bedon;
+use App\Models\BigFamily;
 use App\Models\Family;
 use App\Models\Mafkoden;
 use App\Models\Street;
+use App\Models\Tarkeba;
 use App\Models\Tasreeh;
 use App\Models\Victim;
 use Filament\Actions\StaticAction;
@@ -26,6 +28,7 @@ use Filament\Pages\Page;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -50,11 +53,16 @@ class UserInfoPage extends Page implements HasTable,HasForms
 
 
   public $family_id=null;
+  public $big_family=null;
+  public $tarkeba=null;
+  public $families;
+  public $big_families;
 
   public $street_id=null;
   public $show='all';
   public $mother;
   public $count;
+  public $notes=true;
 
 
 
@@ -64,11 +72,15 @@ class UserInfoPage extends Page implements HasTable,HasForms
       ->schema([
         Section::make()
           ->schema([
+
             Select::make('family_id')
               ->hiddenLabel()
               ->prefix('العائلة')
-              ->options(Family::query()
-              ->pluck('FamName', 'id'))
+              ->options(function () {
+                  if ($this->tarkeba || $this->big_families)
+                     return Family::query()->whereIn('id',$this->families)->pluck('FamName', 'id');
+                  return Family::query()->pluck('FamName', 'id');
+              })
               ->preload()
               ->live()
               ->searchable()
@@ -77,6 +89,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                 $this->family_id=$state;
                 $this->mother=Victim::where('family_id',$state)->where('is_mother',1)->pluck('id')->all();
               }),
+
             Select::make('street_id')
               ->hiddenLabel()
               ->prefix('العنوان')
@@ -84,7 +97,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
               ->preload()
               ->live()
               ->searchable()
-              ->columnSpan(3)
+              ->columnSpan(2)
               ->afterStateUpdated(function ($state){
                 $this->street_id=$state;
               }),
@@ -96,7 +109,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
               ->inlineLabel(false)
               ->reactive()
               ->live()
-              ->columnSpan(4)
+              ->columnSpan(3)
               ->default('all')
               ->afterStateUpdated(function ($state){
                 $this->show=$state;
@@ -108,21 +121,100 @@ class UserInfoPage extends Page implements HasTable,HasForms
                 'father_only'=>'أباء',
                 'mother_only'=>'أمهات',
               ]),
+              Checkbox::make('notes')
+                  ->inlineLabel(false)
+                  ->live()
+                  ->default(0)
+                  ->afterStateUpdated(function ($state){
+                      $this->notes=$state;
+                  })
+                  ->label('إظهار الملاحظات'),
+              Select::make('tarkeba')
+                  ->hiddenLabel()
+                  ->prefix('التركيبة الاجتماعية')
+                  ->options(Tarkeba::query()
+                      ->pluck('name', 'id'))
+                  ->preload()
+                  ->live()
+                  ->searchable()
+                  ->columnSpan(2)
+                  ->afterStateUpdated(function ($state){
+                      $this->tarkeba=$state;
+                      $this->big_families=BigFamily::where('tarkeba_id',$state)->pluck('id')->all();
+                      $this->families=Family::whereIn('big_family_id',$this->big_families)->pluck('id')->all();
+                      $this->mother=Victim::whereIn('family_id',$this->families)->where('is_mother',1)->pluck('id')->all();
+                      $this->family_id=null;
+                      $this->big_family=null;
+
+                  }),
+              Select::make('big_family')
+                  ->hiddenLabel()
+                  ->prefix('العائلة الكبري')
+                  ->options(function () {
+                   if ($this->tarkeba)
+                      return BigFamily::query()->where('tarkeba_id',$this->tarkeba)
+                          ->pluck('name', 'id');
+                      return BigFamily::query()
+                          ->pluck('name', 'id');
+                  })
+                  ->preload()
+                  ->live()
+                  ->searchable()
+                  ->columnSpan(2)
+                  ->afterStateUpdated(function ($state){
+                      $this->big_family=$state;
+                      $this->families=Family::where('big_family_id',$state)->pluck('id')->all();
+                      $this->mother=Victim::whereIn('family_id',$this->families)->where('is_mother',1)->pluck('id')->all();
+                      $this->family_id=null;
+                  }),
+              \Filament\Forms\Components\Actions::make([
+                  \Filament\Forms\Components\Actions\Action::make('printFamily')
+                      ->label('طباعة')
+                      ->visible(function (Get $get){
+                          return $get('family_id')!=null;
+                      })
+                      ->icon('heroicon-m-printer')
+                      ->url(function (Get $get) {
+                          return route('pdffamily',
+                              ['family_id' => $get('family_id'),
+                                  'bait_id' => 0,]);
+                      } ),
+                  \Filament\Forms\Components\Actions\Action::make('printBigFamily')
+                      ->label('طباعة الكبري')
+                      ->visible(function (Get $get){
+                          return $get('big_family')!=null;
+                      })
+                      ->color('success')
+                      ->icon('heroicon-m-printer')
+                      ->url(function (Get $get) {
+                          return route('pdfbigfamily',
+                              ['big_family' => $get('big_family'),]);
+                      } ),
+                  ])
+
           ])
           ->columns(8),
+
       ]);
   }
 
   public function table(Table $table): Table
   {
     return $table
+
       ->query(function (){
         return
           Victim::query()
-            ->where('notes','!=',null)
-            ->when($this->family_id,function($q){
+            ->when($this->tarkeba || $this->big_families,function ($q){
+                $q->orderby('family_id');
+            })
+            ->when($this->family_id && !$this->big_family,function($q){
               $q->where('family_id',$this->family_id);
             })
+            ->when($this->big_family || $this->tarkeba,function($q){
+                  $q->whereIn('family_id',$this->families);
+              })
+
             ->when($this->street_id,function($q){
               $q->where('street_id',$this->street_id);
             })
@@ -182,6 +274,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
               }
             }
             if ($record->notes) $who=$who.' ('.$record->notes.')';
+            if (!$this->notes) return null;
             return $who;
           })
 
@@ -202,8 +295,11 @@ class UserInfoPage extends Page implements HasTable,HasForms
           ->toggleable()
           ->sortable()
           ->searchable(),
+          ImageColumn::make('image')
+              ->toggleable()
 
-
+              ->label('')
+              ->circular(),
 
       ])
       ;

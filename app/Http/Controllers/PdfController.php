@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Allview;
 use App\Models\Bait;
 use App\Models\Bedmafview;
+use App\Models\BigFamily;
 use App\Models\Family;
+use App\Models\Tarkeba;
 use App\Models\Tasbedview;
 use App\Models\Tasmafview;
 use App\Models\Tasreeh;
@@ -184,4 +186,102 @@ class PdfController extends Controller
 
 
  }
+  public function PdfBigFamily($big_family){
+
+        $big=BigFamily::find($big_family);
+        $big_family_name=$big->name;
+        $tarkeba_name=Tarkeba::find($big->tarkeba_id)->name;
+
+        $families=Family::where('big_family_id',$big_family)->pluck('id')->all();
+
+        $fam=Family::whereIn('id',$families)->get();
+
+        $count=Victim::whereIn('family_id',$families)->count();
+
+        $victim_father=Victim::with('father')
+            ->whereIn('family_id',$families)
+            ->where('is_father','1')->get();
+
+
+
+        $fathers=Victim::whereIn('family_id',$families)->where('is_father',1)->select('id');
+        $mothers=Victim::whereIn('family_id',$families)->where('is_mother',1)->select('id');
+
+        $victim_mother=Victim::with('mother')
+            ->whereIn('family_id',$families)
+            ->where('is_mother','1')
+            ->where(function ( $query) use($fathers) {
+                $query->where('husband_id', null)
+                    ->orwhere('husband_id', 0)
+                    ->orwhereNotIn('husband_id',$fathers);
+            })
+
+            ->get();
+
+        $victim_husband=Victim::
+        whereIn('family_id',$families)
+
+            ->where('male','ذكر')
+            ->where('is_father','0')
+            ->where('wife_id','!=',null)
+            ->get();
+
+        $victim_wife=Victim::
+        whereIn('family_id',$families)
+
+            ->where('male','أنثي')
+            ->where('is_mother','0')
+            ->where('husband_id','!=',null)
+            ->get();
+        $victim_only=Victim::
+        whereIn('family_id',$families)
+
+            ->Where(function ( $query) {
+                $query->where('is_father',null)
+                    ->orwhere('is_father',0);
+            })
+            ->Where(function ( $query) {
+                $query->where('is_mother',null)
+                    ->orwhere('is_mother',0);
+            })
+            ->where('husband_id',null)
+            ->where('wife_id',null)
+            ->where('father_id',null)
+            ->where(function ( $query) use($mothers) {
+                $query->where('mother_id', null)
+                    ->orwhere('mother_id', 0)
+                    ->orwhereNotIn('mother_id',$mothers);
+            })
+
+
+            ->get();
+
+
+
+        $html = view('PDF.PdfVictimBigFamily',
+            [
+                'fam'=>$fam,
+                'victim_father'=>$victim_father,
+                'victim_mother'=>$victim_mother,
+                'victim_husband'=>$victim_husband,
+                'victim_wife'=>$victim_wife,
+                'victim_only'=>$victim_only,
+                'tarkeba_name'=>$tarkeba_name,
+                'count'=>$count,
+                'big_family_name'=>$big_family_name,
+            ]
+        )->toArabicHTML();
+
+        $pdf = Pdf::loadHTML($html)->output();
+        $headers = array(
+            "Content-type" => "application/pdf",
+        );
+        return response()->streamDownload(
+            fn () => print($pdf),
+            "victim.pdf",
+            $headers
+        );
+
+
+    }
 }

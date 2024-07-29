@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
-class BedonResource extends Resource
+class   BedonResource extends Resource
 {
     protected static ?string $model = Bedon::class;
 
