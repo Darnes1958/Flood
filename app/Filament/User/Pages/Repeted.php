@@ -33,6 +33,10 @@ class Repeted extends Page implements HasForms,HasTable
 
     public $what='inTas';
 
+  public static function shouldRegisterNavigation(): bool
+  {
+    return  auth()->user()->is_admin;
+  }
     public function  mount() {
         $this->form->fill([]);
     }

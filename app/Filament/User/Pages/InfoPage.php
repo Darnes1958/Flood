@@ -58,7 +58,12 @@ class InfoPage extends Page implements HasTable,HasForms
     public $from='all';
     public $ok=0;
 
-  public function  mount() {
+  public static function shouldRegisterNavigation(): bool
+  {
+    return  auth()->user()->is_admin;
+  }
+
+    public function  mount() {
     $this->form->fill(['ok'=>$this->ok,]);
   }
   public function form(Form $form): Form
@@ -155,6 +160,7 @@ class InfoPage extends Page implements HasTable,HasForms
                       'tasreeh'=>'بتصريح',
                       'bedon'=>'بدون',
                       'mafkoden'=>'مفقودين',
+                      'my'=>'المنظومة',
                     ]),
                   \Filament\Forms\Components\Actions::make([
                     \Filament\Forms\Components\Actions\Action::make('SerWho')
@@ -207,6 +213,9 @@ class InfoPage extends Page implements HasTable,HasForms
                   })
                   ->when($this->from=='mafkoden',function ($q){
                     $q->where('fromwho','مفقودين');
+                  })
+                  ->when($this->from=='my',function ($q){
+                    $q->where('bedon',null)->where('mafkoden',null)->where('tasreeh',null);
                   })
 
                     ->when($this->show=='single',function ($q){

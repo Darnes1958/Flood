@@ -37,6 +37,10 @@ class Tekrar extends Page implements HasForms,HasTable
         $this->form->fill([]);
     }
 
+  public static function shouldRegisterNavigation(): bool
+  {
+    return  auth()->user()->is_admin;
+  }
     public function form(Form $form): Form
     {
         return $form

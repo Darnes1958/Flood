@@ -57,6 +57,10 @@ class VictimResource extends Resource
   public $filters;
   static $ser=0;
 
+  public static function shouldRegisterNavigation(): bool
+  {
+    return  auth()->user()->is_admin;
+  }
     public static function form(Form $form): Form
     {
         return $form
