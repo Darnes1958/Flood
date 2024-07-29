@@ -13,32 +13,32 @@
         @if ($record->otherName) <p style="color: #9f1239;font-weight: bold"> &nbsp; [{{$record->otherName}}]&nbsp; </p> @endif
 
     @if($record->wife)
-      <p style="color: #fbbf24;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;وزوجها :&nbsp;</p>
+      <p style="color: #fbbf24;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;زوجها :&nbsp;</p>
       <p >{{$record->wife->FullName}}</p>
     @endif
     @if($record->husband)
-        <p style="color: #00bb00;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;وزوجته :&nbsp;</p>
+        <p style="color: #00bb00;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;زوجته :&nbsp;</p>
         <p >{{$record->husband->FullName}}&nbsp;({{$record->husband->Family->FamName}})</p>
     @endif
     @if($record->sonOfFather)
         @if($record->male=='ذكر')
-        <p style="color: dodgerblue;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ووالده :&nbsp;</p>
+        <p style="color: dodgerblue;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;والده :&nbsp;</p>
         @else
-        <p style="color: dodgerblue;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ووالدها :&nbsp;</p>
+        <p style="color: dodgerblue;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;والدها :&nbsp;</p>
         @endif
         <p >{{$record->sonOfFather->FullName}}</p>
     @endif
     @if($record->sonOfMother)
         @if($record->male=='ذكر')
-            <p style="color: #c084fc;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;ووالدته :&nbsp;</p>
+            <p style="color: #c084fc;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;والدته :&nbsp;</p>
         @else
-            <p style="color: #c084fc;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;ووالدتها :&nbsp;</p>
+            <p style="color: #c084fc;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;والدتها :&nbsp;</p>
         @endif
 
         <p >{{$record->sonOfMother->FullName}}</p>
     @endif
     @if($record->father->count()>0)
-            <p style="color: aqua;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;وأبناءه :&nbsp;</p>
+            <p style="color: aqua;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;أبناءه :&nbsp;</p>
         @php
             $i=0;
             foreach($record->father as $item){
@@ -47,7 +47,7 @@
         @endphp
     @endif
     @if($record->mother->count()>0)
-                <p style="color: aqua;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;وأبناءها :&nbsp;</p>
+                <p style="color: aqua;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;أبناءها :&nbsp;</p>
             @php
                 $i=0;
                 foreach($record->mother as $item){
