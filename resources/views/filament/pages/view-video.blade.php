@@ -1,6 +1,7 @@
+
+
 <x-filament::page>
-    <video  controls>
-        <source src="{{ route('getVideo', $record->id)  }}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <iframe width="560" height="315"
+            src="https://www.youtube.com/embed/{{$record->attachment}}"  >
+    </iframe>
 </x-filament::page>

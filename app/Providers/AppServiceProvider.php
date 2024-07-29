@@ -7,10 +7,12 @@ use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentColor;
 use Filament\Support\Facades\FilamentView;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use Illuminate\View\View;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse;
+use BezhanSalleh\PanelSwitch\PanelSwitch;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -32,6 +34,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+      PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
+        $panelSwitch
+          ->canSwitchPanels(fn (): bool => Auth::user()->is_admin==1)
+          ->visible(fn (): bool => Auth::user()->is_admin==1);
+
+      });
       FilamentColor::register([
         'Fuchsia' =>  Color::Fuchsia,
         'green' =>  Color::Green,
