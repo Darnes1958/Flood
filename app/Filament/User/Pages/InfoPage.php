@@ -110,6 +110,7 @@ class InfoPage extends Page implements HasTable,HasForms
                    ->live()
                    ->default(0)
                    ->afterStateUpdated(function ($state){
+
                      $this->ok=$state;
                    })
                    ->label('لم تراجع'),

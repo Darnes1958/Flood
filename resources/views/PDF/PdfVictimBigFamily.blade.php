@@ -28,6 +28,7 @@
                   <label  >{{$family->FamName}}</label>
                   <label  style="color: #9f1239" >&nbsp;&nbsp;العائلة : </label>
              </span>
+        </div>
         <div style="position: relative;">
           @foreach($victim_father->where('family_id',$family->id) as $victim)
             <div  style="text-align: right;font-size: 11pt;">
@@ -57,38 +58,61 @@
             </div>
 
             @endforeach
-
         </div>
         <div style="position: relative;">
-            @foreach($victim_mother->where('family_id',$family->id) as $victim)
-                <div  style="text-align: right;font-size: 11pt;">
-                    <label  >{{$victim->Street->StrName}}</label>
+            @php
+            foreach($victim_mother->where('family_id',$family->id) as $victim) {
+                echo "<div  style=\"text-align: right;font-size: 11pt;\">
+                    <label  >{$victim->Street->StrName}</label>
                     <label  > العنوان </label>
                     <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                    <label  >{{$victim->FullName}}</label>
-                    <label style="font-size: 14pt;color: #6b21a8" >الأم : </label>
-                </div>
-                @if($victim->husband_id)
-                    <div  style="text-align: right;font-size: 11pt;">
-                        <label  >{{$victim->wife->FullName}}</label>
+                    <label  >{$victim->FullName}</label>
+                    <label style=\"font-size: 14pt;color: #6b21a8\" >الأم : </label>
+                </div>";
+                if($victim->husband_id)
+                  echo  "<div  style=\"text-align: right;font-size: 11pt;\">
+                        <label  >{$victim->wife->FullName}</label>
                         <label  >زوجها : </label>
-                    </div>
+                        </div>";
 
-                @endif
+                  echo "<div  style=\"text-align: right;font-size: 11pt;\">";
 
-                <div  style="text-align: right;font-size: 11pt;">
-                    @foreach($victim->mother as $son)
-                        @php $father_name=$son->Name2.' '.$son->Name3.' '.$son->Name4 @endphp
-                        <label  >{{$son->Name1}}</label>
-                        @if(!$loop->last) <label> , </label>@endif
-                    @endforeach
-                    @if($victim->husband_id) <label  >الأبناء : </label>
-                        @else
-                            <label  >ابناءها من ({{$father_name}}) : </label>
-                        @endif
-                </div>
+                  if ($victim->has_more==1) ;
+                      if ($victim->has_more !=1) {
+                        foreach($victim->mother as $son) {
+                            $father_name=$son->Name2.' '.$son->Name3.' '.$son->Name4 ;
+                            echo " <label  >$son->Name1</label>";
+                            if(!$loop->last)  echo "<label> , </label>";
+                        }
 
-            @endforeach
+                        if($victim->husband_id) echo "<label  >الأبناء : </label>";
+                        else
+                            echo "<label  >ابناءها من ($father_name) : </label>";
+
+                      } else {
+                              $rec=\App\Models\Victim::where('mother_id',$victim->id)->orderby('Name2')->get();
+                              $i=0;
+                              $name2=$rec[0]->Name2;
+                              $name3=$rec[0]->Name3;
+                              $name4=$rec[0]->Name4;
+                              foreach($rec as $item){
+                                  if ($name2 != $item->Name2){
+                                      echo "<label>(أبناءها من  :  {$name2} {$name3} {$name4}) </label>";
+                                      echo "<br/>";
+                                      $name2=$item->Name2;
+                                      $name3=$item->Name3;
+                                      $name4=$item->Name4;
+                                      $i=0;
+                                  }
+                                  if ($i===0) { echo "<label> {$item->Name1}</label>";}
+                                  else {echo "<label> {$item->Name1},</label>";}
+                                  $i++;
+                              }
+                              echo "<label>(أبناءها من  :  {$name2} {$name3} {$name4}) </label>";
+                          }
+                  echo "</div>" ;
+            }
+            @endphp
 
         </div>
         <div style="position: relative;">

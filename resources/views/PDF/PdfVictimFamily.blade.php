@@ -79,15 +79,45 @@
             @endif
 
             <div  style="text-align: right;font-size: 11pt;">
-                @foreach($victim->mother as $son)
-                    @php $father_name=$son->Name2.' '.$son->Name3.' '.$son->Name4 @endphp
-                    <label  >{{$son->Name1}}</label>
-                    @if(!$loop->last) <label> , </label>@endif
-                @endforeach
-                @if($victim->husband_id) <label  >الأبناء : </label>
-                    @else
-                        <label  >ابناءها من ({{$father_name}}) : </label>
-                    @endif
+
+                @php
+                    if ($victim->has_more==1) ;
+                         if ($victim->has_more !=1) {
+                           foreach($victim->mother as $son) {
+                               $father_name=$son->Name2.' '.$son->Name3.' '.$son->Name4 ;
+                               echo " <label  >$son->Name1</label>";
+                               if(!$loop->last)  echo "<label> , </label>";
+                           }
+
+                           if($victim->husband_id) echo "<label  >الأبناء : </label>";
+                           else
+                               echo "<label  >ابناءها من ($father_name) : </label>";
+
+                         } else {
+                                 $rec=\App\Models\Victim::where('mother_id',$victim->id)->orderby('Name2')->get();
+                                 $i=0;
+                                 $name2=$rec[0]->Name2;
+                                 $name3=$rec[0]->Name3;
+                                 $name4=$rec[0]->Name4;
+                                 foreach($rec as $item){
+                                     if ($name2 != $item->Name2){
+                                         echo "<label>(أبناءها من  :  {$name2} {$name3} {$name4}) </label>";
+                                         echo "<br/>";
+                                         $name2=$item->Name2;
+                                         $name3=$item->Name3;
+                                         $name4=$item->Name4;
+                                         $i=0;
+                                     }
+                                     if ($i===0) { echo "<label> {$item->Name1}</label>";}
+                                     else {echo "<label> {$item->Name1},</label>";}
+                                     $i++;
+                                 }
+                                 echo "<label>(أبناءها من  :  {$name2} {$name3} {$name4}) </label>";
+                             }
+
+
+                @endphp
+
             </div>
             <br>
         @endforeach
