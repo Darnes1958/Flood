@@ -2,6 +2,8 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Road;
+use App\Models\Street;
 use App\Models\Victim;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -12,9 +14,16 @@ class MaleFemale extends BaseWidget
 {
     protected int | string | array $columnSpan='full';
     protected static ?int $sort=1;
+    public $west;
+    public $east;
+
     public static function canView(): bool
     {
       return Auth::user()->can('show count');
+    }
+    public function mount(){
+      $this->west=Street::whereIn('road_id',Road::where('east_west','غرب الوادي')->pluck('id'))->pluck('id');
+      $this->east=Street::whereIn('road_id',Road::where('east_west','شرق الوادي')->pluck('id'))->pluck('id');
     }
     protected function getStats(): array
     {
@@ -42,6 +51,27 @@ class MaleFemale extends BaseWidget
             Stat::make('','')
                 ->label(new HtmlString('<span class="text-white">أم</span>'))
                 ->value(new HtmlString('<span class="text-danger-600">'.Victim::where('is_mother',1)->count().'</span>')),
+          Stat::make('','')
+            ->label(new HtmlString('<span class="text-white">غرب الوادي</span>'))
+            ->value(new HtmlString('<span class="text-primary-500">'.Victim::
+              whereIn('street_id',$this->west)->count().'</span>')),
+          Stat::make('','')
+            ->label(new HtmlString('<span class="text-white">شرق الوادي</span>'))
+            ->value(new HtmlString('<span class="text-primary-500">'.Victim::
+              whereIn('street_id',$this->east)->count().'</span>')),
+          Stat::make('','')
+            ->label(new HtmlString('<span class="text-white">وادي درنه</span>'))
+            ->value(new HtmlString('<span class="text-primary-500">'.Victim::
+              whereIn('street_id',Street::where('road_id',15)->pluck('id'))->count().'</span>')),
+          Stat::make('','')
+            ->label(new HtmlString('<span class="text-white">وادي الناقة</span>'))
+            ->value(new HtmlString('<span class="text-primary-500">'.Victim::
+              whereIn('street_id',Street::where('road_id',16)->pluck('id'))->count().'</span>')),
+
+          Stat::make('','')
+            ->label(new HtmlString('<span class="text-white">غير محدد</span>'))
+            ->value(new HtmlString('<span class="text-primary-500">'.Victim::
+              whereIn('street_id',Street::where('road_id',19)->pluck('id'))->count().'</span>')),
 
         ];
     }

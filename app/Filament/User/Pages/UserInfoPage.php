@@ -71,8 +71,6 @@ class UserInfoPage extends Page implements HasTable,HasForms
   public $notes=true;
   static $ser=0;
 
-
-
   public function form(Form $form): Form
   {
     return $form

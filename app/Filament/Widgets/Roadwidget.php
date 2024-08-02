@@ -36,7 +36,6 @@ class Roadwidget extends BaseWidget
                 TextColumn::make('name')
                     ->sortable()
                   ->action(function (Road $record){
-
                     $this->dispatch('take_road',road_id: $record->id,areaName: $record->name);
                   })
                     ->color('blue')
