@@ -29,7 +29,7 @@ class ContryWidget extends BaseWidget
           }
           )
           ->heading(new HtmlString('<div class="text-primary-400 text-lg">العدد حسب الدولة</div>'))
-          ->defaultPaginationPageOption(25)
+          ->defaultPaginationPageOption(5)
 
           ->defaultSort('victim_count','desc')
           ->striped()

@@ -7,6 +7,10 @@ use App\Filament\Pages\Auth\Login;
 use App\Filament\Widgets\AreaWidget;
 use App\Filament\Widgets\BigFamWidget;
 use App\Filament\Widgets\Buildingwidget;
+use App\Filament\Widgets\ChartEastWest;
+use App\Filament\Widgets\ChartNation;
+use App\Filament\Widgets\ChartParent;
+use App\Filament\Widgets\ChartRoad;
 use App\Filament\Widgets\ContryWidget;
 use App\Filament\Widgets\FamWidget;
 use App\Filament\Widgets\MaleFemale;
@@ -71,6 +75,10 @@ class UserPanelProvider extends PanelProvider
               StreetWidget::class,
               Buildingwidget::class,
               ContryWidget::class,
+              ChartEastWest::class,
+              ChartNation::class,
+              ChartParent::class,
+              ChartRoad::class,
 
 
             ])
