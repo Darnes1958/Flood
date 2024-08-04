@@ -9,7 +9,7 @@ use Filament\Widgets\ChartWidget;
 class ChartRoad extends ChartWidget
 {
 
-  protected static ?int $sort=9;
+  protected static ?int $sort=12;
     protected static ?string $heading = 'الذكور والإناث';
 
   protected function getData(): array
