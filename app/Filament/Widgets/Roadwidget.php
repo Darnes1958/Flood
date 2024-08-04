@@ -27,6 +27,7 @@ class Roadwidget extends BaseWidget
                 return $tribe;
             }
             )
+            ->queryStringIdentifier('roads')
             ->heading(new HtmlString('<div class="text-primary-400 text-lg">العدد حسب الشوارع الرئيسية</div>'))
             ->defaultPaginationPageOption(5)
 

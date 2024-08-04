@@ -26,7 +26,7 @@ class Buildingwidget extends BaseWidget
             )
             ->heading(new HtmlString('<div class="text-primary-400 text-lg">العمارات</div>'))
             ->defaultPaginationPageOption(5)
-
+            ->queryStringIdentifier('building')
             ->defaultSort('victim_count','desc')
             ->striped()
             ->columns([

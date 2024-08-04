@@ -350,6 +350,7 @@ class InfoPage extends Page implements HasTable,HasForms
 
                     )
                     ->description(function (Victim $record){
+                        if ($this->ok) return null;
                       $who='';
                       $tas=null;
                       $bed=null;
@@ -436,6 +437,45 @@ class InfoPage extends Page implements HasTable,HasForms
                 ->toggleable()
                 ->sortable()
                 ->searchable(),
+                IconColumn::make('inWork')
+                    ->label('فالعمل')
+                    ->color(function ($state){
+                        if ($state) return 'Fuchsia'; else return 'yellow';
+                    })
+                    ->action(
+                        Action::make('inwork')
+                            ->action(function (Victim $record,){
+                                if ($record->inWork)  $record->update(['inWork'=>false]);
+                                else  $record->update(['inWork'=>true]);
+                            })
+                    )
+                    ->boolean(),
+                IconColumn::make('inSave')
+                    ->label('فالانقاذ')
+                    ->color(function ($state){
+                        if ($state) return 'Fuchsia'; else return 'yellow';
+                    })
+                    ->action(
+                        Action::make('insave')
+                            ->action(function (Victim $record,){
+                                if ($record->inSave)  $record->update(['inSave'=>false]);
+                                else  $record->update(['inSave'=>true]);
+                            })
+                    )
+                    ->boolean(),
+                IconColumn::make('guests')
+                    ->label('ضيوف')
+                    ->color(function ($state){
+                        if ($state) return 'Fuchsia'; else return 'yellow';
+                    })
+                    ->action(
+                        Action::make('Guests')
+                            ->action(function (Victim $record,){
+                                if ($record->guests)  $record->update(['guests'=>false]);
+                                else  $record->update(['guests'=>true]);
+                            })
+                    )
+                    ->boolean(),
                IconColumn::make('is_mother')
                     ->label('أم')
                     ->color(function ($state){

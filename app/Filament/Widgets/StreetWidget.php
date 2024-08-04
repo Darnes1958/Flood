@@ -59,6 +59,7 @@ class StreetWidget extends BaseWidget
             return $tribe;
           }
           )
+            ->queryStringIdentifier('street')
           ->heading(function () {return new HtmlString('<div class="text-primary-400 text-lg ">'.$this->areaName.'</div>');} )
           ->defaultPaginationPageOption(5)
 

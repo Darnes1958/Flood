@@ -39,6 +39,7 @@ class FamWidget extends BaseWidget
                 return $tribe;
             }
             )
+            ->queryStringIdentifier('families')
             ->heading(new HtmlString('<div class="text-primary-400 text-lg">العدد حسب العائلات</div>'))
             ->defaultPaginationPageOption(5)
 

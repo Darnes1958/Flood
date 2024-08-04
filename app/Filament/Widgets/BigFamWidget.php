@@ -36,6 +36,7 @@ class BigFamWidget extends BaseWidget
         return $tribe;
       }
       )
+        ->queryStringIdentifier('bigfamilies')
       ->heading(new HtmlString('<div class="text-primary-400 text-lg">العدد حسب العائلات الكبري (القبائل)</div>'))
       ->defaultPaginationPageOption(5)
       ->defaultSort('victim_count','desc')

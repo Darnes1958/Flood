@@ -11,7 +11,7 @@ class ChartNation extends ChartWidget
 {
     protected static ?string $heading = 'الجنسيات';
     protected int | string | array $columnSpan=2;
-  protected static ?int $sort=9;
+  protected static ?int $sort=13;
     protected function getData(): array
     {
       $data=$this->getInfo();

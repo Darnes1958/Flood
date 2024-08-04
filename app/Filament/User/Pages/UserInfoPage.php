@@ -69,6 +69,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
   public $mother;
   public $count;
   public $notes=true;
+  public $hasNotes=false;
   static $ser=0;
 
   public function form(Form $form): Form
@@ -172,6 +173,14 @@ class UserInfoPage extends Page implements HasTable,HasForms
                       $this->mother=Victim::whereIn('family_id',$this->families)->where('is_mother',1)->pluck('id')->all();
                       $this->family_id=null;
                   }),
+              Checkbox::make('hasNotes')
+                  ->inlineLabel(false)
+                  ->live()
+                  ->default(0)
+                  ->afterStateUpdated(function ($state){
+                      $this->notes=$state;
+                  })
+                  ->label('من لديهم ملاحظات'),
               \Filament\Forms\Components\Actions::make([
                   \Filament\Forms\Components\Actions\Action::make('printFamily')
                       ->label('طباعة')
@@ -210,6 +219,9 @@ class UserInfoPage extends Page implements HasTable,HasForms
       ->query(function (){
         return
           Victim::query()
+              ->when($this->hasNotes,function ($q){
+                  $q->where('notes','!=',null);
+              })
             ->when($this->tarkeba || $this->big_families,function ($q){
                 $q->orderby('family_id');
             })
@@ -300,6 +312,48 @@ class UserInfoPage extends Page implements HasTable,HasForms
           ->toggleable()
           ->sortable()
           ->searchable(),
+          IconColumn::make('inWork')
+              ->label('فالعمل')
+              ->color(function ($state){
+                  if ($state) return 'Fuchsia'; else return 'yellow';
+              })
+              ->action(
+                  Action::make('inwork')
+                      ->action(function (Victim $record,){
+                          if ($record->inWork)  $record->update(['inWork'=>false]);
+                          else  $record->update(['inWork'=>true]);
+                      })
+              )
+              ->visible(Auth::id()==1)
+              ->boolean(),
+          IconColumn::make('inSave')
+              ->label('فالانقاذ')
+              ->color(function ($state){
+                  if ($state) return 'Fuchsia'; else return 'yellow';
+              })
+              ->action(
+                  Action::make('insave')
+                      ->action(function (Victim $record,){
+                          if ($record->inSave)  $record->update(['inSave'=>false]);
+                          else  $record->update(['inSave'=>true]);
+                      })
+              )
+              ->visible(Auth::id()==1)
+              ->boolean(),
+          IconColumn::make('guests')
+              ->label('ضيوف')
+              ->color(function ($state){
+                  if ($state) return 'Fuchsia'; else return 'yellow';
+              })
+              ->action(
+                  Action::make('Guests')
+                      ->action(function (Victim $record,){
+                          if ($record->guests)  $record->update(['guests'=>false]);
+                          else  $record->update(['guests'=>true]);
+                      })
+              )
+              ->visible(Auth::id()==1)
+              ->boolean(),
           ImageColumn::make('image')
               ->toggleable()
             ->placeholder('الصورة')

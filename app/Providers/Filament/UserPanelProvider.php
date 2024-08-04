@@ -13,11 +13,14 @@ use App\Filament\Widgets\ChartParent;
 use App\Filament\Widgets\ChartRoad;
 use App\Filament\Widgets\ContryWidget;
 use App\Filament\Widgets\FamWidget;
+use App\Filament\Widgets\GuestsWidget;
 use App\Filament\Widgets\MaleFemale;
 use App\Filament\Widgets\Roadwidget;
+use App\Filament\Widgets\SaveWidget;
 use App\Filament\Widgets\StreetWidget;
 use App\Filament\Widgets\TarkebaWidget;
 use App\Filament\Widgets\TriWidget;
+use App\Filament\Widgets\WorkWidget;
 use App\Models\BigFamily;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -79,8 +82,9 @@ class UserPanelProvider extends PanelProvider
               ChartNation::class,
               ChartParent::class,
               ChartRoad::class,
-
-
+              WorkWidget::class,
+              GuestsWidget::class,
+              SaveWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

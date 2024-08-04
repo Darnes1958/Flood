@@ -12,7 +12,7 @@ use Illuminate\Support\HtmlString;
 
 class MaleFemale extends BaseWidget
 {
-    protected int | string | array $columnSpan='full';
+    protected int | string | array $columnSpan='4';
     protected static ?int $sort=1;
     public $west;
     public $east;
@@ -37,8 +37,6 @@ class MaleFemale extends BaseWidget
           Stat::make('','')
             ->label(new HtmlString('<span class="text-white">أجانب</span>'))
             ->value(new HtmlString('<span class="text-primary-500">'.Victim::whereIn('family_id',[120,162,207,250,303,306,308,343,344,345,346,347,10375,10376,10377,10384])->count().'</span>')),
-
-
             Stat::make('','')
                 ->label(new HtmlString('<span class="text-white">ذكور</span>'))
                 ->value(new HtmlString('<span class="text-primary-500">'.Victim::where('male','ذكر')->count().'</span>')),
@@ -51,10 +49,24 @@ class MaleFemale extends BaseWidget
             Stat::make('','')
                 ->label(new HtmlString('<span class="text-white">أم</span>'))
                 ->value(new HtmlString('<span class="text-danger-600">'.Victim::where('is_mother',1)->count().'</span>')),
+            Stat::make('','')
+                ->label(new HtmlString('<span class="text-white">وفاة أثناء العمل</span>'))
+                ->value(new HtmlString('<span class="text-primary-500">'.Victim::
+                    where('inWork',1)->count().'</span>')),
+            Stat::make('','')
+                ->label(new HtmlString('<span class="text-white">منقذين</span>'))
+                ->value(new HtmlString('<span class="text-primary-500">'.Victim::
+                    where('inSave',1)->count().'</span>')),
+            Stat::make('','')
+                ->label(new HtmlString('<span class="text-white">ضيوف</span>'))
+                ->value(new HtmlString('<span class="text-primary-500">'.Victim::
+                    where('guests',1)->count().'</span>')),
+
           Stat::make('','')
             ->label(new HtmlString('<span class="text-white">غرب الوادي</span>'))
             ->value(new HtmlString('<span class="text-primary-500">'.Victim::
               whereIn('street_id',$this->west)->count().'</span>')),
+
           Stat::make('','')
             ->label(new HtmlString('<span class="text-white">شرق الوادي</span>'))
             ->value(new HtmlString('<span class="text-primary-500">'.Victim::

@@ -10,7 +10,7 @@ use Filament\Widgets\ChartWidget;
 class ChartEastWest extends ChartWidget
 {
     protected static ?string $heading = 'مقارن بين غرب الوادي وشرقه';
-  protected static ?int $sort=11;
+  protected static ?int $sort=15;
     protected function getData(): array
     {
       $data=$this->getInfo();

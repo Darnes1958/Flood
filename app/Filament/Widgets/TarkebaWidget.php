@@ -25,6 +25,7 @@ class TarkebaWidget extends BaseWidget
         return $tribe;
       }
       )
+        ->queryStringIdentifier('tarkeba')
       ->heading(new HtmlString('<div class="text-primary-400 text-lg">العدد حسب التركيبة الاجتماعية</div>'))
       ->defaultPaginationPageOption(5)
 

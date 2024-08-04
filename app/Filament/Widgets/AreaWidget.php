@@ -28,6 +28,7 @@ class AreaWidget extends BaseWidget
             return $tribe;
           }
           )
+            ->queryStringIdentifier('area')
           ->heading(new HtmlString('<div class="text-primary-400 text-lg">العدد حسب المحلة</div>'))
           ->defaultPaginationPageOption(5)
 
