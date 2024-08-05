@@ -21,4 +21,7 @@ Route::controller(\App\Http\Controllers\PdfController::class)->group(function ()
   Route::get('get-video/{video}', 'getVideo')->name('getVideo');
   Route::get('set-video/{video}', 'setVideo')->name('setVideo');
 });
+Route::controller(\App\Http\Controllers\WhatsUpController::class)->group(function (){
+  route::get('/sendwhats','SendWhats')->name('sendwhats');
+});
 
