@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Bedon;
+use App\Models\Dead;
 use App\Models\Mafkoden;
 use App\Models\Tasreeh;
 use App\Models\Victim;
@@ -58,9 +59,11 @@ class VictimWidget extends BaseWidget
               ->when(!$this->with_victim && $this->who=='bed',function ($q){
                     $q->where('bedon',null);
                 })
+                ->when(!$this->with_victim && $this->who=='ded',function ($q){
+                    $q->where('dead',null);
+                })
 
                 ->when(!$this->show_other && $this->who=='maf',function ($q){
-
                     $q->where('tasreeh',null)->where('bedon',null);
                 })
                 ->when(!$this->show_other && $this->who=='tas',function ($q){
@@ -70,6 +73,10 @@ class VictimWidget extends BaseWidget
                 ->when(!$this->show_other && $this->who=='bed',function ($q){
 
                     $q->where('mafkoden',null)->where('tasreeh',null);
+                })
+                ->when(!$this->show_other && $this->who=='ded',function ($q){
+
+                    $q->where('mafkoden',null)->where('dead',null);
                 })
 
 
@@ -101,6 +108,10 @@ class VictimWidget extends BaseWidget
                     if ($this->who=='bed') {
                         Bedon::find($this->mod_id)->update(['victim_id'=>$record->id]);
                         $record->update(['bedon'=>$this->mod_id]);
+                    }
+                    if ($this->who=='bed') {
+                        Dead::find($this->mod_id)->update(['victim_id'=>$record->id]);
+                        $record->update(['dead'=>$this->mod_id]);
                     }
 
                   $this->dispatch('reset_mod');
@@ -136,6 +147,15 @@ class VictimWidget extends BaseWidget
                     })
                     ->boolean()
                     ->label('بدون تصريح'),
+                Tables\Columns\IconColumn::make('dead')
+                    ->state(function (Victim $record){
+                        return $record->dead!=null;
+                    })
+                    ->visible( function (){
+                        return $this->who !='dead' && $this->show_other==true;
+                    })
+                    ->boolean()
+                    ->label('متوفيين'),
               TextColumn::make('wife.FullName')
                 ->state(function (Victim $record) : string {
                   if ($record->husband_id ) {
