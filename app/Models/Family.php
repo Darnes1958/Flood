@@ -24,6 +24,9 @@ class Family extends Model
     public function Bedon(){
         return $this->hasMany(Bedon::class);
     }
+  public function Dead(){
+    return $this->hasMany(Dead::class);
+  }
     public function Tribe(){
       return $this->belongsTo(Tribe::class);
     }

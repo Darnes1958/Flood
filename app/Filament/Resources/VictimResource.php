@@ -278,7 +278,8 @@ class VictimResource extends Resource
             ->striped()
             ->defaultSort('id','desc')
             ->columns([
-              Tables\Columns\TextColumn::make('id'),
+              Tables\Columns\TextColumn::make('id')
+              ->searchable(),
               Tables\Columns\TextColumn::make('FullName')
               ->label('الاسم بالكامل')
               ->size(Tables\Columns\TextColumn\TextColumnSize::ExtraSmall)

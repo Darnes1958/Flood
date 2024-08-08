@@ -20,7 +20,6 @@ class ListDeads extends ListRecords
             Actions\CreateAction::make()
                 ->label('إضافة'),
             Actions\Action::make('Modifydead')
-
                 ->label('تعديلات ')
                 ->icon('heroicon-m-users')
                 ->color('danger')
@@ -38,7 +37,7 @@ class ListDeads extends ListRecords
                         if ($item->FamName=='غفير') continue;
                         if ($item->FamName=='رافع') continue;
                         Dead::where('name','like','%'.$item->FamName.'%')
-                            ->where('nation','ليبيا')
+                            ->where('ok',0)
                             ->update(['family_id'=>$item->id]) ;
 
                     }

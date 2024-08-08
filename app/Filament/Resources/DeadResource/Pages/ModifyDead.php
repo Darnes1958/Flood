@@ -6,11 +6,13 @@ use App\Filament\Resources\DeadResource;
 use App\Models\Bedon;
 use App\Models\Dead;
 use App\Models\Family;
+use App\Models\Victim;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Resources\Pages\Page;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -29,10 +31,13 @@ class ModifyDead extends Page implements HasTable,HasForms
   public $family_id;
   public $newFamily_id;
   public $familyData;
+  public $families;
 
   public function mount(): void
 {
     $this->familyForm->fill([]);
+
+
 }
 
   protected function getForms(): array
@@ -54,7 +59,9 @@ class ModifyDead extends Page implements HasTable,HasForms
                 Select::make('family_id')
                     ->hiddenLabel()
                     ->prefix('العائلة')
-                    ->options(Family::all()->pluck('FamName','id'))
+                    ->options(Family::
+                              whereIn('id',Dead::where('ok',0)->select('family_id'))
+                              ->pluck('FamName','id'))
                     ->preload()
                     ->live()
                     ->searchable()
@@ -85,7 +92,7 @@ class ModifyDead extends Page implements HasTable,HasForms
 {
     return $table
         ->query(function (Dead $mafkoden) {
-            $mafkoden = Dead::where('family_id',$this->family_id)
+            $mafkoden = Dead::where('family_id',$this->family_id)->where('ok',0)
             ;
             return $mafkoden;
         })
@@ -102,8 +109,34 @@ class ModifyDead extends Page implements HasTable,HasForms
                 ->searchable(),
             TextColumn::make('Family.FamName')
                 ->sortable()
+              ->action(
+                Action::make('updateFamily')
+                  ->form([
+                    Select::make('family_id')
+                      ->options(Family::all()->pluck('FamName','id'))
+                      ->label('العائلة')
+                      ->searchable()
+                      ->preload()
+                      ->live()
+                  ])
+                  ->fillForm(fn (Dead $record): array => [
+                    'family_id' => $record->family_id,
+                  ])
+                  ->modalCancelActionLabel('عودة')
+                  ->modalSubmitActionLabel('تحزين')
+                  ->modalHeading('تعديل العائلة')
+                  ->action(function (array $data,Dead $record,){
+                    $record->update(['family_id'=>$data['family_id']]);
+                  })
+              )
                 ->toggleable()
                 ->label('العائلة'),
+          TextColumn::make('who')
+            ->label('المبلغ')
+            ->searchable(),
+          TextColumn::make('mother')
+            ->label('الام')
+            ->searchable(),
 
         ])
         ->bulkActions([
