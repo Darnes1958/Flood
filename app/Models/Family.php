@@ -27,6 +27,9 @@ class Family extends Model
   public function Dead(){
     return $this->hasMany(Dead::class);
   }
+    public function Balag(){
+        return $this->hasMany(Balag::class);
+    }
     public function Tribe(){
       return $this->belongsTo(Tribe::class);
     }

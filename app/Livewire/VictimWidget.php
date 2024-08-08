@@ -62,6 +62,9 @@ class VictimWidget extends BaseWidget
                 ->when(!$this->with_victim && $this->who=='ded',function ($q){
                     $q->where('dead',null);
                 })
+                ->when(!$this->with_victim && $this->who=='bal',function ($q){
+                    $q->where('balag',null);
+                })
 
                 ->when(!$this->show_other && $this->who=='maf',function ($q){
                     $q->where('tasreeh',null)->where('bedon',null);
@@ -75,6 +78,10 @@ class VictimWidget extends BaseWidget
                     $q->where('mafkoden',null)->where('tasreeh',null);
                 })
                 ->when(!$this->show_other && $this->who=='ded',function ($q){
+
+                    $q->where('mafkoden',null)->where('dead',null);
+                })
+                ->when(!$this->show_other && $this->who=='bal',function ($q){
 
                     $q->where('mafkoden',null)->where('dead',null);
                 })
@@ -109,7 +116,7 @@ class VictimWidget extends BaseWidget
                         Bedon::find($this->mod_id)->update(['victim_id'=>$record->id]);
                         $record->update(['bedon'=>$this->mod_id]);
                     }
-                    if ($this->who=='bed') {
+                    if ($this->who=='dead') {
                         Dead::find($this->mod_id)->update(['victim_id'=>$record->id]);
                         $record->update(['dead'=>$this->mod_id]);
                     }
