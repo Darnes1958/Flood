@@ -3,9 +3,11 @@
 namespace App\Filament\Resources\BalagResource\Pages;
 
 use App\Filament\Resources\BalagResource;
+use App\Livewire\BalagWidget;
 use App\Livewire\DeadWidget;
 use App\Livewire\VictimWidget;
 use App\Livewire\WhoWidget;
+use App\Models\Balag;
 use App\Models\Family;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Section;
@@ -58,6 +60,11 @@ class CompareBalag extends Page
                                 ->when($get('forign_only'),function ($q){
                                     $q->where('nation','!=','ليبيا');
                                 })
+                               ->whereIn('id',Balag::where('ok',0)
+                                 ->where('victim_id',null)
+                                 ->where('repeted',0)
+                                 ->select('family_id'))
+
                                 ->pluck('FamName','id');
                         })
                         ->preload()
@@ -108,7 +115,7 @@ class CompareBalag extends Page
     public static function getWidgets(): array
     {
         return [
-            DeadWidget::class,
+            BalagWidget::class,
             VictimWidget::class,
             WhoWidget::class,
         ];
@@ -116,7 +123,7 @@ class CompareBalag extends Page
     protected function getFooterWidgets(): array
     {
         return [
-            DeadWidget::make([
+            BalagWidget::make([
                 'family_id'=>$this->family_id,'without'=>$this->with_victim,
             ]),
             VictimWidget::make([

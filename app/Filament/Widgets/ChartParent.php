@@ -9,7 +9,7 @@ class ChartParent extends ChartWidget
 {
     protected static ?string $heading = 'أباء و أمهات';
 
-  protected static ?int $sort=14;
+  protected static ?int $sort=15;
 
     protected function getData(): array
     {

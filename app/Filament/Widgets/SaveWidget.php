@@ -13,7 +13,7 @@ use Illuminate\Support\HtmlString;
 
 class SaveWidget extends BaseWidget
 {
-    protected int | string | array $columnSpan = 2;
+    protected int | string | array $columnSpan = 3;
     protected static ?int $sort=12;
 
     public function table(Table $table): Table

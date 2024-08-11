@@ -4,19 +4,24 @@ namespace App\Filament\Resources\BalagResource\Pages;
 
 use App\Filament\Resources\BalagResource;
 use App\Models\Balag;
-use App\Models\Dead;
+
 use App\Models\Family;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
 use Filament\Resources\Pages\Page;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Support\Collection;
 
-class ModifyBalag extends Page
+class ModifyBalag extends Page implements HasTable,HasForms
 {
+  use InteractsWithTable, InteractsWithForms;
     protected static string $resource = BalagResource::class;
 
     protected static string $view = 'filament.resources.balag-resource.pages.modify-balag';
@@ -30,10 +35,7 @@ class ModifyBalag extends Page
     public function mount(): void
     {
         $this->familyForm->fill([]);
-
-
     }
-
     protected function getForms(): array
     {
         return array_merge(parent::getForms(), [
@@ -41,10 +43,8 @@ class ModifyBalag extends Page
                 ->model(Family::class)
                 ->schema($this->getFamilyFormSchema())
                 ->statePath('familyData'),
-
         ]);
     }
-
     protected function getFamilyFormSchema(): array
     {
         return [
@@ -54,7 +54,7 @@ class ModifyBalag extends Page
                         ->hiddenLabel()
                         ->prefix('العائلة')
                         ->options(Family::
-                        whereIn('id',Balag::where('ok',0)->select('family_id'))
+                          whereIn('id',Balag::select('family_id'))
                             ->pluck('FamName','id'))
                         ->preload()
                         ->live()
@@ -62,7 +62,6 @@ class ModifyBalag extends Page
                         ->columnSpan(2)
                         ->afterStateUpdated(function ($state){
                             $this->family_id=$state;
-
                         }),
 
                     Select::make('newFamily_id')
@@ -70,7 +69,6 @@ class ModifyBalag extends Page
                         ->prefix('العائلة الجديدة')
                         ->prefixIcon('heroicon-m-pencil')
                         ->prefixIconColor('info')
-
                         ->options(Family::all()->pluck('FamName','id'))
                         ->preload()
                         ->live()
@@ -86,10 +84,14 @@ class ModifyBalag extends Page
     {
         return $table
             ->query(function (Balag $mafkoden) {
-                $mafkoden = Balag::where('family_id',$this->family_id)->where('ok',0)
+                $mafkoden = Balag::where('family_id',$this->family_id)
+                  ->where('victim_id',null)
+                  ->where('repeted',0)
+                
                 ;
                 return $mafkoden;
             })
+
             ->striped()
             ->columns([
                 TextColumn::make('ser')
@@ -127,9 +129,11 @@ class ModifyBalag extends Page
                     ->label('العائلة'),
                 TextColumn::make('who')
                     ->label('المبلغ')
+                    ->sortable()
                     ->searchable(),
                 TextColumn::make('mother')
                     ->label('الام')
+                  ->sortable()
                     ->searchable(),
 
             ])
@@ -146,7 +150,6 @@ class ModifyBalag extends Page
                     ])),
 
 
-            ])
-            ;
+            ]);
     }
 }

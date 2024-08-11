@@ -29,6 +29,7 @@ use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
@@ -413,8 +414,6 @@ class InfoPage extends Page implements HasTable,HasForms
                         ->label('العنوان')
                         ->searchable()
                         ->preload()
-
-
                         ->live()
                     ])
                     ->fillForm(fn (Victim $record): array => [
@@ -437,11 +436,15 @@ class InfoPage extends Page implements HasTable,HasForms
                 ->toggleable()
                 ->sortable()
                 ->searchable(),
+              TextInputColumn::make('year')
+                ->label('مواليد')
+                ,
                 IconColumn::make('inWork')
                     ->label('فالعمل')
                     ->color(function ($state){
                         if ($state) return 'Fuchsia'; else return 'yellow';
                     })
+                    ->toggleable()
                     ->action(
                         Action::make('inwork')
                             ->action(function (Victim $record,){
@@ -452,6 +455,7 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->boolean(),
                 IconColumn::make('inSave')
                     ->label('فالانقاذ')
+                  ->toggleable()
                     ->color(function ($state){
                         if ($state) return 'Fuchsia'; else return 'yellow';
                     })
@@ -465,6 +469,7 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->boolean(),
                 IconColumn::make('guests')
                     ->label('ضيوف')
+                  ->toggleable()
                     ->color(function ($state){
                         if ($state) return 'Fuchsia'; else return 'yellow';
                     })
@@ -478,6 +483,7 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->boolean(),
                IconColumn::make('is_mother')
                     ->label('أم')
+                 ->toggleable()
                     ->color(function ($state){
                         if ($state) return 'Fuchsia'; else return 'yellow';
                     })
@@ -495,6 +501,7 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->boolean(),
                 IconColumn::make('is_father')
                     ->label('أب')
+                  ->toggleable()
                     ->color(function ($state){
                         if ($state) return 'success'; else return 'gray';
                     })

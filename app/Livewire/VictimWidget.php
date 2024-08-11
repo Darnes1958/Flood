@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Balag;
 use App\Models\Bedon;
 use App\Models\Dead;
 use App\Models\Mafkoden;
@@ -59,7 +60,7 @@ class VictimWidget extends BaseWidget
               ->when(!$this->with_victim && $this->who=='bed',function ($q){
                     $q->where('bedon',null);
                 })
-                ->when(!$this->with_victim && $this->who=='ded',function ($q){
+                ->when(!$this->with_victim && $this->who=='dead',function ($q){
                     $q->where('dead',null);
                 })
                 ->when(!$this->with_victim && $this->who=='bal',function ($q){
@@ -77,7 +78,7 @@ class VictimWidget extends BaseWidget
 
                     $q->where('mafkoden',null)->where('tasreeh',null);
                 })
-                ->when(!$this->show_other && $this->who=='ded',function ($q){
+                ->when(!$this->show_other && $this->who=='dead',function ($q){
 
                     $q->where('mafkoden',null)->where('dead',null);
                 })
@@ -120,6 +121,10 @@ class VictimWidget extends BaseWidget
                         Dead::find($this->mod_id)->update(['victim_id'=>$record->id]);
                         $record->update(['dead'=>$this->mod_id]);
                     }
+                  if ($this->who=='bal') {
+                    Balag::find($this->mod_id)->update(['victim_id'=>$record->id]);
+                    $record->update(['balag'=>$this->mod_id]);
+                  }
 
                   $this->dispatch('reset_mod');
 

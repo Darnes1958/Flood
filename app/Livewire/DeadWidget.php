@@ -38,7 +38,6 @@ class DeadWidget extends BaseWidget
             ->query(function (Dead $mafkoden) {
                 $mafkoden = Dead::where('family_id',$this->family_id)
 
-
                     ->when(!$this->with_victim,function ($q){
                         $q->where('victim_id',null)->where('repeted',0);
                     })

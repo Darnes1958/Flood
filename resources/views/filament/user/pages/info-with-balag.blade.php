@@ -1,4 +1,4 @@
 <x-filament-panels::page>
-    {{$this->familyForm}}
+    {{$this->form}}
     {{$this->table}}
 </x-filament-panels::page>

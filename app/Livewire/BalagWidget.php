@@ -37,8 +37,6 @@ class BalagWidget extends BaseWidget
         return $table
             ->query(function (Balag $mafkoden) {
                 $mafkoden = Balag::where('family_id',$this->family_id)
-
-
                     ->when(!$this->with_victim,function ($q){
                         $q->where('victim_id',null)->where('repeted',0);
                     })
@@ -59,6 +57,7 @@ class BalagWidget extends BaseWidget
                         $this->dispatch('take_mod_id', mod_id: $record->id);
                     })
                     ->label('الاسم بالكامل')
+                    ->sortable()
                     ->searchable(),
                 TextColumn::make('Victim.FullName')
                     ->label('الاسم فالمنظومة')
@@ -67,11 +66,10 @@ class BalagWidget extends BaseWidget
                         Victim::find($record->victim_id)->update(['Balag'=>null]);
                         $record->update(['victim_id'=>null]);
                         $this->dispatch('reset_vic');
-
                     })
 
                     ->sortable(),
-                TextColumn::make('birth')
+                Tables\Columns\TextInputColumn::make('birth')
                     ->label('مواليد')
                     ->sortable(),
 

@@ -22,7 +22,7 @@ class CompareDead extends Page implements HasForms
     protected static string $resource = DeadResource::class;
 
     protected static string $view = 'filament.resources.dead-resource.pages.compare-dead';
-    protected ?string $heading="مقارنة بدون تصريح";
+    protected ?string $heading="مقارنة متوفيين";
 
     public $family_id;
     public $with_victim=false;

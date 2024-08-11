@@ -21,6 +21,7 @@ use App\Filament\Widgets\StreetWidget;
 use App\Filament\Widgets\TarkebaWidget;
 use App\Filament\Widgets\TriWidget;
 use App\Filament\Widgets\WorkWidget;
+use App\Filament\Widgets\YearWidget;
 use App\Models\BigFamily;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -85,6 +86,7 @@ class UserPanelProvider extends PanelProvider
               WorkWidget::class,
               GuestsWidget::class,
               SaveWidget::class,
+              YearWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

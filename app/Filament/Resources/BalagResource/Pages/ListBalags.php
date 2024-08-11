@@ -85,7 +85,6 @@ class ListBalags extends ListRecords
                         ]);
                     }
                 }),
-
             Actions\Action::make('Naming')
                 ->visible(false)
                 ->label('set Name\'S')
