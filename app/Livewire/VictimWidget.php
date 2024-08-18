@@ -32,8 +32,6 @@ class VictimWidget extends BaseWidget
     $this->show_description=$show_description;
     $this->who=$who;
     $this->show_other=$show_other;
-
-
   }
 
   #[On('take_mod_id')]

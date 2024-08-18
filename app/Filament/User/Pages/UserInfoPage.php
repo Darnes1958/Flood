@@ -300,6 +300,8 @@ class UserInfoPage extends Page implements HasTable,HasForms
             ['record' => $record],
           ))
           ->searchable(),
+          TextColumn::make('year')
+              ->label('مواليد')   ,
         TextColumn::make('Family.FamName')
           ->label('العائلة')
           ->sortable()
