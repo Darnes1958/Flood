@@ -2,8 +2,10 @@
 
 namespace App\Filament\User\Pages;
 
+use App\Models\Family;
 use App\Models\Victim;
 use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -24,6 +26,7 @@ class NotFound extends Page implements HasTable,HasForms
     protected ?string $heading='';
 
     public $what='newData';
+    public $libya=true;
     public static function shouldRegisterNavigation(): bool
     {
         return  auth()->user()->is_admin;
@@ -49,7 +52,14 @@ class NotFound extends Page implements HasTable,HasForms
                     ->afterStateUpdated(function ($state){
                         return $this->what=$state;
                     })
-                    ->live(),
+                    ->live()
+                    ->columnSpan(2),
+                Checkbox::make('libya')
+                 ->label('ليبين فقط')
+                    ->live()
+                 ->afterStateUpdated(function ($state){
+                     return $this->libya=$state;
+                 }),
                 \Filament\Forms\Components\Actions::make([
                     Action::make('print1')
                         ->label('طباعة')
@@ -62,25 +72,41 @@ class NotFound extends Page implements HasTable,HasForms
                 ]),
 
 
-            ]);
+            ])->columns(2);
     }
     public function table(Table $table): Table
     {
         return $table
             ->query(function () {
-                if ($this->what=='newData') return Victim::where('balag',null)->where('dead',null);
+                if ($this->what=='newData')
+                    return Victim::where('balag',null)->where('dead',null)
+                        ->when($this->libya,function ($q){
+                            $q->wherein('family_id',Family::where('nation','ليبيا')->pluck('id'));
+                        });
                 if ($this->what=='oldData')
-                    return Victim::where('tasreeh',null)->where('bedon',null)->where('mafkoden',null);
+                    return Victim::where('tasreeh',null)->where('bedon',null)->where('mafkoden',null)
+                        ->when($this->libya,function ($q){
+                            $q->wherein('family_id',Family::where('nation','ليبيا')->pluck('id'));
+                        });
+
                 if ($this->what=='oldNotnewData') return Victim::
                     where(function ($q){
                         $q->where('tasreeh','!=',null)->orwhere('bedon','!=',null)
                             ->orwhere('mafkoden','!=',null);
                       })
-                    ->where('balag',null)->where('dead',null);
+                    ->where('balag',null)->where('dead',null)
+                    ->when($this->libya,function ($q){
+                        $q->wherein('family_id',Family::where('nation','ليبيا')->pluck('id'));
+                    });
+
 
                 if ($this->what=='allData') return Victim::
                  where('tasreeh',null)->where('bedon',null)->where('mafkoden',null)
-                    ->where('balag',null)->where('dead',null);
+                    ->where('balag',null)->where('dead',null)
+                    ->when($this->libya,function ($q){
+                        $q->wherein('family_id',Family::where('nation','ليبيا')->pluck('id'));
+                    });
+
             }
             )
             ->columns([

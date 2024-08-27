@@ -63,19 +63,28 @@ class PdfController extends Controller
       );
   }
     public function PdfNewOld($what){
-        if ($what=='newData') $TableName = Victim::where('balag',null)->where('dead',null)->get();
+
+        if ($what=='newData') $TableName = Victim::where('balag',null)->where('dead',null)
+            ->wherein('family_id',Family::where('nation','ليبيا')->pluck('id'))
+            ->get();
         if ($what=='oldData') $TableName = Victim::where('tasreeh',null)
-            ->where('bedon',null)->where('mafkoden',null)->get();
+            ->where('bedon',null)->where('mafkoden',null)
+            ->wherein('family_id',Family::where('nation','ليبيا')->pluck('id'))
+            ->get();
         if ($what=='oldNotnewData') $TableName = Victim::
              where(function ($q){
             $q->where('tasreeh','!=',null)->orwhere('bedon','!=',null)
                 ->orwhere('mafkoden','!=',null);
              })
-            ->where('balag',null)->where('dead',null)->get();
+            ->where('balag',null)->where('dead',null)
+            ->wherein('family_id',Family::where('nation','ليبيا')->pluck('id'))
+            ->get();
 
         if ($what=='allData') $TableName = Victim::
               where('tasreeh',null)->where('bedon',null)->where('mafkoden',null)
-            ->where('balag',null)->where('dead',null)->get();
+            ->where('balag',null)->where('dead',null)
+            ->wherein('family_id',Family::where('nation','ليبيا')->pluck('id'))
+            ->get();
 
         $html = view('PDF.PdfNewOld',
             ['TableName'=>$TableName,'what'=>$what])->toArabicHTML();
