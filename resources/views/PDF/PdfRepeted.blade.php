@@ -17,6 +17,12 @@
                 @if($what=='inMaf')
                     <label  > كشف بالتداخل في (مفقودين)  </label>
                 @endif
+                @if($what=='inBal')
+                    <label  > كشف بالتداخل في (البلاغات)  </label>
+                @endif
+                @if($what=='inDed')
+                    <label  > كشف بالتداخل في (المتوفيين)  </label>
+                @endif
 
         </div>
     </div>

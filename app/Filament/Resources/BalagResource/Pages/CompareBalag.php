@@ -60,10 +60,7 @@ class CompareBalag extends Page
                                 ->when($get('forign_only'),function ($q){
                                     $q->where('nation','!=','ليبيا');
                                 })
-                               ->whereIn('id',Balag::where('ok',0)
-                                 ->where('victim_id',null)
-                                 ->where('repeted',0)
-                                 ->select('family_id'))
+                            //   ->whereIn('id',Balag::where('ok',0)->where('victim_id',null)->where('repeted',0)->select('family_id'))
 
                                 ->pluck('FamName','id');
                         })

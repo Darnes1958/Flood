@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Allview;
 use App\Models\Bait;
+use App\Models\Balag;
 use App\Models\Bedmafview;
 use App\Models\BigFamily;
+use App\Models\Dead;
+use App\Models\DedBalview;
 use App\Models\Family;
 use App\Models\Tarkeba;
 use App\Models\Tasbedview;
@@ -45,6 +48,7 @@ class PdfController extends Controller
       if ($what=='inTasAndBed')   $TableName = Tasbedview::query()->orderBy('nameTas')->get();
       if ($what=='inTasAndMaf')   $TableName = Tasmafview::query()->orderBy('nameTas')->get();
       if ($what=='inBedAndMaf')   $TableName = Bedmafview::query()->orderBy('nameBed')->get();
+      if ($what=='inDedAndBal')   $TableName = DedBalview::query()->orderBy('nameDed')->get();
       if ($what=='inAll')   $TableName = Allview::query()->orderBy('nameTas')->get();
       $html = view('PDF.PdfTekrar',
           ['TableName'=>$TableName,'what'=>$what])->toArabicHTML();
@@ -58,10 +62,40 @@ class PdfController extends Controller
           $headers
       );
   }
+    public function PdfNewOld($what){
+        if ($what=='newData') $TableName = Victim::where('balag',null)->where('dead',null)->get();
+        if ($what=='oldData') $TableName = Victim::where('tasreeh',null)
+            ->where('bedon',null)->where('mafkoden',null)->get();
+        if ($what=='oldNotnewData') $TableName = Victim::
+             where(function ($q){
+            $q->where('tasreeh','!=',null)->orwhere('bedon','!=',null)
+                ->orwhere('mafkoden','!=',null);
+             })
+            ->where('balag',null)->where('dead',null)->get();
+
+        if ($what=='allData') $TableName = Victim::
+              where('tasreeh',null)->where('bedon',null)->where('mafkoden',null)
+            ->where('balag',null)->where('dead',null)->get();
+
+        $html = view('PDF.PdfNewOld',
+            ['TableName'=>$TableName,'what'=>$what])->toArabicHTML();
+        $pdf = Pdf::loadHTML($html)->output();
+        $headers = array(
+            "Content-type" => "application/pdf",
+        );
+        return response()->streamDownload(
+            fn () => print($pdf),
+            "newold.pdf",
+            $headers
+        );
+    }
+
     public function PdfRepeted($what){
         if ($what=='inTas')   $TableName = Tasreeh::where('repeted',1)->orderBy('name')->get();
         if ($what=='inMaf')   $TableName = Tasmafview::where('repeted',1)->orderBy('name')->get();
         if ($what=='inBed')   $TableName = Bedmafview::where('repeted',1)->orderBy('name')->get();
+        if ($what=='inBal')   $TableName = Balag::where('repeted',1)->orderBy('name')->get();
+        if ($what=='inDed')   $TableName = Dead::where('repeted',1)->orderBy('name')->get();
 
 
         $html = view('PDF.PdfRepeted',

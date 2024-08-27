@@ -23,6 +23,11 @@
             @if($what=='inTasAndBed' || $what=='inTasAndMaf' || $what=='inAll')
               <th style="width: 28%;">بتصريح</th>
             @endif
+                @if($what=='inDedAndBal' )
+                    <th style="width: 28%;">متوفيين</th>
+                    <th style="width: 28%;">بلاغات</th>
+                @endif
+
             <th style="width: 10%;">العائلة</th>
             <th style="width: 6%;">ت</th>
         </tr>
@@ -37,9 +42,14 @@
                     @if($what=='inTasAndBed' || $what=='inBedAndMaf' || $what=='inAll')
                 <td>{{$item->nameBed}}</td>
                     @endif
-                        @if($what=='inTasAndBed' || $what=='inTasAndMaf' || $what=='inAll')
-                <td>{{$item->nameTas}}</td>
+                    @if($what=='inTasAndBed' || $what=='inTasAndMaf' || $what=='inAll')
+                          <td>{{$item->nameTas}}</td>
                     @endif
+                    @if($what=='inDedAndBal' )
+                        <td>{{$item->nameDed}}</td>
+                        <td>{{$item->nameBal}}</td>
+                    @endif
+
                 <td style="text-align: center"> {{$item->FamName}}  </td>
                 <td style="text-align: center"> {{$item->id}}  </td>
             </tr>

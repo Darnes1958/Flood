@@ -3,8 +3,10 @@
 namespace App\Filament\User\Pages;
 
 use App\Models\Allview;
+use App\Models\Balag;
 use App\Models\Bedmafview;
 use App\Models\Bedon;
+use App\Models\Dead;
 use App\Models\Mafkoden;
 use App\Models\Tasbedview;
 use App\Models\Tasmafview;
@@ -51,6 +53,8 @@ class Repeted extends Page implements HasForms,HasTable
                         'inTas'=>'بتصريح',
                         'inMaf'=>'مفقودين',
                         'inBed'=>'بدون تصريح',
+                        'inBal'=>'البلاعات',
+                        'inDed'=>'متوفيين',
                     ])
                     ->inline()
                     ->afterStateUpdated(function ($state){
@@ -80,9 +84,11 @@ class Repeted extends Page implements HasForms,HasTable
                 return 'name';
             })
             ->query(function (){
-                if ($this->what=='inTas')  return $victim = Tasreeh::query()->where('repeted',1)->orderBy('name');
-                if ($this->what=='inBed')  return $victim = Bedon::query()->where('repeted',1)->orderBy('name');
-                if ($this->what=='inMaf')  return $victim = Mafkoden::query()->where('repeted',1)->orderBy('name');
+                if ($this->what=='inTas')  return $victim = Tasreeh::query()->where('repeted',1);
+                if ($this->what=='inBed')  return $victim = Bedon::query()->where('repeted',1);
+                if ($this->what=='inMaf')  return $victim = Mafkoden::query()->where('repeted',1);
+                if ($this->what=='inBal')  return $victim = Balag::query()->where('repeted',1);
+                if ($this->what=='inDed')  return $victim = Dead::query()->where('repeted',1);
             })
             ->columns([
                 TextColumn::make('ser')

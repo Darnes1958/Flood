@@ -4,6 +4,7 @@ namespace App\Filament\User\Pages;
 
 use App\Models\Allview;
 use App\Models\Bedmafview;
+use App\Models\DedBalview;
 use App\Models\Tasbedview;
 use App\Models\Tasmafview;
 use Filament\Forms\Components\Actions\Action;
@@ -51,6 +52,7 @@ class Tekrar extends Page implements HasForms,HasTable
                     'inTasAndBed'=>'بتصريح وبدون تصريح',
                     'inTasAndMaf'=>'بتصريح ومفقودين',
                     'inBedAndMaf'=>'بدون تصريح ومفقودين',
+                    'inDedAndBal'=>'وفيات وبلاغات',
                     'inAll'=>'في الثلاث ملفات',
                 ])
                ->inline()
@@ -81,14 +83,12 @@ class Tekrar extends Page implements HasForms,HasTable
         return $table
 
             ->striped()
-            ->defaultSort(function (){
-               return 'nameTas';
 
-            })
             ->query(function (){
                 if ($this->what=='inTasAndBed')  return $victim = Tasbedview::query()->orderBy('nameTas');
                 if ($this->what=='inTasAndMaf')  return $victim = Tasmafview::query()->orderBy('nameTas');
                 if ($this->what=='inBedAndMaf')  return $victim = Bedmafview::query()->orderBy('nameBed');
+                if ($this->what=='inDedAndBal')  return $victim = DedBalview::query()->orderBy('nameDed');
                 if ($this->what=='inAll')  return $victim = Allview::query()->orderBy('nameTas');
 
             })
@@ -124,6 +124,22 @@ class Tekrar extends Page implements HasForms,HasTable
                         return $this->what=='inTasAndMaf' || $this->what=='inBedAndMaf' || $this->what=='inAll';
                     })
                     ->label('مفقودين'),
+                TextColumn::make('nameDed')
+                    ->sortable()
+                    ->searchable()
+                    ->color('rose')
+                    ->visible(function (){
+                        return $this->what=='inDedAndBal' ;
+                    })
+                    ->label('متوفيين'),
+                TextColumn::make('nameBal')
+                    ->sortable()
+                    ->searchable()
+                    ->color('rose')
+                    ->visible(function (){
+                        return $this->what=='inDedAndBal' ;
+                    })
+                    ->label('بلاغات'),
 
             ]);
     }
