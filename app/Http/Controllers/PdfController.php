@@ -62,14 +62,22 @@ class PdfController extends Controller
           $headers
       );
   }
-    public function PdfNewOld($what){
+    public function PdfNewOld($what,$libya){
 
         if ($what=='newData') $TableName = Victim::where('balag',null)->where('dead',null)
-            ->wherein('family_id',Family::where('nation','ليبيا')->pluck('id'))
+            ->when($libya,function ($q){
+                $q->wherein('family_id',Family::where('nation','ليبيا')->pluck('id'));
+            })
+            ->orderBy('family_id')
+            ->orderBy('id')
             ->get();
         if ($what=='oldData') $TableName = Victim::where('tasreeh',null)
             ->where('bedon',null)->where('mafkoden',null)
-            ->wherein('family_id',Family::where('nation','ليبيا')->pluck('id'))
+            ->when($libya,function ($q){
+                $q->wherein('family_id',Family::where('nation','ليبيا')->pluck('id'));
+            })
+            ->orderBy('family_id')
+            ->orderBy('id')
             ->get();
         if ($what=='oldNotnewData') $TableName = Victim::
              where(function ($q){
@@ -77,13 +85,21 @@ class PdfController extends Controller
                 ->orwhere('mafkoden','!=',null);
              })
             ->where('balag',null)->where('dead',null)
-            ->wherein('family_id',Family::where('nation','ليبيا')->pluck('id'))
+            ->when($libya,function ($q){
+                $q->wherein('family_id',Family::where('nation','ليبيا')->pluck('id'));
+            })
+            ->orderBy('family_id')
+            ->orderBy('id')
             ->get();
 
         if ($what=='allData') $TableName = Victim::
               where('tasreeh',null)->where('bedon',null)->where('mafkoden',null)
             ->where('balag',null)->where('dead',null)
-            ->wherein('family_id',Family::where('nation','ليبيا')->pluck('id'))
+            ->when($libya,function ($q){
+                $q->wherein('family_id',Family::where('nation','ليبيا')->pluck('id'));
+            })
+            ->orderBy('family_id')
+            ->orderBy('id')
             ->get();
 
         $html = view('PDF.PdfNewOld',

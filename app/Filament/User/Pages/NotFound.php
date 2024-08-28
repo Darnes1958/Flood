@@ -66,7 +66,7 @@ class NotFound extends Page implements HasTable,HasForms
 
                         ->icon('heroicon-m-printer')
                         ->url(function () {
-                            return route('pdfnewold', ['what' => $this->what]);
+                            return route('pdfnewold', ['what' => $this->what,'libya'=>$this->libya]);
                         } ),
 
                 ]),

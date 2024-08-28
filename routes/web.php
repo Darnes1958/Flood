@@ -18,7 +18,7 @@ Route::controller(\App\Http\Controllers\PdfController::class)->group(function ()
   route::get('/pdfbigfamily/{big_family?}', 'PdfBigFamily')->name('pdfbigfamily') ;
   route::get('/pdftekrar/{what}', 'PdfTekrar')->name('pdftekrar') ;
   route::get('/pdfrepeted/{what}', 'PdfRepeted')->name('pdfrepeted') ;
-  route::get('/pdfnewold/{what}', 'PdfNewOld')->name('pdfnewold') ;
+  route::get('/pdfnewold/{what?},{libya?}', 'PdfNewOld')->name('pdfnewold') ;
   Route::get('get-video/{video}', 'getVideo')->name('getVideo');
   Route::get('set-video/{video}', 'setVideo')->name('setVideo');
 });
