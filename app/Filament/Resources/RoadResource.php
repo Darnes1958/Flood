@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\RoadResource\Pages;
 use App\Filament\Resources\RoadResource\RelationManagers;
+use App\Models\Area;
 use App\Models\Road;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
@@ -29,8 +30,13 @@ class RoadResource extends Resource
                  ->required()
                  ->unique()
                  ->label('الشارع الرئيسي'),
-
-
+                Select::make('area_id')
+                    ->relationship('Area','AreaName')
+                    ->label('المحلة')
+                    ->searchable()
+                    ->preload()
+                    ->reactive()
+                    ->required(),
             ]);
     }
 
@@ -40,6 +46,10 @@ class RoadResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                 ->label('الشارع الرئيسي'),
+                Tables\Columns\SelectColumn::make('area_id')
+                  ->label('المحلة')
+                  ->options(Area::all()->pluck('AreaName', 'id')),
+
             ])
             ->filters([
                 //

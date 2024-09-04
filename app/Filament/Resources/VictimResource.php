@@ -258,7 +258,8 @@ class VictimResource extends Resource
                 ->label('ملاحظات'),
               TextInput::make('otherName')
                 ->label('إسم أخر'),
-              Forms\Components\FileUpload::make('image')
+              Forms\Components\FileUpload::make('image2')
+                ->multiple()
                 ->directory('form-attachments'),
               TextInput::make('FullName')
               ->hidden(),
@@ -306,7 +307,9 @@ class VictimResource extends Resource
                 Tables\Columns\TextColumn::make('VicTalent.Talent.name')
                     ->label('المواهب'),
 
-              Tables\Columns\ImageColumn::make('image')
+              Tables\Columns\ImageColumn::make('image2')
+                  ->stacked()
+
                 ->circular(),
 
 

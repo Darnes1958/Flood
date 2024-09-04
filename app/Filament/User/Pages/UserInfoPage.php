@@ -356,18 +356,23 @@ class UserInfoPage extends Page implements HasTable,HasForms
               )
               ->visible(Auth::id()==1)
               ->boolean(),
-          ImageColumn::make('image')
-              ->toggleable()
+          ImageColumn::make('image2')
+            ->toggleable()
+            ->stacked()
             ->placeholder('الصورة')
             ->tooltip('اضغط للإدخال او التعديل')
             ->action(
               Action::make('Upload')
+                ->fillForm(function (Victim $record){
+                    return ['image2'=>$record->image2];
+                })
                 ->form([
-                  FileUpload::make('image')
+                  FileUpload::make('image2')
+                    ->multiple()
                     ->directory('form-attachments'),
                 ])
                 ->action(function (array $data,Victim $record,){
-                  $record->update(['image'=>$data['image'], ]);
+                  $record->update(['image2'=>$data['image2'], ]);
                 })
             )
               ->label('')

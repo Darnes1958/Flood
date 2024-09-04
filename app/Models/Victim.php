@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Victim extends Model
 {
     use HasFactory;
+
   public function Bait(){
     return $this->belongsTo(Bait::class);
   }
@@ -62,6 +63,7 @@ class Victim extends Model
 
 
   protected $casts = [
+      'image2' =>  'array',
     'is_mother' => 'boolean',
     'is_father' => 'boolean',
 
