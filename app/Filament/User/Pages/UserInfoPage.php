@@ -515,11 +515,11 @@ class UserInfoPage extends Page implements HasTable,HasForms
                   ->columns(2)
                   ->columnSpan(2),
 
-                ImageEntry::make('image')
+                ImageEntry::make('image2')
                   ->label('')
-
-                  ->height(400)
-                  ->square()
+                    ->stacked()
+                    ->label('')
+                    ->height(500)
                   ->columnSpan(2)
 
 
