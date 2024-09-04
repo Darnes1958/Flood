@@ -383,7 +383,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
         Action::make('View Information')
           ->iconButton()
           ->modalHeading('')
-          ->modalWidth(MaxWidth::FiveExtraLarge)
+          ->modalWidth(MaxWidth::SevenExtraLarge)
           ->icon('heroicon-s-eye')
           ->modalSubmitAction(false)
           ->modalCancelAction(fn (StaticAction $action) => $action->label('عودة'))
