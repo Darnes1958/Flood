@@ -15,6 +15,7 @@ class ListVictims extends ListRecords
     {
         return [
           Actions\Action::make('sendwhatsss')
+              ->visible(false)
            ->action(function (){
              $phone='218925518783';
              $curl = curl_init();
@@ -58,6 +59,7 @@ class ListVictims extends ListRecords
                 ->color('danger')
                 ->url('victims/modifyvictim'),
           Actions\Action::make('byfammily')
+              ->visible(false)
           ->label('ادحال يالعائلات')
           ->icon('heroicon-m-users')
             ->color('success')

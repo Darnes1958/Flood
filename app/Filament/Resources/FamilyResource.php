@@ -60,6 +60,12 @@ class FamilyResource extends Resource
                             ->required(),
                     ])
                     ->label('القبيلة'),
+                Forms\Components\Select::make('familyshow_id')
+                    ->searchable()
+                    ->required()
+                    ->preload()
+                    ->relationship('Familyshow','name')
+                    ->label('العائلة الكبري'),
                 Forms\Components\Select::make('tribe_id')
                   ->searchable()
                   ->required()

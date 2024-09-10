@@ -178,6 +178,13 @@ class VictimResource extends Resource
                     ->required(),
                 ])
                   ->required(),
+                Select::make('familyshow_id')
+                    ->label('العائلة الكبري')
+                    ->relationship('Familyshow','name')
+                    ->searchable()
+                    ->reactive()
+                    ->preload()
+                    ->required(),
               Select::make('street_id')
                 ->label('الشارع')
                 ->relationship('Street','StrName')
