@@ -63,7 +63,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
 
 
   public $family_id=null;
-    public $familyshow_id;
+  public $familyshow_id;
 
   public $street_id=null;
   public $show='all';
