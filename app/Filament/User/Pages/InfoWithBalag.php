@@ -48,6 +48,10 @@ class InfoWithBalag extends Page implements HasTable,HasForms
   protected ?string $heading='';
   protected static ?string $navigationLabel='استفسار وبحث عن (البلاغات الجديدة)';
   protected static ?int $navigationSort=1;
+    public static function shouldRegisterNavigation(): bool
+    {
+        return  auth()->user()->is_admin;
+    }
 
 
   public $family_id=null;

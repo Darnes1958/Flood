@@ -11,13 +11,17 @@
             <label  > القبيلة أو التركيبة الإجتماعية :  </label>
         </div>
         <div style="text-align: center;font-size: 14pt;">
-            <label  > {{$family_name}} </label>
+            <label  > {{$familyshow_name}} </label>
             <label> العائلة أو القبيلة : </label>
+        </div>
+        <div style="text-align: center;font-size: 14pt;">
+            <label  > {{$family_name}} </label>
+            <label> اللقب : </label>
         </div>
         <div style="text-align: center;font-size: 14pt;">
 
             <label  > {{$count}} </label>
-            <label>عدد الضحايا فالقبيلة : </label>
+            <label>عدد الضحايا  : </label>
         </div>
         @if($bait_name)
             <div style="text-align: center;font-size: 14pt;">

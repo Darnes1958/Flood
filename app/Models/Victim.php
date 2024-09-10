@@ -18,6 +18,9 @@ class Victim extends Model
     public function Family(){
       return $this->belongsTo(Family::class);
     }
+    public function Familyshow(){
+        return $this->belongsTo(Familyshow::class);
+    }
     public function Street(){
       return $this->belongsTo(Street::class);
     }

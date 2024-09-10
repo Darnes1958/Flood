@@ -7,10 +7,12 @@ use App\Filament\Pages\Auth\Login;
 use App\Filament\Widgets\AreaWidget;
 use App\Filament\Widgets\BigFamWidget;
 use App\Filament\Widgets\Buildingwidget;
+use App\Filament\Widgets\ChartCategorie;
 use App\Filament\Widgets\ChartEastWest;
 use App\Filament\Widgets\ChartNation;
 use App\Filament\Widgets\ChartParent;
 use App\Filament\Widgets\ChartRoad;
+use App\Filament\Widgets\ChartYear;
 use App\Filament\Widgets\ContryWidget;
 use App\Filament\Widgets\FamWidget;
 use App\Filament\Widgets\GuestsWidget;
@@ -87,6 +89,8 @@ class UserPanelProvider extends PanelProvider
               GuestsWidget::class,
               SaveWidget::class,
               YearWidget::class,
+              ChartYear::class,
+              ChartCategorie::class,
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -10,6 +10,7 @@ use App\Models\BigFamily;
 use App\Models\Dead;
 use App\Models\DedBalview;
 use App\Models\Family;
+use App\Models\Familyshow;
 use App\Models\Tarkeba;
 use App\Models\Tasbedview;
 use App\Models\Tasmafview;
@@ -145,6 +146,7 @@ class PdfController extends Controller
    else {$bait_name=null;$bait_count=0;}
 
    $tribe_name=Tribe::find($fam->tribe_id)->TriName;
+   $familyshow_name=Familyshow::find($fam->familyshow_id)->name;
 
    $count=Victim::where('family_id',$family_id)->count();
    $victim_father=Victim::with('father')
@@ -230,6 +232,7 @@ class PdfController extends Controller
        'family_name'=>$family_name,
        'bait_name'=>$bait_name,
        'bait_count'=>$bait_count,
+       'familyshow_name'=>$familyshow_name,
        ]
        )->toArabicHTML();
 
@@ -245,13 +248,13 @@ class PdfController extends Controller
 
 
  }
-  public function PdfBigFamily($big_family){
+  public function PdfFamilyShow($familyshow_id){
 
-        $big=BigFamily::find($big_family);
+        $big=BigFamily::find(Familyshow::find($familyshow_id)->bigfamily_id);
         $big_family_name=$big->name;
         $tarkeba_name=Tarkeba::find($big->tarkeba_id)->name;
 
-        $families=Family::where('big_family_id',$big_family)->pluck('id')->all();
+        $families=Family::where('familyshow_id',$familyshow_id)->pluck('id')->all();
 
         $fam=Family::whereIn('id',$families)->get();
 
@@ -260,8 +263,6 @@ class PdfController extends Controller
         $victim_father=Victim::with('father')
             ->whereIn('family_id',$families)
             ->where('is_father','1')->get();
-
-
 
         $fathers=Victim::whereIn('family_id',$families)->where('is_father',1)->select('id');
         $mothers=Victim::whereIn('family_id',$families)->where('is_mother',1)->select('id');
@@ -279,7 +280,6 @@ class PdfController extends Controller
 
         $victim_husband=Victim::
         whereIn('family_id',$families)
-
             ->where('male','ذكر')
             ->where('is_father','0')
             ->where('wife_id','!=',null)

@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(\App\Http\Controllers\PdfController::class)->group(function (){
   route::get('/pdffamily/{family_id?},{bait_id?}', 'PdfFamily')->name('pdffamily') ;
-  route::get('/pdfbigfamily/{big_family?}', 'PdfBigFamily')->name('pdfbigfamily') ;
+  route::get('/pdffamilyshow/{familyshow_id?}', 'PdfFamilyShow')->name('pdffamilyshow') ;
   route::get('/pdftekrar/{what}', 'PdfTekrar')->name('pdftekrar') ;
   route::get('/pdfrepeted/{what}', 'PdfRepeted')->name('pdfrepeted') ;
   route::get('/pdfnewold/{what?},{libya?}', 'PdfNewOld')->name('pdfnewold') ;

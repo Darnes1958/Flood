@@ -4,9 +4,12 @@ namespace App\Filament\User\Pages;
 
 use App\Models\Archif;
 use App\Models\Bait;
+use App\Models\Balag;
 use App\Models\Bedon;
 use App\Models\BigFamily;
+use App\Models\Dead;
 use App\Models\Family;
+use App\Models\Familyshow;
 use App\Models\Mafkoden;
 use App\Models\Street;
 use App\Models\Tarkeba;
@@ -44,6 +47,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\HtmlString;
 
 class UserInfoPage extends Page implements HasTable,HasForms
 {
@@ -59,10 +63,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
 
 
   public $family_id=null;
-  public $big_family=null;
-  public $tarkeba=null;
-  public $families;
-  public $big_families;
+    public $familyshow_id;
 
   public $street_id=null;
   public $show='all';
@@ -79,24 +80,42 @@ class UserInfoPage extends Page implements HasTable,HasForms
         Section::make()
           ->schema([
 
-            Select::make('family_id')
-              ->hiddenLabel()
-              ->prefix('العائلة')
-              ->options(function () {
-                  if ($this->tarkeba || $this->big_families)
-                     return Family::query()->whereIn('id',$this->families)->pluck('FamName', 'id');
-                  return Family::query()->pluck('FamName', 'id');
-              })
-              ->preload()
-              ->live()
-              ->searchable()
-              ->columnSpan(2)
-              ->afterStateUpdated(function ($state){
-                $this->family_id=$state;
-                $this->mother=Victim::where('family_id',$state)->where('is_mother',1)->pluck('id')->all();
-              }),
+              Select::make('familyshow_id')
+                  ->hiddenLabel()
+                  ->prefix('العائلة')
+                  ->options(function () {
+                      return Familyshow::query()->pluck('name', 'id');
+                  })
+                  ->preload()
+                  ->live()
+                  ->searchable()
+                  ->columnSpan(2)
+                  ->afterStateUpdated(function ($state){
+                      $this->familyshow_id=$state;
+                      $this->family_id=null;
+                      $this->mother=Victim::where('familyshow_id',$state)->where('is_mother',1)->pluck('id')->all();
+                  }),
+              Select::make('family_id')
+                  ->hiddenLabel()
+                  ->prefix('اللقب')
+                  ->hidden(function (){
+                      return $this->familyshow_id && Family::where('familyshow_id',$this->familyshow_id)->count()<=1;
+                  })
+                  ->options(function () {
+                      if ($this->familyshow_id )
+                          return Family::query()->whereIn('familyshow_id',Familyshow::where('id',$this->familyshow_id)->pluck('id'))->pluck('FamName', 'id');
+                      return Family::query()->pluck('FamName', 'id');
+                  })
+                  ->preload()
+                  ->live()
+                  ->searchable()
+                  ->columnSpan(2)
+                  ->afterStateUpdated(function ($state){
+                      $this->family_id=$state;
+                      $this->mother=Victim::where('family_id',$state)->where('is_mother',1)->pluck('id')->all();
+                  }),
 
-            Select::make('street_id')
+              Select::make('street_id')
               ->hiddenLabel()
               ->prefix('العنوان')
               ->options(Street::all()->pluck('StrName','id'))
@@ -127,63 +146,23 @@ class UserInfoPage extends Page implements HasTable,HasForms
                 'father_only'=>'أباء',
                 'mother_only'=>'أمهات',
               ]),
-              Checkbox::make('notes')
-                  ->inlineLabel(false)
-                  ->live()
-                  ->default(0)
-                  ->afterStateUpdated(function ($state){
-                      $this->notes=$state;
-                  })
-                  ->label('إظهار الملاحظات'),
-              Select::make('tarkeba')
-                  ->hiddenLabel()
-                  ->prefix('التركيبة الاجتماعية')
-                  ->options(Tarkeba::query()
-                      ->pluck('name', 'id'))
-                  ->preload()
-                  ->live()
-                  ->searchable()
-                  ->columnSpan(2)
-                  ->afterStateUpdated(function ($state){
-                      $this->tarkeba=$state;
-                      $this->big_families=BigFamily::where('tarkeba_id',$state)->pluck('id')->all();
-                      $this->families=Family::whereIn('big_family_id',$this->big_families)->pluck('id')->all();
-                      $this->mother=Victim::whereIn('family_id',$this->families)->where('is_mother',1)->pluck('id')->all();
-                      $this->family_id=null;
-                      $this->big_family=null;
 
-                  }),
-              Select::make('big_family')
-                  ->hiddenLabel()
-                  ->prefix('العائلة الكبري')
-                  ->options(function () {
-                   if ($this->tarkeba)
-                      return BigFamily::query()->where('tarkeba_id',$this->tarkeba)
-                          ->pluck('name', 'id');
-                      return BigFamily::query()
-                          ->pluck('name', 'id');
-                  })
-                  ->preload()
-                  ->live()
-                  ->searchable()
-                  ->columnSpan(2)
-                  ->afterStateUpdated(function ($state){
-                      $this->big_family=$state;
-                      $this->families=Family::where('big_family_id',$state)->pluck('id')->all();
-                      $this->mother=Victim::whereIn('family_id',$this->families)->where('is_mother',1)->pluck('id')->all();
-                      $this->family_id=null;
-                  }),
-              Checkbox::make('hasNotes')
-                  ->inlineLabel(false)
-                  ->live()
-                  ->default(0)
-                  ->afterStateUpdated(function ($state){
-                      $this->notes=$state;
-                  })
-                  ->label('من لديهم ملاحظات'),
+
+
               \Filament\Forms\Components\Actions::make([
+                  \Filament\Forms\Components\Actions\Action::make('printBigFamily')
+                      ->label('طباعة العائلة')
+                      ->visible(function (Get $get){
+                          return $get('familyshow_id')!=null;
+                      })
+                      ->color('success')
+                      ->icon('heroicon-m-printer')
+                      ->url(function (Get $get) {
+                          return route('pdffamilyshow',
+                              ['familyshow_id' => $get('familyshow_id'),]);
+                      } ),
                   \Filament\Forms\Components\Actions\Action::make('printFamily')
-                      ->label('طباعة')
+                      ->label('طباعة اللقب')
                       ->visible(function (Get $get){
                           return $get('family_id')!=null;
                       })
@@ -193,17 +172,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                               ['family_id' => $get('family_id'),
                                   'bait_id' => 0,]);
                       } ),
-                  \Filament\Forms\Components\Actions\Action::make('printBigFamily')
-                      ->label('طباعة الكبري')
-                      ->visible(function (Get $get){
-                          return $get('big_family')!=null;
-                      })
-                      ->color('success')
-                      ->icon('heroicon-m-printer')
-                      ->url(function (Get $get) {
-                          return route('pdfbigfamily',
-                              ['big_family' => $get('big_family'),]);
-                      } ),
+
                   ])
 
           ])
@@ -218,82 +187,80 @@ class UserInfoPage extends Page implements HasTable,HasForms
 
       ->query(function (){
         return
-          Victim::query()
-              ->when($this->hasNotes,function ($q){
-                  $q->where('notes','!=',null);
-              })
-            ->when($this->tarkeba || $this->big_families,function ($q){
-                $q->orderby('family_id');
-            })
-            ->when($this->family_id && !$this->big_family,function($q){
-              $q->where('family_id',$this->family_id);
-            })
-            ->when($this->big_family || $this->tarkeba,function($q){
-                  $q->whereIn('family_id',$this->families);
-              })
-
-            ->when($this->street_id,function($q){
-              $q->where('street_id',$this->street_id);
-            })
-            ->when($this->show=='parent',function ($q){
-              $q->where(function ($q){
-                $q->where('is_father',1)
-                  ->orwhere('is_mother',1);
-              });
-            })
-            ->when($this->show=='father_only',function ($q){
-              $q->where('is_father',1);
-            })
-            ->when($this->show=='mother_only',function ($q){
-              $q->where('is_mother',1);
-            })
-
-            ->when($this->show=='single',function ($q){
-              $q->where(function ($q){
-                $q->where('is_father',null)->orwhere('is_father',0);
-              })
-                ->where(function ($q){
-                  $q->where('is_mother',null)->orwhere('is_mother',0);
+            Victim::query()
+                ->when($this->familyshow_id ,function($q){
+                    $q->where('familyshow_id',$this->familyshow_id);
                 })
-                ->where(function ($q){
-                  $q->where('father_id',null)->orwhere('father_id',0);
+                ->when($this->family_id ,function($q){
+                    $q->where('family_id',$this->family_id);
                 })
-                ->when($this->family_id,function ($q){
+                ->when($this->street_id,function($q){
+                    $q->where('street_id',$this->street_id);
+                })
+                ->when($this->show=='parent',function ($q){
+                    $q->where(function ($q){
+                        $q->where('is_father',1)
+                            ->orwhere('is_mother',1);
+                    });
+                })
+                ->when($this->show=='father_only',function ($q){
+                    $q->where('is_father',1);
+                })
+                ->when($this->show=='mother_only',function ($q){
+                    $q->where('is_mother',1);
+                })
+                ->when($this->show=='single',function ($q){
+                    $q->where(function ($q){
+                        $q->where('is_father',null)->orwhere('is_father',0);
+                    })
+                        ->where(function ($q){
+                            $q->where('is_mother',null)->orwhere('is_mother',0);
+                        })
+                        ->where(function ($q){
+                            $q->where('father_id',null)->orwhere('father_id',0);
+                        })
+                        ->when($this->family_id,function ($q){
 
-                  $q->where(function ( $query) {
-                    $query->where('mother_id', null)
-                      ->orwhere('mother_id', 0)
-                      ->orwhereNotIn('mother_id',$this->mother);
-                  });
-                });
-            });
+                            $q->where(function ( $query) {
+                                $query->where('mother_id', null)
+                                    ->orwhere('mother_id', 0)
+                                    ->orwhereNotIn('mother_id',$this->mother);
+                            });
+                        });
+                })
+                ->orderBy('familyshow_id')
+                ->orderBy('family_id');
       })
       ->columns([
         TextColumn::make('FullName')
           ->label('الاسم بالكامل')
           ->sortable()
           ->searchable()
-          ->description(function (Victim $record){
-            $who='';
-            if (!$record->sonOfMother) {
+            ->description(function (Victim $record){
+                $who='';
+                if (!$record->sonOfMother) {
 
-              $bed = null;
-              $maf = null;
+                    $bed = null;
+                    $maf = null;
+                    $ded = null;
+                    $bal = null;
+                    if ($record->balag) $bal = Balag::find($record->balag);
+                    if ($record->dead) $ded = Dead::find($record->dead);
+                    if ($record->bedon) $bed = Bedon::find($record->bedon);
+                    if ($record->mafkoden) $maf = Mafkoden::find($record->mafkoden);
 
-              if ($record->bedon) $bed = Bedon::find($record->bedon);
-              if ($record->mafkoden) $maf = Mafkoden::find($record->mafkoden);
+                    if ($bed || $maf || $ded || $bal) {
+                        if ($bal && $bal->mother) $who = 'اسم الأم : ' . $bal->mother;
+                        if ($who=='' && $ded && $ded->mother) $who = 'اسم الأم : ' . $ded->mother;
+                        if ($who=='' && $bed && $bed->mother) $who = 'اسم الأم : ' . $bed->mother;
+                        if ($who=='' && $maf && $maf->mother) $who = $who . 'اسم الأم : ' . $maf->mother;
 
-              if ($bed || $maf) {
-                if ($bed && $bed->mother) $who = 'الأم : ' . $bed->mother;
-                else {
-                  if ($maf && $maf->mother) $who = $who . 'الأم : ' . $maf->mother;
+                    }
                 }
-              }
-            }
-            if ($record->notes) $who=$who.' ('.$record->notes.')';
-            if (!$this->notes) return null;
-            return $who;
-          })
+                if ($record->notes) $who=$who.' ('.$record->notes.')';
+
+                return $who;
+            })
 
           ->formatStateUsing(fn (Victim $record): View => view(
             'filament.user.pages.full-data',
@@ -302,12 +269,20 @@ class UserInfoPage extends Page implements HasTable,HasForms
           ->searchable(),
           TextColumn::make('year')
               ->label('مواليد')   ,
-        TextColumn::make('Family.FamName')
-          ->label('العائلة')
-          ->sortable()
-          ->toggleable()
-          ->hidden(function (){return $this->family_id!=null;})
-          ->searchable(),
+          TextColumn::make('Familyshow.name')
+              ->label('العائلة')
+              ->sortable()
+              ->toggleable()
+              ->hidden(function (){return $this->familyshow_id !=null;})
+              ->searchable(),
+          TextColumn::make('Family.FamName')
+              ->label('التسمية')
+              ->sortable()
+              ->toggleable()
+              ->visible(function (){
+                  return $this->familyshow_id && Family::where('familyshow_id',$this->familyshow_id)->count()>1;
+              })
+              ->searchable(),
 
         TextColumn::make('Street.StrName')
           ->label('العنوان')
@@ -354,10 +329,15 @@ class UserInfoPage extends Page implements HasTable,HasForms
                     TextEntry::make('FullName')
                       ->color(function (Victim $record){
                         if ($record->male=='ذكر') return 'primary';  else return 'Fuchsia';})
-                      ->columnSpanFull()
+                      ->columnSpan(3)
                       ->weight(FontWeight::ExtraBold)
                       ->size(TextEntry\TextEntrySize::Large)
                       ->label(''),
+                      TextEntry::make('year')
+                          ->visible(function (Victim $record){return $record->year!=null;})
+                          ->inlineLabel()
+                          ->color('rose')
+                          ->label(new HtmlString('<span style="color: yellow">مواليد</span>')),
                     TextEntry::make('sonOfFather.FullName')
                       ->visible(function (Victim $record){
                         return $record->father_id;
@@ -434,10 +414,15 @@ class UserInfoPage extends Page implements HasTable,HasForms
                       ->badge()
                       ->separator(',')
                       ->columnSpanFull(),
-
+                      TextEntry::make('Familyshow.name')
+                          ->color('info')
+                          ->label('العائلة'),
                     TextEntry::make('Family.FamName')
+                        ->visible(function (){
+                            return $this->familyshow_id && Family::where('familyshow_id',$this->familyshow_id)->count()>1;
+                        })
                       ->color('info')
-                      ->label('العائلة'),
+                      ->label('التسمية'),
                     TextEntry::make('Family.Tribe.TriName')
                       ->color('info')
                       ->label('القبيلة'),
@@ -471,7 +456,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                       ->label('')
 
                   ])
-                  ->columns(2)
+                  ->columns(4)
                   ->columnSpan(2),
 
                 ImageEntry::make('image2')

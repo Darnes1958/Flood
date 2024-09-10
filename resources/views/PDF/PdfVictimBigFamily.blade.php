@@ -12,23 +12,26 @@
         </div>
         <div style="text-align: center;font-size: 14pt;">
             <label  > {{$big_family_name}} </label>
-            <label> القبيلة : </label>
+            <label> العائلة او القبيلة : </label>
         </div>
         <div style="text-align: center;font-size: 14pt;">
 
             <label  > {{$count}} </label>
-            <label>عدد الضحايا فالقبيلة : </label>
+            <label>عدد الضحايا  : </label>
         </div>
 
     </div>
     @foreach($fam as $family)
         <br>
-        <div style="position: relative;">
+        @if($fam->count()>1)
+            <div style="position: relative;">
              <span style="font-size: 16pt;">
                   <label  >{{$family->FamName}}</label>
                   <label  style="color: #9f1239" >&nbsp;&nbsp;العائلة : </label>
              </span>
-        </div>
+            </div>
+        @endif
+
         <div style="position: relative;">
           @foreach($victim_father->where('family_id',$family->id) as $victim)
             <div  style="text-align: right;font-size: 11pt;">
