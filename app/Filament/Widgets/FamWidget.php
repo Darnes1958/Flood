@@ -20,16 +20,25 @@ class FamWidget extends BaseWidget
     protected int | string | array $columnSpan=1;
     protected static ?int $sort=3;
   public $big_family_id=null;
+  public $familyshow_id=null;
 
   #[On('take_big_family')]
   public function take_big_family($big_family_id){
     $this->big_family_id=$big_family_id;
   }
+    #[On('take_familyshow_id')]
+    public function take_familyshow_id($familyshow_id){
+        $this->big_family_id=$familyshow_id;
+    }
+
     public function table(Table $table): Table
     {
         return $table
             ->query(function (Family $tribe) {
                 $tribe=Family::query()
+                    ->when($this->familyshow_id,function ($q){
+                        $q->where('familyshow_id',$this->familyshow_id);
+                    })
                   ->when($this->big_family_id,function ($q){
                     $q->where('big_family_id',$this->big_family_id);
                   })
@@ -40,7 +49,7 @@ class FamWidget extends BaseWidget
             }
             )
             ->queryStringIdentifier('families')
-            ->heading(new HtmlString('<div class="text-primary-400 text-lg">العدد حسب العائلات</div>'))
+            ->heading(new HtmlString('<div class="text-primary-400 text-lg">العائلات الصغري</div>'))
             ->defaultPaginationPageOption(5)
 
             ->defaultSort('victim_count','desc')

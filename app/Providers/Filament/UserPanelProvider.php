@@ -14,6 +14,7 @@ use App\Filament\Widgets\ChartParent;
 use App\Filament\Widgets\ChartRoad;
 use App\Filament\Widgets\ChartYear;
 use App\Filament\Widgets\ContryWidget;
+use App\Filament\Widgets\FamilyShowWidget;
 use App\Filament\Widgets\FamWidget;
 use App\Filament\Widgets\GuestsWidget;
 use App\Filament\Widgets\MaleFemale;
@@ -25,6 +26,7 @@ use App\Filament\Widgets\TriWidget;
 use App\Filament\Widgets\WorkWidget;
 use App\Filament\Widgets\YearWidget;
 use App\Models\BigFamily;
+use App\Models\Familyshow;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -75,7 +77,8 @@ class UserPanelProvider extends PanelProvider
               MaleFemale::class,
               TarkebaWidget::class,
               BigFamWidget::class,
-              FamWidget::class,
+              FamilyShowWidget::class,
+
               AreaWidget::class,
               Roadwidget::class,
               StreetWidget::class,

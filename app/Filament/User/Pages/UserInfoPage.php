@@ -84,7 +84,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                   ->hiddenLabel()
                   ->prefix('العائلة')
                   ->options(function () {
-                      return Familyshow::query()->pluck('name', 'id');
+                      return Familyshow::query()->orderBy('name')->pluck('name', 'id');
                   })
                   ->preload()
                   ->live()
@@ -173,7 +173,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                                   'bait_id' => 0,]);
                       } ),
 
-                  ])
+                  ])->columnSpan(2),
 
           ])
           ->columns(8),
