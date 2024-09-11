@@ -175,7 +175,13 @@ class ViewFamily extends Page implements HasTable,HasForms
 
             ->query(function (){
                 return
-                    Victim::query()->where('familyshow_id',$this->familyshow_id)  ;
+                    Victim::query()
+                        ->when($this->familyshow_id ,function($q){
+                            $q->where('familyshow_id',$this->familyshow_id);
+                        })
+                        ->when($this->family_id ,function($q){
+                            $q->where('family_id',$this->family_id);
+                        })  ;
             })
             ->columns([
                     ImageColumn::make('image2')
