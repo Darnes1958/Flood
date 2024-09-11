@@ -7,7 +7,7 @@
                 foreach($record->father as $item){
                      if ($i == 0) echo "<p>{$item->Name1}</p>"; else echo "<p style=\"color: aqua;font-weight: bold\">&nbsp;,&nbsp;</p><p>{$item->Name1}</p>";
                      $i++;
-                     if ($i == 3) break;}
+                     if ($i == 4) break;}
             @endphp
         </div>
         <div class="flex">
@@ -15,8 +15,8 @@
             @php
                 $ii=0;
                 foreach($record->father as $item){
-                    if ($ii<3) {$ii++; continue;}
-                     if ($ii == 3) echo "<p>{$item->Name1}</p>"; else echo "<p style=\"color: aqua;font-weight: bold\">&nbsp;,&nbsp;</p><p>{$item->Name1}</p>";
+                    if ($ii<4) {$ii++; continue;}
+                     if ($ii == 4) echo "<p>{$item->Name1}</p>"; else echo "<p style=\"color: aqua;font-weight: bold\">&nbsp;,&nbsp;</p><p>{$item->Name1}</p>";
                      $ii++;}
             @endphp
         </div>
