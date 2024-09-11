@@ -191,6 +191,7 @@ class ViewFamily extends Page implements HasTable,HasForms
                 Stack::make([
                     Panel::make([
                         TextColumn::make('FullName')
+                            ->searchable()
                             ->weight(FontWeight::Bold)
                             ->color('primary')
                             ->sortable(),
