@@ -54,6 +54,7 @@ class CreateTalent extends Page
         ->schema([
           Select::make('talent_id')
             ->relationship('Talent','name')
+            ->searchable()
             ->label('الموهبة')
             ->preload()
             ->createOptionForm([
