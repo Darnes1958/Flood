@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\VictimResource\Pages;
 
+use App\Enums\talentType;
 use App\Filament\Resources\VictimResource;
 use App\Models\Talent;
 use App\Models\VicTalent;
@@ -60,11 +61,13 @@ class CreateTalent extends Page
             ->createOptionForm([
               Section::make('ادخال مواهب')
                 ->schema([
-
                   TextInput::make('name')
-                ->required()
-                ->label('الموهبة')
-                ->maxLength(255),
+                    ->required()
+                    ->label('الموهبة')
+                    ->maxLength(255),
+                  Select::make('talentType')
+                     ->label('التصنيف')
+                     ->options(talentType::class),
                   ])
             ])
             ->editOptionForm([
@@ -72,10 +75,14 @@ class CreateTalent extends Page
                 ->required()
                 ->label('الموهبة')
                 ->maxLength(255),
+                Select::make('talentType')
+                    ->label('التصنيف')
+                    ->options(talentType::class),
             ])
+            ->columnSpan(3)
+            ->multiple(),
 
-            ->multiple()
-            ,
+
           \Filament\Forms\Components\Actions::make([
             Action::make('store')
               ->label('تخزين')
@@ -96,6 +103,7 @@ class CreateTalent extends Page
           ])->extraAttributes(['class' => 'items-center justify-between']),
 
         ])
+        ->columns(4)
 
 
     ];

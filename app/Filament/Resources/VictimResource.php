@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\jobType;
 use App\Filament\Resources\VictimResource\Pages;
 use App\Filament\Resources\VictimResource\RelationManagers;
 use App\Models\Area;
@@ -250,12 +251,20 @@ class VictimResource extends Resource
                     ->required()
                     ->label('الوظيفة')
                     ->maxLength(255),
+                    Select::make('jobType')
+                        ->label('التصنيف')
+                        ->searchable()
+                        ->options(jobType::class)
                 ])
                 ->editOptionForm([
                   TextInput::make('name')
                     ->required()
                     ->label('الوظيفة')
                     ->maxLength(255),
+                    Select::make('jobType')
+                        ->label('التصنيف')
+                        ->searchable()
+                        ->options(jobType::class)
                 ]),
 
 
