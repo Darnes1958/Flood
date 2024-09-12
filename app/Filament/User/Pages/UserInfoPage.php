@@ -2,6 +2,11 @@
 
 namespace App\Filament\User\Pages;
 
+use App\Enums\jobType;
+use App\Enums\qualyType;
+use App\Enums\talentType;
+use App\Filament\Resources\VictimResource;
+use App\Filament\User\Resources\VictimResource\Pages\ListVictims;
 use App\Models\Archif;
 use App\Models\Bait;
 use App\Models\Balag;
@@ -10,8 +15,11 @@ use App\Models\BigFamily;
 use App\Models\Dead;
 use App\Models\Family;
 use App\Models\Familyshow;
+use App\Models\Job;
 use App\Models\Mafkoden;
+use App\Models\Qualification;
 use App\Models\Street;
+use App\Models\Talent;
 use App\Models\Tarkeba;
 use App\Models\Tasreeh;
 use App\Models\VicTalent;
@@ -37,6 +45,9 @@ use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\Layout\Panel;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -48,6 +59,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
+use Livewire\Attributes\On;
 
 class UserInfoPage extends Page implements HasTable,HasForms
 {
@@ -73,6 +85,16 @@ class UserInfoPage extends Page implements HasTable,HasForms
   public $hasNotes=false;
   static $ser=0;
 
+  #[On('resetInfo')]
+  public function resetInfo()
+  {
+      $this->resetTable();
+  }
+  public  function Do($id)
+  {
+      $this->dispatch('fillModal', id: $id);
+      $this->dispatch('open-modal', id: 'talentModal');
+  }
   public function form(Form $form): Form
   {
     return $form
@@ -232,87 +254,188 @@ class UserInfoPage extends Page implements HasTable,HasForms
                 ->orderBy('family_id');
       })
       ->columns([
-        TextColumn::make('FullName')
-          ->label('الاسم بالكامل')
-          ->sortable()
-          ->searchable()
-            ->description(function (Victim $record){
-                $who='';
-                if (!$record->sonOfMother) {
 
-                    $bed = null;
-                    $maf = null;
-                    $ded = null;
-                    $bal = null;
-                    if ($record->balag) $bal = Balag::find($record->balag);
-                    if ($record->dead) $ded = Dead::find($record->dead);
-                    if ($record->bedon) $bed = Bedon::find($record->bedon);
-                    if ($record->mafkoden) $maf = Mafkoden::find($record->mafkoden);
+              TextColumn::make('FullName')
+                  ->label('الاسم بالكامل')
+                  ->sortable()
+                  ->searchable()
+                  ->description(function (Victim $record){
+                      $who='';
+                      if (!$record->sonOfMother) {
 
-                    if ($bed || $maf || $ded || $bal) {
-                        if ($bal && $bal->mother) $who = 'اسم الأم : ' . $bal->mother;
-                        if ($who=='' && $ded && $ded->mother) $who = 'اسم الأم : ' . $ded->mother;
-                        if ($who=='' && $bed && $bed->mother) $who = 'اسم الأم : ' . $bed->mother;
-                        if ($who=='' && $maf && $maf->mother) $who = $who . 'اسم الأم : ' . $maf->mother;
+                          $bed = null;
+                          $maf = null;
+                          $ded = null;
+                          $bal = null;
+                          if ($record->balag) $bal = Balag::find($record->balag);
+                          if ($record->dead) $ded = Dead::find($record->dead);
+                          if ($record->bedon) $bed = Bedon::find($record->bedon);
+                          if ($record->mafkoden) $maf = Mafkoden::find($record->mafkoden);
 
-                    }
-                }
-                if ($record->notes) $who=$who.' ('.$record->notes.')';
+                          if ($bed || $maf || $ded || $bal) {
+                              if ($bal && $bal->mother) $who = 'اسم الأم : ' . $bal->mother;
+                              if ($who=='' && $ded && $ded->mother) $who = 'اسم الأم : ' . $ded->mother;
+                              if ($who=='' && $bed && $bed->mother) $who = 'اسم الأم : ' . $bed->mother;
+                              if ($who=='' && $maf && $maf->mother) $who = $who . 'اسم الأم : ' . $maf->mother;
 
-                return $who;
-            })
+                          }
+                      }
+                      if ($record->notes) $who=$who.' ('.$record->notes.')';
 
-          ->formatStateUsing(fn (Victim $record): View => view(
-            'filament.user.pages.full-data',
-            ['record' => $record],
-          ))
-          ->searchable(),
-          TextColumn::make('year')
-              ->label('مواليد')   ,
-          TextColumn::make('Familyshow.name')
-              ->label('العائلة')
-              ->sortable()
-              ->toggleable()
-              ->hidden(function (){return $this->familyshow_id !=null;})
-              ->searchable(),
-          TextColumn::make('Family.FamName')
-              ->label('التسمية')
-              ->sortable()
-              ->toggleable()
-              ->visible(function (){
-                  return $this->familyshow_id && Family::where('familyshow_id',$this->familyshow_id)->count()>1;
-              })
-              ->searchable(),
+                      return $who;
+                  })
 
-        TextColumn::make('Street.StrName')
-          ->label('العنوان')
-          ->toggleable()
-          ->sortable()
-          ->searchable(),
+                  ->formatStateUsing(fn (Victim $record): View => view(
+                      'filament.user.pages.full-data',
+                      ['record' => $record],
+                  ))
+                  ->searchable(),
+              TextColumn::make('year')
+                  ->label('مواليد')   ,
+              TextColumn::make('Familyshow.name')
+                  ->label('العائلة')
+                  ->sortable()
+                  ->toggleable()
+                  ->hidden(function (){return $this->familyshow_id !=null;})
+                  ->searchable(),
+              TextColumn::make('Family.FamName')
+                  ->label('التسمية')
+                  ->sortable()
+                  ->toggleable()
+                  ->visible(function (){
+                      return $this->familyshow_id && Family::where('familyshow_id',$this->familyshow_id)->count()>1;
+                  })
+                  ->searchable(),
 
-          ImageColumn::make('image2')
-            ->toggleable()
-            ->stacked()
-            ->placeholder('الصورة')
-            ->tooltip('اضغط للإدخال او التعديل')
-            ->action(
-              Action::make('Upload')
-                ->fillForm(function (Victim $record){
-                    return ['image2'=>$record->image2];
-                })
-                ->form([
-                  FileUpload::make('image2')
-                    ->multiple()
-                    ->directory('form-attachments'),
-                ])
-                ->action(function (array $data,Victim $record,){
-                  $record->update(['image2'=>$data['image2'], ]);
-                })
-            )
-              ->label('')
-              ->circular(),
-
+              TextColumn::make('Street.StrName')
+                  ->label('العنوان')
+                  ->toggleable()
+                  ->sortable()
+                  ->searchable(),
+                      TextColumn::make('Qualification.name')
+                          ->label('المؤهل')
+                          ->action(
+                              Action::make('updateQualification')
+                                  ->form([
+                                      Select::make('qualification_id')
+                                          ->options(Qualification::all()->pluck('name','id'))
+                                          ->label('المؤهل')
+                                          ->createOptionForm([
+                                              TextInput::make('name')
+                                                  ->required()
+                                                  ->label('المؤهل')
+                                                  ->maxLength(255),
+                                              Select::make('qualyType')
+                                                  ->label('التصنيف')
+                                                  ->searchable()
+                                                  ->options(qualyType::class)
+                                          ])
+                                          ->createOptionUsing(function (array $data): int {
+                                              return Qualification::create($data)->getKey();
+                                          })
+                                          ->fillEditOptionActionFormUsing(function (Victim $record){
+                                              return Qualification::find($record->id)->toArray();
+                                          })
+                                          ->editOptionForm([
+                                              TextInput::make('name')
+                                                  ->label('المؤهل')
+                                                  ->maxLength(255),
+                                              Select::make('qualyType')
+                                                  ->label('التصنيف')
+                                                  ->searchable()
+                                                  ->options(qualyType::class)
+                                          ])
+                                          ->searchable()
+                                          ->preload()
+                                          ->live()
+                                  ])
+                                  ->fillForm(fn (Victim $record): array => [
+                                      'qualification_id' => $record->qualification_id,
+                                  ])
+                                  ->modalCancelActionLabel('عودة')
+                                  ->modalSubmitActionLabel('تحزين')
+                                  ->modalHeading('تعديل المؤهل')
+                                  ->action(function (array $data,Victim $record,){
+                                      $record->update(['qualification_id'=>$data['qualification_id']]);
+                                  })
+                          )
+                          ->toggleable(),
+                      TextColumn::make('Job.name')
+                          ->label('المهنة')
+                          ->action(
+                              Action::make('updateJob')
+                                  ->form([
+                                      Select::make('job_id')
+                                          ->options(Job::all()->pluck('name','id'))
+                                          ->label('المهنة')
+                                          ->createOptionForm([
+                                              TextInput::make('name')
+                                                  ->required()
+                                                  ->label('الوظيفة')
+                                                  ->maxLength(255),
+                                              Select::make('jobType')
+                                                  ->label('التصنيف')
+                                                  ->searchable()
+                                                  ->options(jobType::class)
+                                          ])
+                                          ->createOptionUsing(function (array $data): int {
+                                              return Job::create($data)->getKey();
+                                          })
+                                          ->fillEditOptionActionFormUsing(function (Victim $record){
+                                              return Job::find($record->id)->toArray();
+                                          })
+                                          ->editOptionForm([
+                                              TextInput::make('name')
+                                                  ->required()
+                                                  ->label('الوظيفة')
+                                                  ->maxLength(255),
+                                              Select::make('jobType')
+                                                  ->label('التصنيف')
+                                                  ->searchable()
+                                                  ->options(jobType::class)
+                                          ])
+                                          ->searchable()
+                                          ->preload()
+                                          ->live()
+                                  ])
+                                  ->fillForm(fn (Victim $record): array => [
+                                      'job_id' => $record->job_id,
+                                  ])
+                                  ->modalCancelActionLabel('عودة')
+                                  ->modalSubmitActionLabel('تحزين')
+                                  ->modalHeading('تعديل المهنة')
+                                  ->action(function (array $data,Victim $record,){
+                                      $record->update(['job_id'=>$data['job_id']]);
+                                  })
+                          )
+                          ->toggleable(),
+          TextColumn::make('VicTalent.Talent.name')
+              ->label('المواهب')
+              ->action(function (Victim $record){$this->Do($record->id);})
+              ->toggleable(),
+              ImageColumn::make('image2')
+                  ->toggleable()
+                  ->stacked()
+                  ->placeholder('الصورة')
+                  ->tooltip('اضغط للإدخال او التعديل')
+                  ->action(
+                      Action::make('Upload')
+                          ->fillForm(function (Victim $record){
+                              return ['image2'=>$record->image2];
+                          })
+                          ->form([
+                              FileUpload::make('image2')
+                                  ->multiple()
+                                  ->directory('form-attachments'),
+                          ])
+                          ->action(function (array $data,Victim $record,){
+                              $record->update(['image2'=>$data['image2'], ]);
+                          })
+                  )
+                  ->label('')
+                  ->circular(),
       ])
+
       ->actions([
         Action::make('View Information')
           ->iconButton()
@@ -470,6 +593,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
               ])->columns(4)
           ])
           ->slideOver(),
+
       ])
       ;
   }

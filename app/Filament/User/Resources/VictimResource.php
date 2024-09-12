@@ -7,14 +7,10 @@ use App\Filament\User\Resources\VictimResource\Pages;
 use App\Filament\User\Resources\VictimResource\RelationManagers;
 use App\Models\Bait;
 use App\Models\Bedon;
-use App\Models\Family;
 use App\Models\Mafkoden;
 use App\Models\Tasreeh;
 use App\Models\VicTalent;
 use App\Models\Victim;
-use Doctrine\DBAL\Schema\Schema;
-use Filament\Actions\EditAction;
-
 use Filament\Actions\StaticAction;
 use Filament\Forms;
 use Filament\Forms\Components\Radio;
@@ -23,7 +19,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Infolists\Components\ImageEntry;
-
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
@@ -32,14 +27,12 @@ use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 
@@ -715,6 +708,7 @@ class VictimResource extends Resource
             'create' => Pages\CreateVictim::route('/create'),
             'edit' => Pages\EditVictim::route('/{record}/edit'),
           'view' => Pages\ViewVictim::route('/{record}'),
+
         ];
     }
 }

@@ -1,37 +1,50 @@
 <?php
 
-namespace App\Filament\Resources\VictimResource\Pages;
+namespace App\Filament\User\Pages;
 
 use App\Enums\talentType;
-use App\Filament\Resources\VictimResource;
+
 use App\Models\VicTalent;
+use App\Models\Victim;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Resources\Pages\Concerns\InteractsWithRecord;
-use Filament\Resources\Pages\Page;
+
+
+use Filament\Pages\Page;
+use Livewire\Attributes\On;
 
 class CreateTalent extends Page
 {
-  use InteractsWithRecord;
-    protected static string $resource = VictimResource::class;
+    protected ?string $heading='';
 
-    protected static string $view = 'filament.resources.victim-resource.pages.create-talent';
+
+    protected static string $view = 'filament.user.pages.create-talent';
 
     public $vicTalent;
     public $talentData;
+    public $id;
 
-  public function mount(int | string $record): void
-  {
-    $this->record = $this->resolveRecord($record);
-    $this->vicTalent=VicTalent::where('victim_id',$this->getRecord()->id)->get();
-    if ($this->vicTalent->count()>0) {
-      $this->talentForm->fill(['talent_id'=>$this->vicTalent->pluck('talent_id')]);
+    #[On('fillModal')]
+    public function fillModal($id){
+        $this->id=$id;
+        $this->vicTalent=VicTalent::where('victim_id',$id)->get();
+        if ($this->vicTalent->count()>0) {
+            $this->talentForm->fill(['talent_id'=>$this->vicTalent->pluck('talent_id')]);
+        }
+
+        else $this->talentForm->fill([]);
     }
+  public function mount(): void
+  {
+     $this->id=Victim::first()->id;
+      $this->vicTalent=VicTalent::where('victim_id',$this->id)->get();
+      if ($this->vicTalent->count()>0) {
+          $this->talentForm->fill(['talent_id'=>$this->vicTalent->pluck('talent_id')]);
+      }
 
-    else $this->talentForm->fill([]);
-
+      else $this->talentForm->fill([]);
 
   }
   protected function getForms(): array
@@ -87,15 +100,16 @@ class CreateTalent extends Page
               ->button()
 
               ->color('success')
-              ->requiresConfirmation()
               ->action(function () {
-                VicTalent::where('victim_id',$this->getRecord()->id)->delete();
+                VicTalent::where('victim_id',$this->id)->delete();
                 foreach ($this->talentData['talent_id'] as $t_id) {
                     VicTalent::create([
-                      'victim_id'=>$this->getRecord()->id,
+                      'victim_id'=>$this->id,
                       'talent_id'=>$t_id,
                       ]);
                   }
+               $this->dispatch('resetInfo');
+
               }),
           ])->extraAttributes(['class' => 'items-center justify-between']),
 

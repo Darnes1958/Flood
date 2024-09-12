@@ -1,3 +1,4 @@
+<div>
 <div class="flex te">
     @if($record->is_father)
      <p style="color: #fbbf24; ">{{$record->FullName}}</p>
@@ -8,16 +9,18 @@
             <p  >{{$record->FullName}}</p>
         @endif
     @endif
+</div>
+    <div class="flex te">
 
 
         @if ($record->otherName) <p style="color: #9f1239;font-weight: bold"> &nbsp; [{{$record->otherName}}]&nbsp; </p> @endif
 
     @if($record->wife)
-      <p style="color: #fbbf24;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;زوجها :&nbsp;</p>
+      <p style="color: #fbbf24;font-weight: bold">زوجها :&nbsp;</p>
       <p >{{$record->wife->FullName}}</p>
     @endif
     @if($record->husband)
-        <p style="color: #00bb00;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;زوجته :&nbsp;</p>
+        <p style="color: #00bb00;font-weight: bold">زوجته :&nbsp;</p>
         <p >{{$record->husband->FullName}}</p>
     @endif
     @if($record->sonOfFather)
@@ -37,17 +40,21 @@
 
         <p >{{$record->sonOfMother->FullName}}</p>
     @endif
+</div>
     @if($record->father->count()>0)
-            <p style="color: aqua;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;أبناءه :&nbsp;</p>
+        <div class="flex">
+            <p style="color: aqua;font-weight: bold">أبناءه :&nbsp;</p>
         @php
             $i=0;
             foreach($record->father as $item){
                  if ($i == 0) echo "<p>{$item->Name1}</p>"; else echo "<p style=\"color: aqua;font-weight: bold\">&nbsp;,&nbsp;</p><p>{$item->Name1}</p>";
                  $i++;}
         @endphp
+        </div>
     @endif
     @if($record->mother->count()>0)
-                <p style="color: aqua;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;أبناءها :&nbsp;</p>
+        <div class="flex">
+                <p style="color: aqua;font-weight: bold">أبناءها :&nbsp;</p>
             @php
                 if ($record->has_more !=1) {
                     $i=0;
@@ -79,5 +86,6 @@
                 }
 
             @endphp
+        </div>
         @endif
 </div>
