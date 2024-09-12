@@ -334,7 +334,9 @@ class UserInfoPage extends Page implements HasTable,HasForms
                                               return Qualification::create($data)->getKey();
                                           })
                                           ->fillEditOptionActionFormUsing(function (Victim $record){
-                                              return Qualification::find($record->id)->toArray();
+                                              $q=Qualification::find($record->id);
+                                              if ($q)
+                                              return $q->toArray();  else return [];
                                           })
                                           ->editOptionForm([
                                               TextInput::make('name')
@@ -382,7 +384,9 @@ class UserInfoPage extends Page implements HasTable,HasForms
                                               return Job::create($data)->getKey();
                                           })
                                           ->fillEditOptionActionFormUsing(function (Victim $record){
-                                              return Job::find($record->id)->toArray();
+                                              $job=Job::find($record->id);
+                                              if ($job)
+                                              return $job->toArray(); else return [];
                                           })
                                           ->editOptionForm([
                                               TextInput::make('name')
