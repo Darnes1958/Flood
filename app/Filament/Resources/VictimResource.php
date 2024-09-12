@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\jobType;
+use App\Enums\qualyType;
 use App\Filament\Resources\VictimResource\Pages;
 use App\Filament\Resources\VictimResource\RelationManagers;
 use App\Models\Area;
@@ -231,12 +232,20 @@ class VictimResource extends Resource
                     ->required()
                     ->label('المؤهل')
                     ->maxLength(255),
+                    Select::make('jobType')
+                        ->label('التصنيف')
+                        ->searchable()
+                        ->options(qualyType::class)
                 ])
                 ->editOptionForm([
                   TextInput::make('name')
                     ->required()
                     ->label('المؤهل')
                     ->maxLength(255),
+                    Select::make('jobType')
+                        ->label('التصنيف')
+                        ->searchable()
+                        ->options(qualyType::class)
                 ]),
 
 
@@ -315,7 +324,7 @@ class VictimResource extends Resource
                     ]),
 
                 Tables\Columns\SelectColumn::make('qualification_id')
-                    ->label('المهنة')
+                    ->label('المؤهل')
                     ->options(Qualification::all()->pluck('name','id')),
                 Tables\Columns\SelectColumn::make('job_id')
                     ->label('الوظيفة')
