@@ -47,6 +47,7 @@ class ViewFamily extends Page implements HasTable,HasForms
     protected static string $view = 'filament.user.pages.view-family';
 
     protected static ?string $navigationLabel='عرض للضحايا بالصور';
+    protected ?string $heading='';
     public $family_id=null;
     public $familyshow_id;
 
