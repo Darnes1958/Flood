@@ -336,7 +336,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                                           ->fillEditOptionActionFormUsing(function (Victim $record){
                                               $q=Qualification::find($record->id);
                                               if ($q)
-                                              return $q->toArray();  else return [];
+                                              return Qualification::find($record->id)->toArray();  else return [];
                                           })
                                           ->editOptionForm([
                                               TextInput::make('name')

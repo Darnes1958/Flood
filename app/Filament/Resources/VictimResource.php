@@ -225,7 +225,7 @@ class VictimResource extends Resource
                     ->required()
                     ->label('المؤهل')
                     ->maxLength(255),
-                    Select::make('jobType')
+                    Select::make('qualyType')
                         ->label('التصنيف')
                         ->searchable()
                         ->options(qualyType::class)
@@ -235,7 +235,7 @@ class VictimResource extends Resource
                     ->required()
                     ->label('المؤهل')
                     ->maxLength(255),
-                    Select::make('jobType')
+                    Select::make('qualyType')
                         ->label('التصنيف')
                         ->searchable()
                         ->options(qualyType::class)
