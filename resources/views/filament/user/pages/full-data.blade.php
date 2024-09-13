@@ -1,5 +1,6 @@
 <div>
-<div class="flex te">
+<div class="flex ">
+
     @if($record->is_father)
      <p style="color: #fbbf24; ">{{$record->FullName}}</p>
     @else
@@ -9,7 +10,9 @@
             <p  >{{$record->FullName}}</p>
         @endif
     @endif
+
 </div>
+
     <div class="flex te">
 
 

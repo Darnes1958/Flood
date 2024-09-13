@@ -363,6 +363,10 @@ class UserInfoPage extends Page implements HasTable,HasForms
                           )
                           ->toggleable(),
                       TextColumn::make('Job.name')
+                          ->formatStateUsing(fn (Victim $record): View => view(
+                              'filament.user.pages.job-data',
+                              ['record' => $record],
+                          ))
                           ->label('المهنة')
                           ->action(
                               Action::make('updateJob')
@@ -415,6 +419,11 @@ class UserInfoPage extends Page implements HasTable,HasForms
                           ->toggleable(),
           TextColumn::make('VicTalent.Talent.name')
               ->label('المواهب')
+              ->formatStateUsing(fn (Victim $record): View => view(
+                  'filament.user.pages.talent-data',
+                  ['record' => $record],
+              ))
+
               ->action(function (Victim $record){$this->Do($record->id);})
               ->toggleable(),
               ImageColumn::make('image2')
