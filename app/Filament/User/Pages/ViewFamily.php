@@ -179,16 +179,59 @@ class ViewFamily extends Page implements HasTable,HasForms
                         })
                         ->when($this->family_id ,function($q){
                             $q->where('family_id',$this->family_id);
-                        })  ;
+                        })
+                        ->when($this->street_id,function($q){
+                            $q->where('street_id',$this->street_id);
+                        })
+                        ->when($this->show=='parent',function ($q){
+                            $q->where(function ($q){
+                                $q->where('is_father',1)
+                                    ->orwhere('is_mother',1);
+                            });
+                        })
+                        ->when($this->show=='father_only',function ($q){
+                            $q->where('is_father',1);
+                        })
+                        ->when($this->show=='mother_only',function ($q){
+                            $q->where('is_mother',1);
+                        })
+                        ->when($this->show=='single',function ($q){
+                            $q->where(function ($q){
+                                $q->where('is_father',null)->orwhere('is_father',0);
+                            })
+                                ->where(function ($q){
+                                    $q->where('is_mother',null)->orwhere('is_mother',0);
+                                })
+                                ->where(function ($q){
+                                    $q->where('father_id',null)->orwhere('father_id',0);
+                                })
+                                ->when($this->family_id,function ($q){
+
+                                    $q->where(function ( $query) {
+                                        $query->where('mother_id', null)
+                                            ->orwhere('mother_id', 0)
+                                            ->orwhereNotIn('mother_id',$this->mother);
+                                    });
+                                });
+                        })
+                        ->orderBy('familyshow_id')
+                        ->orderBy('family_id');
             })
+            ->paginationPageOptions([5,10,25,50,100])
             ->columns([
                     ImageColumn::make('image2')
                         ->height(160)
+
                         ->limit(1)
                         ->circular(),
                 Stack::make([
                     Panel::make([
                         TextColumn::make('FullName')
+                            ->label('الاسم')
+                            ->formatStateUsing(fn (Victim $record): View => view(
+                                'filament.user.pages.name-only',
+                                ['record' => $record],
+                            ))
                             ->searchable()
                             ->weight(FontWeight::Bold)
                             ->color('primary')
@@ -218,7 +261,7 @@ class ViewFamily extends Page implements HasTable,HasForms
             ])
         ->contentGrid([
         'md' => 2,
-        'xl' => 5,
+        'xl' => 4,
     ]);
     }
 }

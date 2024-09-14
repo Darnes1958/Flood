@@ -253,6 +253,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                 ->orderBy('familyshow_id')
                 ->orderBy('family_id');
       })
+        ->paginationPageOptions([5,10,25,50,100])
       ->columns([
 
               TextColumn::make('FullName')

@@ -10,6 +10,35 @@
             <p  >{{$record->FullName}}</p>
         @endif
     @endif
+        @if($record->VicTalent)
+            @foreach($record->VicTalent as $talent)
+
+                @if($talent->talent->talentType->name=='دارنس')
+                    <x-filament::avatar
+                        src="{{ asset('img/darens.jpg') }}"
+                        size="sm"
+                    />
+                @endif
+                @if($talent->talent->talentType->name=='الافريقي')
+                    <x-filament::avatar
+                        src="{{ asset('img/afriky.jpg') }}"
+                        size="sm"
+                    />
+                @endif
+                @if($talent->talent->talentType->name=='الهلال_الاحمر')
+                    <x-filament::avatar
+                        src="{{ asset('img/helal.jpg') }}"
+                        size="sm"
+                    />
+                @endif
+                @if($talent->talent->talentType->name=='الكشافة')
+                    <x-filament::avatar
+                        src="{{ asset('img/kashaf.jpg') }}"
+                        size="sm"
+                    />
+                @endif
+            @endforeach
+        @endif
 
 </div>
 

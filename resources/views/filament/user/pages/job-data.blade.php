@@ -1,10 +1,7 @@
 <div class="flex">
     @if($record->Job)
-
             @if($record->Job->jobType->name!='القوات_المسلحة' )
-
                 <p >{{$record->Job->name}}&nbsp;</p>
-
             @endif
 
             @if($record->Job->jobType->name=='القوات_المسلحة')
