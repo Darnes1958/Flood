@@ -36,6 +36,9 @@ class Family extends Model
     public function Big_family(){
         return $this->belongsTo(BigFamily::class);
     }
+    public function Familyshow(){
+        return $this->belongsTo(Familyshow::class);
+    }
     public function Country(){
         return $this->belongsTo(Country::class);
     }

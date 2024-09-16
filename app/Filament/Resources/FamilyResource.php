@@ -64,6 +64,36 @@ class FamilyResource extends Resource
                     ->searchable()
                     ->required()
                     ->preload()
+                    ->createOptionForm([
+                        TextInput::make('name')
+                            ->required()
+                            ->label('اسم ')
+                            ->maxLength(255)
+                            ->required(),
+                        Forms\Components\Select::make('bigfamily_id')
+                            ->searchable()
+                            ->required()
+                            ->options(BigFamily::all()->pluck('name','id'))
+
+                            ->preload()
+                            ->label('القبيلة'),
+                        Forms\Components\Hidden::make('country_id')
+                         ->default(1),
+
+                    ])
+                    ->editOptionForm([
+                        TextInput::make('name')
+                            ->required()
+                            ->label('اسم ')
+                            ->maxLength(255)
+                            ->required(),
+                        Forms\Components\Select::make('bigfamily_id')
+                            ->searchable()
+                            ->options(BigFamily::all()->pluck('name','id'))
+                            ->required()
+                            ->preload()
+                            ->label('القبيلة'),
+                    ])
                     ->relationship('Familyshow','name')
                     ->label('العائلة الكبري'),
                 Forms\Components\Select::make('tribe_id')
