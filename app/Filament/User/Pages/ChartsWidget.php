@@ -18,7 +18,7 @@ class ChartsWidget extends Page
     protected static string $view = 'filament.user.pages.charts-widget';
     protected ?string $heading='';
     protected static ?string $navigationLabel='رسوم بيانية';
-    protected static ?int $navigationSort=8;
+    protected static ?int $navigationSort=10;
 
     protected function getFooterWidgets(): array
     {

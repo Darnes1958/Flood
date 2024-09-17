@@ -17,7 +17,7 @@ class FamilyPage extends Page
     protected static string $view = 'filament.user.pages.family-page';
     protected ?string $heading='';
     protected static ?string $navigationLabel='العائلات';
-    protected static ?int $navigationSort=9;
+    protected static ?int $navigationSort=4;
     public $showFamilyWidget=false;
 
 
@@ -28,7 +28,6 @@ class FamilyPage extends Page
 
     protected function getFooterWidgets(): array
     {
-
             return [
                 FamilyShowWidget::class,
                 VictimSHow::class,

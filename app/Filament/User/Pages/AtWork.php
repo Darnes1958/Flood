@@ -11,8 +11,8 @@ class AtWork extends Page
 
     protected static string $view = 'filament.user.pages.at-work';
     protected ?string $heading='';
-    protected static ?string $navigationLabel='شهداء أثناء العمل';
-    protected static ?int $navigationSort=5;
+    protected static ?string $navigationLabel='في العمل';
+    protected static ?int $navigationSort=8;
 
     protected function getFooterWidgets(): array
     {

@@ -9,9 +9,13 @@ use Illuminate\Database\Eloquent\Model;
 class Talent extends Model
 {
   protected $table='talent';
-  public function Victim(){
+  public function Victalent(){
    return $this->hasMany(VicTalent::class);
   }
+    public function Victim()
+    {
+        return $this->hasManyThrough('App\Models\Victim', 'App\Models\VicTalent');
+    }
     protected $casts =[
         'talentType'=>talentType::class,
         ];

@@ -37,7 +37,8 @@ class AppServiceProvider extends ServiceProvider
       PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
         $panelSwitch
           ->canSwitchPanels(fn (): bool => Auth::user()->is_admin==1)
-          ->visible(fn (): bool => Auth::user()->is_admin==1);
+          ->visible(fn (): bool => Auth::user()->is_admin==1)
+          ->slideOver();
 
       });
       FilamentColor::register([
@@ -48,6 +49,7 @@ class AppServiceProvider extends ServiceProvider
         'yellow' =>  Color::Yellow,
         'rose' => Color::Rose,
       ]);
+
       FilamentView::registerRenderHook(
         'panels::page.end',
         fn (): View => view('analytics'),
@@ -64,6 +66,6 @@ class AppServiceProvider extends ServiceProvider
                 ->locales(['ar','en','fr']); // also accepts a closure
         });
       Model::unguard();
-       
+
     }
 }

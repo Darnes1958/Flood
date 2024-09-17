@@ -70,7 +70,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
     protected static string $view = 'filament.user.pages.user-info-page';
 
   protected ?string $heading='';
-  protected static ?string $navigationLabel='استفسار وبحث عن ضحايا الفيضان';
+  protected static ?string $navigationLabel='استفسار وبحث';
   protected static ?int $navigationSort=1;
 
 

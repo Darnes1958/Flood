@@ -15,6 +15,7 @@ class Places extends Page
     protected static string $view = 'filament.user.pages.places';
     protected ?string $heading='';
     protected static ?string $navigationLabel='العناوين';
+    protected static ?int $navigationSort=5;
     public function getFooterWidgetsColumns(): int | string | array
     {
         return 4;

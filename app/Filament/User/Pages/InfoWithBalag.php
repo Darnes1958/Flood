@@ -46,7 +46,7 @@ class InfoWithBalag extends Page implements HasTable,HasForms
     protected static string $view = 'filament.user.pages.info-with-balag';
 
   protected ?string $heading='';
-  protected static ?string $navigationLabel='استفسار وبحث عن (البلاغات الجديدة)';
+  protected static ?string $navigationLabel='استفسار وبحث(بلاغات)';
   protected static ?int $navigationSort=1;
     public static function shouldRegisterNavigation(): bool
     {

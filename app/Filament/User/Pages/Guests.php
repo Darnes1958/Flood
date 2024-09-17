@@ -13,7 +13,7 @@ class Guests extends Page
 
     protected ?string $heading='';
     protected static ?string $navigationLabel='ضيوف';
-    protected static ?int $navigationSort=7;
+    protected static ?int $navigationSort=6;
 
     protected function getFooterWidgets(): array
     {

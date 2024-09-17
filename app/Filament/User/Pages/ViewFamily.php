@@ -48,7 +48,7 @@ class ViewFamily extends Page implements HasTable,HasForms
 
     protected static ?string $navigationLabel='عرض للضحايا بالصور';
     protected ?string $heading='';
-    protected static ?int $navigationSort=3;
+    protected static ?int $navigationSort=2;
     public $family_id=null;
     public $familyshow_id;
 
