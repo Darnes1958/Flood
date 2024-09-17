@@ -17,7 +17,9 @@ use App\Filament\Widgets\ContryWidget;
 use App\Filament\Widgets\FamilyShowWidget;
 use App\Filament\Widgets\FamWidget;
 use App\Filament\Widgets\GuestsWidget;
+use App\Filament\Widgets\Left1;
 use App\Filament\Widgets\MaleFemale;
+use App\Filament\Widgets\Right1;
 use App\Filament\Widgets\Roadwidget;
 use App\Filament\Widgets\SaveWidget;
 use App\Filament\Widgets\StreetWidget;
@@ -74,26 +76,8 @@ class UserPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/User/Widgets'), for: 'App\\Filament\\User\\Widgets')
             ->widgets([
-              MaleFemale::class,
-              TarkebaWidget::class,
-              BigFamWidget::class,
-              FamilyShowWidget::class,
-
-              AreaWidget::class,
-              Roadwidget::class,
-              StreetWidget::class,
-              Buildingwidget::class,
-              ContryWidget::class,
-              ChartEastWest::class,
-              ChartNation::class,
-              ChartParent::class,
-              ChartRoad::class,
-              WorkWidget::class,
-              GuestsWidget::class,
-              SaveWidget::class,
-              YearWidget::class,
-              ChartYear::class,
-              ChartCategorie::class,
+                Left1::class,
+                Right1::class,
             ])
             ->middleware([
                 EncryptCookies::class,
