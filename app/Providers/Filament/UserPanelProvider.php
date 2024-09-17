@@ -53,7 +53,7 @@ class UserPanelProvider extends PanelProvider
           ->viteTheme('resources/css/filament/user/theme.css')
           ->brandName('فيضان درنه')
           ->profile(EditProfile::class)
-           ->spa()
+
           ->sidebarFullyCollapsibleOnDesktop()
           ->breadcrumbs(false)
           ->maxContentWidth('Full')
