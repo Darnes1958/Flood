@@ -76,8 +76,8 @@ class UserPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/User/Widgets'), for: 'App\\Filament\\User\\Widgets')
             ->widgets([
-                Left1::class,
-                Right1::class,
+                \App\Filament\User\Widgets\Left1::class,
+                \App\Filament\User\Widgets\Right1::class,
             ])
             ->middleware([
                 EncryptCookies::class,
