@@ -10,6 +10,9 @@
             <p  >{{$record->FullName}}</p>
         @endif
     @endif
+    @if ($record->otherName) <p style="color: #9f1239;font-weight: bold"> &nbsp; [{{$record->otherName}}]&nbsp; </p> @endif
+    <div>&nbsp;&nbsp;</div>
+
         @if($record->VicTalent)
             @foreach($record->VicTalent as $talent)
 
@@ -45,7 +48,7 @@
     <div class="flex te">
 
 
-        @if ($record->otherName) <p style="color: #9f1239;font-weight: bold"> &nbsp; [{{$record->otherName}}]&nbsp; </p> @endif
+
 
     @if($record->wife)
       <p style="color: #fbbf24;font-weight: bold">زوجها :&nbsp;</p>

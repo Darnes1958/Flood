@@ -18,7 +18,10 @@ use Livewire\Attributes\On;
 class CreateTalent extends Page
 {
     protected ?string $heading='';
-
+    public static function shouldRegisterNavigation(): bool
+    {
+        return  false;
+    }
 
     protected static string $view = 'filament.user.pages.create-talent';
 

@@ -45,6 +45,7 @@ class JobVictimWidget extends BaseWidget
             ->emptyStateHeading('')
             ->columns([
                 TextColumn::make('FullName')
+                    ->searchable()
                     ->label(''),
                 ImageColumn::make('image2')
                     ->label('')

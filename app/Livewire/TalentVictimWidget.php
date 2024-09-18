@@ -44,6 +44,7 @@ class TalentVictimWidget extends BaseWidget
             ->emptyStateHeading('')
             ->columns([
                 TextColumn::make('Victim.FullName')
+                ->searchable()
                 ->label(''),
                 ImageColumn::make('Victim.image2')
                     ->label('')
