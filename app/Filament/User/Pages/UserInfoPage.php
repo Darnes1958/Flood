@@ -49,6 +49,7 @@ use Filament\Tables\Columns\Layout\Panel;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
@@ -141,6 +142,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
               ->hiddenLabel()
               ->prefix('العنوان')
               ->options(Street::all()->pluck('StrName','id'))
+
               ->preload()
               ->live()
               ->searchable()
@@ -291,8 +293,9 @@ class UserInfoPage extends Page implements HasTable,HasForms
                       ['record' => $record],
                   ))
                   ->searchable(),
-              TextColumn::make('year')
-                  ->label('مواليد')   ,
+          TextInputColumn::make('year')
+              ->label('مواليد')
+          ,
               TextColumn::make('Familyshow.name')
                   ->label('العائلة')
                   ->sortable()
@@ -310,6 +313,34 @@ class UserInfoPage extends Page implements HasTable,HasForms
 
               TextColumn::make('Street.StrName')
                   ->label('العنوان')
+                  ->action(
+                      Action::make('updateٍStreet')
+                          ->form([
+                              Select::make('street_id')
+                                  ->options(Street::all()->pluck('StrName','id'))
+                                  ->label('العنوان')
+                                  ->searchable()
+                                  ->preload()
+                                  ->live()
+                          ])
+                          ->fillForm(fn (Victim $record): array => [
+                              'street_id' => $record->street_id,
+                          ])
+                          ->visible(Auth::user()->is_admin)
+                          ->modalCancelActionLabel('عودة')
+                          ->modalSubmitActionLabel('تحزين')
+                          ->modalHeading('تعديل العنوان')
+                          ->action(function (array $data,Victim $record,){
+                              $record->update(['street_id'=>$data['street_id']]);
+                              Victim::where('father_id',$record->id)
+                                  ->orwhere('id',$record->mother_id)
+                                  ->orwhere('id',$record->father_id)
+                                  ->orwhere('husband_id',$record->id)
+                                  ->orwhere('wife_id',$record->id)
+                                  ->orwhere('mother_id',$record->id)
+                                  ->update(['street_id'=>$data['street_id']]);
+                          })
+                  )
                   ->toggleable()
                   ->sortable()
                   ->searchable(),
