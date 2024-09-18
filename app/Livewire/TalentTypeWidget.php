@@ -48,7 +48,7 @@ class TalentTypeWidget extends BaseWidget
                     ->label('')
                     ->formatStateUsing(fn (Talent $record): View => view(
                         'filament.user.pages.img-only',
-                        ['record' => $record],
+                        ['record' => $record,'who'=>'talent'],
                     )),
 
             ]);

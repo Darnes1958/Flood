@@ -27,6 +27,7 @@ class Madany extends Page
 
     protected static string $view = 'filament.user.pages.madany';
     protected static ?string $navigationLabel='مجتمع مدني ومواهب';
+    protected static ?int $navigationSort=9;
     protected ?string $heading='';
     public function getFooterWidgetsColumns(): int | string | array
     {
