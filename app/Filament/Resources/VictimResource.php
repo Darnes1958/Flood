@@ -240,8 +240,6 @@ class VictimResource extends Resource
                         ->searchable()
                         ->options(qualyType::class)
                 ]),
-
-
               Select::make('job_id')
                 ->label('الوظيفة')
                 ->relationship('Job','name')
@@ -268,9 +266,6 @@ class VictimResource extends Resource
                         ->searchable()
                         ->options(jobType::class)
                 ]),
-
-
-
               TextInput::make('notes')
                 ->columnSpan(2)
                 ->label('ملاحظات'),
@@ -285,15 +280,11 @@ class VictimResource extends Resource
                 ->hidden(),
               TextInput::make('fromwho')
                 ->hidden(),
-
-            ])->columns(4)
-          ;
-
+            ])->columns(4);
     }
     public static function table(Table $table): Table
     {
         return $table
-
             ->striped()
             ->defaultSort('id','desc')
             ->columns([
@@ -305,12 +296,10 @@ class VictimResource extends Resource
               ->searchable(),
               Tables\Columns\TextColumn::make('Street.StrName')
                 ->label('الشارع'),
-
               Tables\Columns\TextColumn::make('Family.FamName')
                 ->sortable()
-
                 ->label('العائلة'),
-                Tables\Columns\SelectColumn::make('male')
+              Tables\Columns\SelectColumn::make('male')
                     ->options([
                         'ذكر' => 'ذكر',
                         'أنثي' => 'أنثي',

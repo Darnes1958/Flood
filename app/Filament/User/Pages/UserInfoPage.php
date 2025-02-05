@@ -7,6 +7,7 @@ use App\Enums\qualyType;
 use App\Enums\talentType;
 use App\Filament\Resources\VictimResource;
 use App\Filament\User\Resources\VictimResource\Pages\ListVictims;
+use App\Livewire\Traits\PublicTrait;
 use App\Models\Archif;
 use App\Models\Bait;
 use App\Models\Balag;
@@ -59,13 +60,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\HtmlString;
 use Livewire\Attributes\On;
 
 class UserInfoPage extends Page implements HasTable,HasForms
 {
   use InteractsWithTable,InteractsWithForms;
-
+    use PublicTrait;
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
     protected static string $view = 'filament.user.pages.user-info-page';
@@ -91,6 +93,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
   {
       $this->resetTable();
   }
+
   public  function Do($id)
   {
       $this->dispatch('fillModal', id: $id);
@@ -196,8 +199,92 @@ class UserInfoPage extends Page implements HasTable,HasForms
                               ['family_id' => $get('family_id'),
                                   'bait_id' => 0,]);
                       } ),
+                  \Filament\Forms\Components\Actions\Action::make('printAll')
+                      ->label('طباعة الكل')
+                      ->color('success')
+                      ->icon('heroicon-m-printer')
+                      ->action(function (Get $get){
 
-                  ])->columnSpan(2),
+                          $familyshow_id=$get('familyshow_id');
+                          $familyshow_name=Familyshow::find($familyshow_id)->name;
+
+                          $families=Family::where('familyshow_id',$familyshow_id)->pluck('id')->all();
+
+                          $fam=Family::whereIn('id',$families)->get();
+
+                          $count=Victim::whereIn('family_id',$families)->count();
+
+                          $victim_father=Victim::with('father')
+                              ->whereIn('family_id',$families)
+                              ->where('is_father','1')->get();
+
+                          $fathers=Victim::whereIn('family_id',$families)->where('is_father',1)->select('id');
+                          $mothers=Victim::whereIn('family_id',$families)->where('is_mother',1)->select('id');
+
+                          $victim_mother=Victim::with('mother')
+                              ->whereIn('family_id',$families)
+                              ->where('is_mother','1')
+                              ->where(function ( $query) use($fathers) {
+                                  $query->where('husband_id', null)
+                                      ->orwhere('husband_id', 0)
+                                      ->orwhereNotIn('husband_id',$fathers);
+                              })
+
+                              ->get();
+
+                          $victim_husband=Victim::
+                          whereIn('family_id',$families)
+                              ->where('male','ذكر')
+                              ->where('is_father','0')
+                              ->where('wife_id','!=',null)
+                              ->get();
+
+                          $victim_wife=Victim::
+                          whereIn('family_id',$families)
+
+                              ->where('male','أنثي')
+                              ->where('is_mother','0')
+                              ->where('husband_id','!=',null)
+                              ->get();
+                          $victim_only=Victim::
+                          whereIn('family_id',$families)
+
+                              ->Where(function ( $query) {
+                                  $query->where('is_father',null)
+                                      ->orwhere('is_father',0);
+                              })
+                              ->Where(function ( $query) {
+                                  $query->where('is_mother',null)
+                                      ->orwhere('is_mother',0);
+                              })
+                              ->where('husband_id',null)
+                              ->where('wife_id',null)
+                              ->where('father_id',null)
+                              ->where(function ( $query) use($mothers) {
+                                  $query->where('mother_id', null)
+                                      ->orwhere('mother_id', 0)
+                                      ->orwhereNotIn('mother_id',$mothers);
+                              })
+                              ->get();
+                          \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfAllVictims',
+                              ['fam'=>$fam,
+                                  'victim_father'=>$victim_father,
+                                  'victim_mother'=>$victim_mother,
+                                  'victim_husband'=>$victim_husband,
+                                  'victim_wife'=>$victim_wife,
+                                  'victim_only'=>$victim_only,
+                                  'count'=>$count,
+                                  'familyshow_name'=>$familyshow_name,])
+                              ->save(public_path().'/bigFamily.pdf');
+
+                          return Response::download(public_path().'/bigFamily.pdf',
+                              'filename.pdf', self::ret_spatie_header());
+
+                      }),
+
+
+
+              ])->columnSpan(2),
 
           ])
           ->columns(8),
@@ -293,7 +380,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                       ['record' => $record],
                   ))
                   ->searchable(),
-          TextInputColumn::make('year')
+          TextColumn::make('year')
               ->label('مواليد')
           ,
               TextColumn::make('Familyshow.name')
@@ -344,7 +431,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                   ->toggleable()
                   ->sortable()
                   ->searchable(),
-                      TextColumn::make('Qualification.name')
+              TextColumn::make('Qualification.name')
                           ->label('المؤهل')
                           ->action(
                               Action::make('updateQualification')
@@ -394,7 +481,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                                   })
                           )
                           ->toggleable(),
-                      TextColumn::make('Job.name')
+              TextColumn::make('Job.name')
                           ->formatStateUsing(fn (Victim $record): View => view(
                               'filament.user.pages.job-data',
                               ['record' => $record],
