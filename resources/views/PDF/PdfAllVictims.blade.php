@@ -38,7 +38,7 @@
 
         <div style="position: relative;">
             @foreach($victim_father->where('family_id',$family->id) as $victim)
-                <div  style="text-align: right;font-size: 11pt;">
+                <div  style="text-align: right;font-size: 11pt;" class="flex">
                     <label  style="font-size: 14pt;" class="text-yellow-700">الأب : </label>
                     @if($victim->otherName)
                         <label  >{{$victim->FullName}} ({{$victim->otherName}})</label>
@@ -46,23 +46,116 @@
                         <label  >{{$victim->FullName}}</label>
                     @endif
 
+                    @if($victim->VicTalent)
+
+                        @foreach($victim->VicTalent as $talent)
+                            <label>&nbsp;</label>
+                            @if($talent->talent->talentType->name=='دارنس')
+                                <img
+                                    src="{{ base_path('public/img/darens.jpg') }}"
+                                    style="width: 20px; height: 20px;"
+                                />
+                            @endif
+                            @if($talent->talent->talentType->name=='الافريقي')
+                                <img
+                                    src="{{ base_path('public/img/afriky.jpg') }}"
+                                    style="width: 20px; height: 20px;"
+                                />
+                            @endif
+                            @if($talent->talent->talentType->name=='الهلال_الاحمر')
+                                <img
+                                    src="{{ base_path('public/img/helal.jpg') }}"
+                                    style="width: 20px; height: 20px;"
+                                />
+                            @endif
+                            @if($talent->talent->talentType->name=='الكشافة')
+                                <img
+                                    src="{{ base_path('public/img/kashaf.jpg') }}"
+                                    style="width: 20px; height: 20px;"
+                                />
+                            @endif
+                        @endforeach
+                    @endif
+
+
                     <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                     <label  > العنوان : </label>
                     <label  >{{$victim->Street->StrName}}</label>
                 </div>
                 @if($victim->wife_id)
-                    <div  style="text-align: right;font-size: 11pt;">
+                    <div  style="text-align: right;font-size: 11pt;" class="flex">
                         <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                         <label  class="text-green-500">زوجته : </label>
                         <label  >{{$victim->husband->FullName}}</label>
+                        @if($victim->husband->VicTalent)
+
+                            @foreach($victim->husband->VicTalent as $talent)
+                                <label>&nbsp;</label>
+                                @if($talent->talent->talentType->name=='دارنس')
+                                    <img
+                                        src="{{ base_path('public/img/darens.jpg') }}"
+                                        style="width: 20px; height: 20px;"
+                                    />
+                                @endif
+                                @if($talent->talent->talentType->name=='الافريقي')
+                                    <img
+                                        src="{{ base_path('public/img/afriky.jpg') }}"
+                                        style="width: 20px; height: 20px;"
+                                    />
+                                @endif
+                                @if($talent->talent->talentType->name=='الهلال_الاحمر')
+                                    <img
+                                        src="{{ base_path('public/img/helal.jpg') }}"
+                                        style="width: 20px; height: 20px;"
+                                    />
+                                @endif
+                                @if($talent->talent->talentType->name=='الكشافة')
+                                    <img
+                                        src="{{ base_path('public/img/kashaf.jpg') }}"
+                                        style="width: 20px; height: 20px;"
+                                    />
+                                @endif
+                            @endforeach
+                        @endif
+
                     </div>
                 @endif
 
-                <div  style="text-align: right;font-size: 11pt;">
+                <div  style="text-align: right;font-size: 11pt;" class="flex">
                     <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                     <label class="text-sky-500" >الأبناء : </label>
                     @foreach($victim->father as $son)
                         <label  >{{$son->Name1}}</label>
+                        @if($son->VicTalent)
+
+                            @foreach($son->VicTalent as $talent)
+
+                                @if($talent->talent->talentType->name=='دارنس')
+                                    <img
+                                        src="{{ base_path('public/img/darens.jpg') }}"
+                                        style="width: 20px; height: 20px;"
+                                    />
+                                @endif
+                                @if($talent->talent->talentType->name=='الافريقي')
+                                    <img
+                                        src="{{ base_path('public/img/afriky.jpg') }}"
+                                        style="width: 20px; height: 20px;"
+                                    />
+                                @endif
+                                @if($talent->talent->talentType->name=='الهلال_الاحمر')
+                                    <img
+                                        src="{{ base_path('public/img/helal.jpg') }}"
+                                        style="width: 20px; height: 20px;"
+                                    />
+                                @endif
+                                @if($talent->talent->talentType->name=='الكشافة')
+                                    <img
+                                        src="{{ base_path('public/img/kashaf.jpg') }}"
+                                        style="width: 20px; height: 20px;"
+                                    />
+                                @endif
+                            @endforeach
+                        @endif
                         @if(!$loop->last) <label> , </label>@endif
                     @endforeach
 
@@ -73,21 +166,55 @@
         <div style="position: relative;">
             @php
                 foreach($victim_mother->where('family_id',$family->id) as $victim) {
-                    echo "<div  style=\"text-align: right;font-size: 11pt;\">
+                    echo "<div  style=\"text-align: right;font-size: 11pt;\" class=\"flex\">
                         <label style=\"font-size: 14pt;\" class=\"text-green-500\" >الأم : </label>
                         <label  >{$victim->FullName}</label>
                         <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                         <label  > العنوان : </label>
-                        <label  >{$victim->Street->StrName}</label>
-                    </div>";
+                        <label  >{$victim->Street->StrName}</label> ";
+                    if($victim->VicTalent)
+                        foreach($victim->VicTalent as $talent) {
+                           echo "<label>&nbsp;</label>";
+                            if($talent->talent->talentType->name=='دارنس')
+                              echo " <img
+                                    src=\"{{ base_path('public/img/darens.jpg') }}\"
+                                    style=\"width: 20px; height: 20px;\"
+                                />";
+
+                            if($talent->talent->talentType->name=='الافريقي')
+                                echo "<img
+                                    src=\"{{ base_path('public/img/afriky.jpg') }}\"
+                                    style=\"width: 20px; height: 20px;\"
+                                />";
+
+                            if($talent->talent->talentType->name=='الهلال_الاحمر')
+                                echo "<img
+                                    src=\"{{ base_path('public/img/helal.jpg') }}\"
+                                    style=\"width: 20px; height: 20px;\"
+                                />";
+
+
+                            if($talent->talent->talentType->name=='الكشافة')
+                             echo "  <img
+                                    src=\"{{ base_path('public/img/kashaf.jpg') }}\"
+                                    style=\"width: 20px; height: 20px;\"
+                                />";
+                            }
+
+
+
+                    echo "</div>";
                     if($victim->husband_id)
-                      echo  "<div  style=\"text-align: right;font-size: 11pt;\">
+                      echo  "<div  style=\"text-align: right;font-size: 11pt;\" class=\"flex\">
                       <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                             <label class=\"text-yellow-700\" >زوجها : </label>
-                            <label  >{$victim->wife->FullName}</label>
-                            </div>";
+                            <label  >{$victim->wife->FullName}</label>";
 
-                      echo "<div  style=\"text-align: right;font-size: 11pt;\">
+
+
+                    echo      "</div>";
+
+                      echo "<div  style=\"text-align: right;font-size: 11pt;\" class=\"flex\" >
                       <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>";
 
 
@@ -102,11 +229,37 @@
                               foreach($victim->mother as $son) {
                                 if($i>0)  echo "<label> , </label>";
                                   echo " <label  >$son->Name1</label>";
+                                  if($son->VicTalent)
+                                   foreach($son->VicTalent as $talent) {
+                           echo "<label>&nbsp;</label>";
+                            if($talent->talent->talentType->name=='دارنس')
+                              echo " <img
+                                    src=\"{{ base_path('public/img/darens.jpg') }}\"
+                                    style=\"width: 20px; height: 20px;\"
+                                />";
+
+                            if($talent->talent->talentType->name=='الافريقي')
+                                echo "<img
+                                    src=\"{{ base_path('public/img/afriky.jpg') }}\"
+                                    style=\"width: 20px; height: 20px;\"
+                                />";
+
+                            if($talent->talent->talentType->name=='الهلال_الاحمر')
+                                echo "<img
+                                    src=\"{{ base_path('public/img/helal.jpg') }}\"
+                                    style=\"width: 20px; height: 20px;\"
+                                />";
+
+
+                            if($talent->talent->talentType->name=='الكشافة')
+                             echo "<img
+                                    src=\"{{ base_path('public/img/kashaf.jpg') }}\"
+                                    style=\"width: 20px; height: 20px;\"
+                                />";
+                            }
 
                                 $i++;
                             }
-
-
 
 
 
@@ -131,6 +284,35 @@
                                       }
                                       if ($i===0) { echo "<label> {$item->Name1}</label>";}
                                       else {echo "<label> , {$item->Name1}</label>";}
+
+                                       if($item->VicTalent)
+                                   foreach($item->VicTalent as $talent) {
+                                       echo "<label>&nbsp;</label>";
+                                        if($talent->talent->talentType->name=='دارنس')
+                                          echo " <img
+                                                src=\"{{ base_path('public/img/darens.jpg') }}\"
+                                                style=\"width: 20px; height: 20px;\"
+                                            />";
+
+                                        if($talent->talent->talentType->name=='الافريقي')
+                                            echo "<img
+                                                src=\"{{ base_path('public/img/afriky.jpg') }}\"
+                                                style=\"width: 20px; height: 20px;\"
+                                            />";
+
+                                        if($talent->talent->talentType->name=='الهلال_الاحمر')
+                                            echo "<img
+                                                src=\"{{ base_path('public/img/helal.jpg') }}\"
+                                                style=\"width: 20px; height: 20px;\"
+                                            />";
+
+
+                                        if($talent->talent->talentType->name=='الكشافة')
+                                         echo "  <img
+                                                src=\"{{ base_path('public/img/kashaf.jpg') }}\"
+                                                style=\"width: 20px; height: 20px;\"
+                                            />";
+                                        }
 
                                     $i++;
 

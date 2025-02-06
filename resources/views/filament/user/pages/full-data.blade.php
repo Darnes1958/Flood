@@ -12,10 +12,8 @@
     @endif
     @if ($record->otherName) <p style="color: #9f1239;font-weight: bold"> &nbsp; [{{$record->otherName}}]&nbsp; </p> @endif
     <div>&nbsp;&nbsp;</div>
-
         @if($record->VicTalent)
             @foreach($record->VicTalent as $talent)
-
                 @if($talent->talent->talentType->name=='دارنس')
                     <x-filament::avatar
                         src="{{ asset('img/darens.jpg') }}"
