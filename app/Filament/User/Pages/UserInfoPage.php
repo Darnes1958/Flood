@@ -206,7 +206,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                       ->action(function (Get $get){
 
                           $familyshow_id=$get('familyshow_id');
-                          $familyshow_name=Familyshow::find($familyshow_id)->name;
+                          $familyshow=Familyshow::find($familyshow_id);
 
                           $families=Family::where('familyshow_id',$familyshow_id)->pluck('id')->all();
 
@@ -274,7 +274,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                                   'victim_wife'=>$victim_wife,
                                   'victim_only'=>$victim_only,
                                   'count'=>$count,
-                                  'familyshow_name'=>$familyshow_name,])
+                                  'familyshow'=>$familyshow,])
                               ->save(public_path().'/bigFamily.pdf');
 
                           return Response::download(public_path().'/bigFamily.pdf',
