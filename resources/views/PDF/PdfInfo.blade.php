@@ -32,6 +32,17 @@
         </div>
         <div class="flex flex-row mt-10 mr-40">
             <div class="basis-1/2 ">
+                <label class="text-2xl  m-2 ">جد  : </label>
+                <label  class="text-2xl text-red-600"> {{\App\Models\Victim::where('is_grandfather',1)->count()}} </label>
+            </div>
+            <div class="basis-1/2 ">
+                <label class="text-2xl m-2">جده  : </label>
+                <label  class="text-2xl text-red-600"> {{\App\Models\Victim::where('is_grandmother',1)->count()}} </label>
+            </div>
+        </div>
+
+        <div class="flex flex-row mt-10 mr-40">
+            <div class="basis-1/2 ">
                 <label class="text-2xl  m-2 ">أباء  : </label>
                 <label  class="text-2xl text-red-600"> {{$father}} </label>
             </div>
@@ -82,7 +93,130 @@
             <label  class="text-2xl text-red-600"> {{$naga}} </label>
         </div>
 
+        @pageBreak
+
+           @php($country=\App\Models\Country::all())
+          <div class="flex flex-row  justify-center items-center bg-zinc-50 " >
+            <table style="width: 50%;margin-top: 40px;"  >
+                @foreach($country as $c)
+                    <tr class="h-14 ">
+
+                        <td class="text-xl border-0">
+                            <div class="flex  ">
+                                <div >
+                                    <x-filament::avatar
+                                        src="{{ storage_path('app/public/'.$c->image) }}"
+                                        size="sm"
+                                    />
+
+                                </div>
+                                <label>&nbsp;&nbsp;</label>
+                                {{$c->name}}
+
+                            </div>
+                            </td>
+                        <td class="text-xl border-0">  {{$c->Victim->count()}}</td>
+
+                    </tr>
+                @endforeach
+
+            </table>
+          </div>
 
 
+        @pageBreak
+
+        @php($familyshow=\App\Models\Familyshow_count::where('country_id',1)->orderBy('count','desc')->get())
+
+        @php($i=1)
+        <div class="flex flex-row  justify-center items-center  " >
+            <table style="width: 96%;margin-top: 40px;"  >
+                <thead>
+                <tr class="h-10">
+                    <td class="bg-blue-300 w-30 text-lg text-center">ت</td>
+                    <td class="bg-blue-300 w-30 text-lg text-center">العائلة</td>
+                    <td class="bg-blue-300 w-20 text-lg text-center">العدد</td>
+                    <td class="bg-blue-300 w-30 text-lg text-center">ت</td>
+                    <td class="bg-blue-300 w-30 text-lg text-center">العائلة</td>
+                    <td class="bg-blue-300 w-20 text-lg text-center">العدد</td>
+                    <td class="bg-blue-300 w-30 text-lg text-center">ت</td>
+                    <td class="bg-blue-300 w-30 text-lg text-center">العائلة</td>
+                    <td class="bg-blue-300 w-20 text-lg text-center">العدد</td>
+                </tr>
+                </thead>
+
+                @foreach($familyshow->split($familyshow->count()/3) as $row)
+                    <tr class="h-8 odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800">
+                    @foreach($row as $c)
+                            <td class="text-sm text-center">{{$i}}</td>
+                            <td class="text-sm ">{{$c->name}}</td>
+                            <td class="text-sm text-center">{{$c->count}}</td>
+                        @php($i++)
+                    @endforeach
+                    </tr>
+                @endforeach
+
+
+            </table>
+        </div>
+
+        @pageBreak
+        @php($data=\App\Models\Area::query()->get())
+        @php($i=1)
+        <div class="flex flex-row  justify-center items-center  " >
+            <table style="width: 96%;margin-top: 40px;"  >
+                <thead>
+                <tr class="h-10">
+
+                    <td class="bg-blue-300 w-30 text-lg text-center">الاسم</td>
+                    <td class="bg-blue-300 w-20 text-lg text-center">العدد</td>
+
+                    <td class="bg-blue-300 w-30 text-lg text-center">الاسم</td>
+                    <td class="bg-blue-300 w-20 text-lg text-center">العدد</td>
+
+                </tr>
+                </thead>
+
+                @foreach($data->split($data->count()/2) as $row)
+                    <tr class="h-8 odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800">
+                        @foreach($row as $rec)
+                            <td class="text-sm ">{{$rec->AreaName}}</td>
+                            <td class="text-sm text-center">{{$rec->Victim->count()}}</td>
+                        @endforeach
+                    </tr>
+                @endforeach
+
+
+            </table>
+        </div>
+        @pageBreak
+        @php($data=\App\Models\Road::query()->get())
+        @php($i=1)
+        <div class="flex flex-row  justify-center items-center  " >
+            <table style="width: 96%;margin-top: 40px;"  >
+                <thead>
+                <tr class="h-10">
+
+                    <td class="bg-blue-300 w-30 text-lg text-center">الاسم</td>
+                    <td class="bg-blue-300 w-20 text-lg text-center">العدد</td>
+
+                    <td class="bg-blue-300 w-30 text-lg text-center">الاسم</td>
+                    <td class="bg-blue-300 w-20 text-lg text-center">العدد</td>
+
+                </tr>
+                </thead>
+
+                @foreach($data->split($data->count()/2) as $row)
+                    <tr class="h-8 odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800">
+                        @foreach($row as $rec)
+                            <td class="text-sm ">{{$rec->name}}</td>
+                            <td class="text-sm text-center">{{$rec->Victim->count()}}</td>
+                        @endforeach
+                    </tr>
+                @endforeach
+
+
+            </table>
+        </div>
 
 @endsection

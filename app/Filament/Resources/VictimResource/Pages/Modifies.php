@@ -47,6 +47,7 @@ class Modifies extends Page implements HasTable,HasForms
 
   public $street_id;
   public $newFamily_id;
+    public $newFamilyshow_id;
   public $bait_id;
   public $withoutBait=false;
   public $newFather_id;
@@ -167,6 +168,7 @@ class Modifies extends Page implements HasTable,HasForms
              ->searchable()
              ->afterStateUpdated(function ($state){
                $this->newFamily_id=$state;
+               $this->newFamilyshow_id=Family::find($state)->familyshow_id;
              }),
            Select::make('newBait_id')
              ->hiddenLabel()
@@ -325,7 +327,7 @@ class Modifies extends Page implements HasTable,HasForms
             ->hidden(!$this->newFamily_id)
             ->requiresConfirmation()
             ->action(fn (Collection $records) => $records->each->update([
-              'family_id'=>$this->newFamily_id
+              'family_id'=>$this->newFamily_id,'familyshow_id'=>$this->newFamilyshow_id,
             ])),
         BulkAction::make('editFather')
             ->deselectRecordsAfterCompletion()

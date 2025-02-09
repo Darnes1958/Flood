@@ -30,7 +30,6 @@ class Roadwidget extends BaseWidget
             ->queryStringIdentifier('roads')
             ->heading(new HtmlString('<div class="text-primary-400 text-lg">العدد حسب الشوارع الرئيسية</div>'))
             ->defaultPaginationPageOption(5)
-
             ->defaultSort('victim_count','desc')
             ->striped()
             ->columns([

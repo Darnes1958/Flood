@@ -201,88 +201,6 @@ class UserInfoPage extends Page implements HasTable,HasForms
                               ['family_id' => $get('family_id'),
                                   'bait_id' => 0,]);
                       } ),
-                  \Filament\Forms\Components\Actions\Action::make('printAll')
-                      ->label('طباعة الكل')
-                      ->color('success')
-                      ->icon('heroicon-m-printer')
-                      ->action(function (Get $get){
-
-                          $familyshow_id=$get('familyshow_id');
-                          $familyshow=Familyshow::find($familyshow_id);
-
-                          $families=Family::where('familyshow_id',$familyshow_id)->pluck('id')->all();
-
-                          $fam=Family::whereIn('id',$families)->get();
-
-                          $count=Victim::whereIn('family_id',$families)->count();
-
-                          $victim_father=Victim::with('father')
-                              ->whereIn('family_id',$families)
-                              ->where('is_father','1')->get();
-
-                          $fathers=Victim::whereIn('family_id',$families)->where('is_father',1)->select('id');
-                          $mothers=Victim::whereIn('family_id',$families)->where('is_mother',1)->select('id');
-
-                          $victim_mother=Victim::with('mother')
-                              ->whereIn('family_id',$families)
-                              ->where('is_mother','1')
-                              ->where(function ( $query) use($fathers) {
-                                  $query->where('husband_id', null)
-                                      ->orwhere('husband_id', 0)
-                                      ->orwhereNotIn('husband_id',$fathers);
-                              })
-
-                              ->get();
-
-                          $victim_husband=Victim::
-                          whereIn('family_id',$families)
-                              ->where('male','ذكر')
-                              ->where('is_father','0')
-                              ->where('wife_id','!=',null)
-                              ->get();
-
-                          $victim_wife=Victim::
-                          whereIn('family_id',$families)
-
-                              ->where('male','أنثي')
-                              ->where('is_mother','0')
-                              ->where('husband_id','!=',null)
-                              ->get();
-                          $victim_only=Victim::
-                          whereIn('family_id',$families)
-
-                              ->Where(function ( $query) {
-                                  $query->where('is_father',null)
-                                      ->orwhere('is_father',0);
-                              })
-                              ->Where(function ( $query) {
-                                  $query->where('is_mother',null)
-                                      ->orwhere('is_mother',0);
-                              })
-                              ->where('husband_id',null)
-                              ->where('wife_id',null)
-                              ->where('father_id',null)
-                              ->where(function ( $query) use($mothers) {
-                                  $query->where('mother_id', null)
-                                      ->orwhere('mother_id', 0)
-                                      ->orwhereNotIn('mother_id',$mothers);
-                              })
-                              ->get();
-                          \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfAllVictims',
-                              ['fam'=>$fam,
-                                  'victim_father'=>$victim_father,
-                                  'victim_mother'=>$victim_mother,
-                                  'victim_husband'=>$victim_husband,
-                                  'victim_wife'=>$victim_wife,
-                                  'victim_only'=>$victim_only,
-                                  'count'=>$count,
-                                  'familyshow'=>$familyshow,])
-                              ->save(public_path().'/bigFamily.pdf');
-
-                          return Response::download(public_path().'/bigFamily.pdf',
-                              'filename.pdf', self::ret_spatie_header());
-
-                      }),
                   \Filament\Forms\Components\Actions\Action::make('printAll2')
                       ->label('طباعة كل الضحايا')
                       ->color('success')
@@ -307,12 +225,8 @@ class UserInfoPage extends Page implements HasTable,HasForms
                       ->color('success')
                       ->icon('heroicon-m-printer')
                       ->action(function (Get $get){
-
-
                           $west=Street::whereIn('road_id',Road::where('east_west','غرب الوادي')->pluck('id'))->pluck('id');
                           $east=Street::whereIn('road_id',Road::where('east_west','شرق الوادي')->pluck('id'))->pluck('id');
-
-
                           \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfInfo',
                               [
                                   'count'=>Victim::count(),
@@ -342,10 +256,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                               'filename.pdf', self::ret_spatie_header());
 
                       }),
-
-
-
-              ])->columnSpan(2),
+              ])->columns(3)->columnSpan(5),
 
           ])
           ->columns(8),

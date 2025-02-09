@@ -2,9 +2,9 @@
 
 @section('mainrep')
 
-
+    @php $print_count=0; @endphp
     @foreach($familyshowAll as $show)
-        @php
+            @php
             $familyshow_id=$show->id;
             $familyshow=\App\Models\Familyshow::find($familyshow_id);
 
@@ -68,10 +68,6 @@
             ->get();
         @endphp
 
-
-
-
-
             <div >
                 <label class="text-xl text-red-500"> العائلة  : </label>
                 <label  class="text-xl  font-bold"> {{$familyshow->name}} </label>
@@ -119,7 +115,12 @@
         <div style="position: relative;">
             @foreach($victim_father->where('family_id',$family->id) as $victim)
                 <div  style="text-align: right;font-size: 11pt;" class="flex">
-                    <label  style="font-size: 14pt;" class="text-yellow-700">الأب : </label>
+                    @if($victim->is_grandfather)
+                        <label  style="font-size: 14pt;" class="text-red-950">الجد : </label>
+                    @else
+                        <label  style="font-size: 14pt;" class="text-yellow-700">الأب : </label>
+                    @endif
+
                     @if($victim->otherName)
                         <label  >&nbsp;{{$victim->FullName}} ({{$victim->otherName}})</label>
                     @else
@@ -213,9 +214,12 @@
         <div style="position: relative;" >
             @php
                 foreach($victim_mother->where('family_id',$family->id) as $victim) {
-                    echo "<div  style=\"text-align: right;font-size: 11pt;\" class=\"flex\">
-                        <label style=\"font-size: 14pt;\" class=\"text-green-500\" >الأم : </label>
-                        <label  >&nbsp;$victim->FullName</label>";
+                    echo "<div  style=\"text-align: right;font-size: 11pt;\" class=\"flex\">";
+                    if ($victim->is_grandmother)
+                        echo "<label style=\"font-size: 14pt;\" class=\"text-red-950\" >الجدة : </label>";
+                    else
+                        echo "<label style=\"font-size: 14pt;\" class=\"text-green-500\" >الأم : </label>";
+                    echo "<label  >&nbsp;$victim->FullName</label>";
                     if($victim->otherName)
                         echo "<label class=\"text-red-600\" >&nbsp;({$victim->otherName})</label> ";
                      if($victim->Job)
@@ -487,8 +491,38 @@
 
 
 
-    @pageBreak
+    @if($count>7)
+        @pageBreak
+    @endif
+    @if($count<8 && $count>5)
+        @php $print_count++; @endphp
+        @if($print_count>1)
+            @php $print_count=0; @endphp
+            @pageBreak
+        @else
+            <br>
+        @endif
+    @endif
 
+            @if($count<6 && $count>2)
+                @php $print_count++; @endphp
+                @if($print_count>2)
+                    @php $print_count=0; @endphp
+                    @pageBreak
+                @else
+                    <br>
+                @endif
+            @endif
+
+            @if($count<3 )
+                @php $print_count++; @endphp
+                @if($print_count>3)
+                    @php $print_count=0; @endphp
+                    @pageBreak
+                @else
+                    <br>
+                @endif
+            @endif
 
     @endforeach
 
