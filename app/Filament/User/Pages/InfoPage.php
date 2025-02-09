@@ -47,7 +47,7 @@ class InfoPage extends Page implements HasTable,HasForms
 
     protected static string $view = 'filament.user.pages.info-page';
     protected ?string $heading='';
-    protected static ?string $navigationLabel='استفسار وبحث وتعدبل';
+    protected static ?string $navigationLabel='استفسار وبحث وتعديل';
     protected static ?int $navigationSort=1;
 
     public $family_id=null;

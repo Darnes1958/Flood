@@ -16,9 +16,11 @@ use App\Models\BigFamily;
 use App\Models\Dead;
 use App\Models\Family;
 use App\Models\Familyshow;
+use App\Models\Familyshow_count;
 use App\Models\Job;
 use App\Models\Mafkoden;
 use App\Models\Qualification;
+use App\Models\Road;
 use App\Models\Street;
 use App\Models\Talent;
 use App\Models\Tarkeba;
@@ -275,6 +277,65 @@ class UserInfoPage extends Page implements HasTable,HasForms
                                   'victim_only'=>$victim_only,
                                   'count'=>$count,
                                   'familyshow'=>$familyshow,])
+                              ->save(public_path().'/bigFamily.pdf');
+
+                          return Response::download(public_path().'/bigFamily.pdf',
+                              'filename.pdf', self::ret_spatie_header());
+
+                      }),
+                  \Filament\Forms\Components\Actions\Action::make('printAll2')
+                      ->label('طباعة كل الضحايا')
+                      ->color('success')
+                      ->icon('heroicon-m-printer')
+                      ->action(function (Get $get){
+
+
+                          $familyshowAll=Familyshow_count::where('nation','ليبيا')->orderBy('count','desc')->get();
+
+
+                          \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfAllVictims_2',
+                              [
+                                  'familyshowAll'=>$familyshowAll,])
+                              ->save(public_path().'/bigFamily.pdf');
+
+                          return Response::download(public_path().'/bigFamily.pdf',
+                              'filename.pdf', self::ret_spatie_header());
+
+                      }),
+                  \Filament\Forms\Components\Actions\Action::make('printInfo')
+                      ->label('طباعة الاحصائيات')
+                      ->color('success')
+                      ->icon('heroicon-m-printer')
+                      ->action(function (Get $get){
+
+
+                          $west=Street::whereIn('road_id',Road::where('east_west','غرب الوادي')->pluck('id'))->pluck('id');
+                          $east=Street::whereIn('road_id',Road::where('east_west','شرق الوادي')->pluck('id'))->pluck('id');
+
+
+                          \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfInfo',
+                              [
+                                  'count'=>Victim::count(),
+                                  'libyan'=>Victim::whereIn('family_id',Family::where('country_id',1)->pluck('id'))->count(),
+                                  'forign'=>Victim::whereIn('family_id',Family::where('country_id','!=',1)->pluck('id'))->count(),
+                                  'male'=>Victim::where('male','ذكر')->count(),
+                                  'female'=>Victim::where('male','أنثي')->count(),
+                                  'father'=>Victim::where('is_father',1)->count(),
+                                  'mother'=>Victim::where('is_mother',1)->count(),
+                                  'forignWives'=>Victim::whereIn('family_id',[303,306,10384,10404])->count(),
+                                  'forignHusband'=>Victim::where('husband_id','!=',null)
+                                      ->whereNotIn('family_id',[120,162,207,250,303,306,308,343,344,345,346,347,10375,10376,10377,10384])
+                                      ->whereIn('husband_id',Victim::whereIn('family_id',[120,162,207,250,303,306,308,343,344,345,346,347,10375,10376,10377,10384])->where('wife_id','!=',null)->pluck('id'))
+                                      ->count(),
+                                  'in_work'=>Victim::where('inWork',1)->count(),
+                                  'at_save'=>Victim::where('inSave',1)->count(),
+                                  'guest'=>Victim::where('guests',1)->count(),
+                                  'east'=>Victim::whereIn('street_id',$east)->count(),
+                                  'west'=>Victim::whereIn('street_id',$west)->count(),
+                                  'derna'=>Victim::whereIn('street_id',Street::where('road_id',15)->pluck('id'))->count(),
+                                  'naga'=>Victim::whereIn('street_id',Street::where('road_id',16)->pluck('id'))->count(),
+
+                                  ])
                               ->save(public_path().'/bigFamily.pdf');
 
                           return Response::download(public_path().'/bigFamily.pdf',

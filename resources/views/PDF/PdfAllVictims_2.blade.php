@@ -2,52 +2,119 @@
 
 @section('mainrep')
 
-    <div style="position: relative;">
 
-        <div >
-            <label class="text-xl text-red-500"> العائلة  : </label>
-            <label  class="text-xl  font-bold"> {{$familyshow->name}} </label>
-            <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
-            <label class="text-sm">عدد الضحايا  : </label>
-            <label  class="text-sm text-red-600"> {{$count}} </label>
-        </div>
+    @foreach($familyshowAll as $show)
+        @php
+            $familyshow_id=$show->id;
+            $familyshow=\App\Models\Familyshow::find($familyshow_id);
 
-        @if($fam->count()>1)
-            <div class="flex">
-              <label class="text-sm">(</label>
+            $families=\App\Models\Family::where('familyshow_id',$familyshow_id)->pluck('id')->all();
 
-              @foreach($fam as $family)
-                @if(\App\Models\Victim::where('family_id',$family->id)->count()>0 )
-                         <label class="text-sm" >{{$family->FamName}}</label>
-                         <label  class="text-sm" >&nbsp;{{$family->victim->count()}}</label>
-                        @if(!$loop->last) <label> &nbsp;,&nbsp; </label>@endif
-                @endif
-              @endforeach
-              <label class="text-sm">)</label>
+            $fam=\App\Models\Family::whereIn('id',$families)->get();
+
+            $count=\App\Models\Victim::whereIn('family_id',$families)->count();
+
+            $victim_father=\App\Models\Victim::with('father')
+            ->whereIn('family_id',$families)
+            ->where('is_father','1')->get();
+
+            $fathers=\App\Models\Victim::whereIn('family_id',$families)->where('is_father',1)->select('id');
+            $mothers=\App\Models\Victim::whereIn('family_id',$families)->where('is_mother',1)->select('id');
+
+            $victim_mother=\App\Models\Victim::with('mother')
+            ->whereIn('family_id',$families)
+            ->where('is_mother','1')
+            ->where(function ( $query) use($fathers) {
+            $query->where('husband_id', null)
+            ->orwhere('husband_id', 0)
+            ->orwhereNotIn('husband_id',$fathers);
+            })
+
+            ->get();
+
+            $victim_husband=\App\Models\Victim::
+            whereIn('family_id',$families)
+            ->where('male','ذكر')
+            ->where('is_father','0')
+            ->where('wife_id','!=',null)
+            ->get();
+
+            $victim_wife=\App\Models\Victim::
+            whereIn('family_id',$families)
+
+            ->where('male','أنثي')
+            ->where('is_mother','0')
+            ->where('husband_id','!=',null)
+            ->get();
+            $victim_only=\App\Models\Victim::
+            whereIn('family_id',$families)
+
+            ->Where(function ( $query) {
+            $query->where('is_father',null)
+            ->orwhere('is_father',0);
+            })
+            ->Where(function ( $query) {
+            $query->where('is_mother',null)
+            ->orwhere('is_mother',0);
+            })
+            ->where('husband_id',null)
+            ->where('wife_id',null)
+            ->where('father_id',null)
+            ->where(function ( $query) use($mothers) {
+            $query->where('mother_id', null)
+            ->orwhere('mother_id', 0)
+            ->orwhereNotIn('mother_id',$mothers);
+            })
+            ->get();
+        @endphp
+
+
+
+
+
+            <div >
+                <label class="text-xl text-red-500"> العائلة  : </label>
+                <label  class="text-xl  font-bold"> {{$familyshow->name}} </label>
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <label class="text-sm">عدد الضحايا  : </label>
+                <label  class="text-sm text-red-600"> {{$count}} </label>
             </div>
-        @endif
 
-        @if($familyshow->who)
-            <div class="flex">
-                <label class="text-gray-500 text-sm">تمت المراجعة بمعرفة : &nbsp; </label>
-                <label class="text-gray-500 text-sm">{{$familyshow->who}}</label>
-            </div>
-        @endif
+            @if($fam->count()>1)
+                <div class="flex">
+                    <label class="text-sm">(</label>
+
+                    @foreach($fam as $family)
+                        @if(\App\Models\Victim::where('family_id',$family->id)->count()>0 )
+                            <label class="text-sm" >{{$family->FamName}}</label>
+                            <label  class="text-sm" >&nbsp;{{$family->victim->count()}}</label>
+                            @if(!$loop->last) <label> &nbsp;,&nbsp; </label>@endif
+                        @endif
+                    @endforeach
+                    <label class="text-sm">)</label>
+                </div>
+            @endif
+
+            @if($familyshow->who)
+                <div class="flex">
+                    <label class="text-gray-500 text-sm">تمت المراجعة بمعرفة : &nbsp; </label>
+                    <label class="text-gray-500 text-sm">{{$familyshow->who}}</label>
+                </div>
+            @endif
 
 
-    </div>
     <br>
     @foreach($fam as $family)
         @if($fam->count()>1)
-             @if(\App\Models\Victim::where('family_id',$family->id)->count()>0 )
-                 <div style="position: relative;">
-                     @if(!$loop->first) <br> @endif
-                     <span style="font-size: 14pt;">
-                         <label  style="color: #9f1239" >&nbsp;&nbsp;اللقب :</label>
-                         <label  >{{$family->FamName}}</label>
-                     </span>
-                 </div>
-                @endif
+            @if(\App\Models\Victim::where('family_id',$family->id)->count()>0 )
+                <div style="position: relative;">
+                    @if(!$loop->first) <br> @endif
+                    <span style="font-size: 14pt;">
+                             <label  style="color: #9f1239" >&nbsp;&nbsp;اللقب :</label>
+                             <label  >{{$family->FamName}}</label>
+                         </span>
+                </div>
+            @endif
         @endif
         <div style="position: relative;">
             @foreach($victim_father->where('family_id',$family->id) as $victim)
@@ -89,8 +156,8 @@
 
                         @if($victim->husband->Job)
                             @if($victim->husband->Job->image)
-                             <label>&nbsp;</label>
-                             <img src="{{ storage_path('app/public/'.$victim->husband->Job->image) }}"  style="width: 20px; height: 20px;" />
+                                <label>&nbsp;</label>
+                                <img src="{{ storage_path('app/public/'.$victim->husband->Job->image) }}"  style="width: 20px; height: 20px;" />
                             @endif
                         @endif
 
@@ -280,9 +347,9 @@
                     @if($victim->VicTalent)
                         @foreach($victim->VicTalent as $talent)
                             <label>&nbsp;</label>
-                        @if($talent->Talent->image)
+                            @if($talent->Talent->image)
                                 <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 20px; height: 20px;" />
-                        @endif
+                            @endif
                         @endforeach
                     @endif
 
@@ -417,6 +484,14 @@
 
 
     @endforeach
+
+
+
+    @pageBreak
+
+
+    @endforeach
+
 
 
 @endsection
