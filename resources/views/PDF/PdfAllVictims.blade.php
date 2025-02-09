@@ -59,50 +59,21 @@
                         <label  >&nbsp;{{$victim->FullName}}</label>
                     @endif
                     @if($victim->Job)
-                        <label>&nbsp;</label>
-                        @if($victim->Job->jobType->name=='القوات_المسلحة')
-                            <x-filament::avatar
-                                src="{{ base_path('public/img/milatary.jpg') }}"
-                                size="sm"
-                            />
-                        @endif
-                        @if($victim->Job->jobType->name=='الداخلية')
-                            <x-filament::avatar
-                                src="{{ base_path('public/img/aladel.jpeg') }}"
-                                size="sm"
-                            />
-
+                        @if($victim->Job->image)
+                            <label>&nbsp;</label>
+                            <img src="{{ storage_path('app/public/'.$victim->Job->image) }}"  style="width: 20px; height: 20px;" />
                         @endif
                     @endif
                     @if($victim->VicTalent)
                         @foreach($victim->VicTalent as $talent)
                             <label>&nbsp;</label>
-                            @if($talent->talent->talentType->name=='دارنس')
-                                <img
-                                    src="{{ base_path('public/img/darens.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الافريقي')
-                                <img
-                                    src="{{ base_path('public/img/afriky.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الهلال_الاحمر')
-                                <img
-                                    src="{{ base_path('public/img/helal.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الكشافة')
-                                <img
-                                    src="{{ base_path('public/img/kashaf.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
+                            @if($talent->Talent->image)
+                                <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 20px; height: 20px;" />
                             @endif
                         @endforeach
                     @endif
+
+
                     <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                     <label  > العنوان :  &nbsp</label>
                     <label  >{{$victim->Street->StrName}}</label>
@@ -112,55 +83,28 @@
                         <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                         <label  class="text-green-500">زوجته : </label>
                         <label  >&nbsp;{{$victim->husband->FullName}}</label>
+                        @if($victim->husband->otherName)
+                            <label class="text-red-600" >&nbsp;({{$victim->husband->otherName}})</label> ;
+                        @endif
+
                         @if($victim->husband->Job)
-                            <label>&nbsp;</label>
-                            @if($victim->husband->Job->jobType->name=='القوات_المسلحة')
-                                <x-filament::avatar
-                                    src="{{ base_path('public/img/milatary.jpg') }}"
-                                    size="sm"
-                                />
-                            @endif
-                            @if($victim->husband->Job->jobType->name=='الداخلية')
-                                <x-filament::avatar
-                                    src="{{ base_path('public/img/aladel.jpeg') }}"
-                                    size="sm"
-                                />
+                            @if($victim->husband->Job->image)
+                             <label>&nbsp;</label>
+                             <img src="{{ storage_path('app/public/'.$victim->husband->Job->image) }}"  style="width: 20px; height: 20px;" />
                             @endif
                         @endif
 
 
-                    @if($victim->husband->otherName)
-                         <label class="text-red-600" >&nbsp;({{$victim->husband->otherName}})</label> ;
-                        @endif
+
                         @if($victim->husband->VicTalent)
                             @foreach($victim->husband->VicTalent as $talent)
                                 <label>&nbsp;</label>
-                                @if($talent->talent->talentType->name=='دارنس')
-                                    <img
-                                        src="{{ base_path('public/img/darens.jpg') }}"
-                                        style="width: 20px; height: 20px;"
-                                    />
-                                @endif
-                                @if($talent->talent->talentType->name=='الافريقي')
-                                    <img
-                                        src="{{ base_path('public/img/afriky.jpg') }}"
-                                        style="width: 20px; height: 20px;"
-                                    />
-                                @endif
-                                @if($talent->talent->talentType->name=='الهلال_الاحمر')
-                                    <img
-                                        src="{{ base_path('public/img/helal.jpg') }}"
-                                        style="width: 20px; height: 20px;"
-                                    />
-                                @endif
-                                @if($talent->talent->talentType->name=='الكشافة')
-                                    <img
-                                        src="{{ base_path('public/img/kashaf.jpg') }}"
-                                        style="width: 20px; height: 20px;"
-                                    />
+                                @if($talent->Talent->image)
+                                    <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 20px; height: 20px;" />
                                 @endif
                             @endforeach
                         @endif
+
 
                     </div>
                 @endif
@@ -174,52 +118,24 @@
                             <label class="text-red-600" >&nbsp;({{$son->otherName}})</label> ;
                         @endif
                         @if($son->Job)
-                            <label>&nbsp;</label>
-                            @if($son->Job->jobType->name=='القوات_المسلحة')
-                                <x-filament::avatar
-                                    src="{{ base_path('public/img/milatary.jpg') }}"
-                                    size="sm"
-                                />
-                            @endif
-                            @if($son->Job->jobType->name=='الداخلية')
-                                <x-filament::avatar
-
-                                    src="{{ base_path('public/img/aladel.jpeg') }}"
-                                    size="sm"
-                                />
+                            @if($son->Job->image)
+                                <label>&nbsp;</label>
+                                <img src="{{ storage_path('app/public/'.$son->Job->image) }}"  style="width: 20px; height: 20px;" />
                             @endif
                         @endif
 
+
+
                         @if($son->VicTalent)
-
                             @foreach($son->VicTalent as $talent)
-
-                                @if($talent->talent->talentType->name=='دارنس')
-                                    <img
-                                        src="{{ base_path('public/img/darens.jpg') }}"
-                                        style="width: 20px; height: 20px;"
-                                    />
-                                @endif
-                                @if($talent->talent->talentType->name=='الافريقي')
-                                    <img
-                                        src="{{ base_path('public/img/afriky.jpg') }}"
-                                        style="width: 20px; height: 20px;"
-                                    />
-                                @endif
-                                @if($talent->talent->talentType->name=='الهلال_الاحمر')
-                                    <img
-                                        src="{{ base_path('public/img/helal.jpg') }}"
-                                        style="width: 20px; height: 20px;"
-                                    />
-                                @endif
-                                @if($talent->talent->talentType->name=='الكشافة')
-                                    <img
-                                        src="{{ base_path('public/img/kashaf.jpg') }}"
-                                        style="width: 20px; height: 20px;"
-                                    />
+                                <label>&nbsp;</label>
+                                @if($talent->Talent->image)
+                                    <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 20px; height: 20px;" />
                                 @endif
                             @endforeach
                         @endif
+
+
                         @if(!$loop->last) <label> , </label>@endif
                     @endforeach
 
@@ -235,44 +151,15 @@
                         <label  >&nbsp;$victim->FullName</label>";
                     if($victim->otherName)
                         echo "<label class=\"text-red-600\" >&nbsp;({$victim->otherName})</label> ";
-                    if($victim->Job){
-                        echo "<label>&nbsp;</label>";
-                        if($victim->Job->jobType->name=='القوات_المسلحة')
-                        echo " <img
-                                            src= ". base_path('public/img/milatary.jpg').
-                                            " style=\"width: 20px; height: 20px;\"
-                                            />";
+                     if($victim->Job)
+                        if($victim->Job->image)
+                            echo "  <label>&nbsp;</label>
+                            <img src=". storage_path('app/public/'.$victim->Job->image) ."  style=\"width: 20px; height: 20px;\" />";
 
-                        if($victim->Job->jobType->name=='الداخلية')
-                        echo "   <x-filament::avatar
-                                src=". base_path('public/img/aladel.jpeg') .
-                                "size=\"sm\"
-                            />";
-                        }
-                    if ($victim->VicTalent)
-                        foreach($victim->VicTalent as $talent) {
-                           echo "<label>&nbsp;</label>";
-                                       if($talent->talent->talentType->name=='دارنس')
-                                          echo " <img
-                                            src= ". base_path('public/img/darens.jpg').
-                                            " style=\"width: 20px; height: 20px;\"
-                                            />";
-                                        if($talent->talent->talentType->name=='الافريقي')
-                                            echo "<img
-                                            src= ". base_path('public/img/afriky.jpg').
-                                            " style=\"width: 20px; height: 20px;\"
-                                            />";
-                                        if($talent->talent->talentType->name=='الهلال_الاحمر')
-                                            echo " <img
-                                            src= ". base_path('public/img/helal.jpg').
-                                            " style=\"width: 20px; height: 20px;\"
-                                            />";
-                                        if($talent->talent->talentType->name=='الكشافة')
-                                        echo "<img
-                                            src= ". base_path('public/img/kashaf.jpg').
-                                            " style=\"width: 20px; height: 20px;\"
-                                            />";
-                            }
+
+
+
+
 
                     echo  "<label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                         <label  > العنوان :  &nbsp</label>
@@ -286,50 +173,20 @@
                             <label  >&nbsp;{$victim->wife->FullName}</label>";
                     if($victim->wife->otherName)
                         echo "<label class=\"text-red-600\" >&nbsp;({$victim->wife->otherName})</label> ";
+                    if($victim->wife->Job)
+                        if($victim->wife->Job->image)
+                            echo "  <label>&nbsp;</label>
+                            <img src=". storage_path('app/public/'.$victim->wife->Job->image) ."  style=\"width: 20px; height: 20px;\" />";
 
-                    if($victim->wife->Job){
-                        echo "<label>&nbsp;</label>";
-                        if($victim->wife->Job->jobType->name=='القوات_المسلحة')
-                        echo " <img
-                                            src= ". base_path('public/img/milatary.jpg').
-                                            " style=\"width: 20px; height: 20px;\"
-                                            />";
 
-                        if($victim->wife->Job->jobType->name=='الداخلية')
-                        echo "   <x-filament::avatar
-                                src=". base_path('public/img/aladel.jpeg') .
-                                "size=\"sm\"
-                            />";
-                        }
-
-                    if ($victim->wife->VicTalent)
+                    if($victim->wife->VicTalent)
                         foreach($victim->wife->VicTalent as $talent) {
-                           echo "<label>&nbsp;</label>";
-                            if ($talent->talent->talentType->name=='دارنس')
-                              echo " <img
-                                    src=". base_path('public/img/darens.jpg') ."
-                                    style=\"width: 20px; height: 20px;\"
-                                />";
+                          echo " <label>&nbsp;</label>";
+                            if($talent->Talent->image)
+                              echo " <img src=". storage_path('app/public/'.$talent->Talent->image) ."  style=\"width: 20px; height: 20px;\" />";
 
-                            if ($talent->talent->talentType->name=='الافريقي')
-                                echo "<img
-                                    src=". base_path('public/img/afriky.jpg')."
-                                    style=\"width: 20px; height: 20px;\"
-                                />";
+                       }
 
-                            if ($talent->talent->talentType->name=='الهلال_الاحمر')
-                                echo "<img
-                                    src=". base_path('public/img/helal.jpg')."
-                                    style=\"width: 20px; height: 20px;\"
-                                />";
-
-
-                            if ($talent->talent->talentType->name=='الكشافة')
-                             echo "  <img
-                                    src=". base_path('public/img/kashaf.jpg')."
-                                    style=\"width: 20px; height: 20px;\"
-                                />";
-                            }
                     echo      "</div>";}
 
                       echo "<div  style=\"text-align: right;font-size: 11pt;\" class=\"flex\" >
@@ -349,46 +206,17 @@
                                   echo " <label  >&nbsp;$son->Name1</label>";
                                   if($son->otherName)
                                    echo "<label class=\"text-red-600\" >&nbsp;({$son->otherName})</label> ";
-                    if($son->Job){
-                        echo "<label>&nbsp;</label>";
-                        if($son->Job->jobType->name=='القوات_المسلحة')
-                        echo " <img
-                                            src= ". base_path('public/img/milatary.jpg').
-                                            " style=\"width: 20px; height: 20px;\"
-                                            />";
+                     if($son->Job)
+                        if($son->Job->image)
+                            echo "  <label>&nbsp;</label>
+                            <img src=". storage_path('app/public/'.$son->Job->image) ."  style=\"width: 20px; height: 20px;\" />";
+                        if($son->VicTalent)
+                        foreach($son->VicTalent as $talent) {
+                          echo " <label>&nbsp;</label>";
+                            if($talent->Talent->image)
+                              echo " <img src=". storage_path('app/public/'.$talent->Talent->image) ."  style=\"width: 20px; height: 20px;\" />";
 
-                        if($son->Job->jobType->name=='الداخلية')
-                        echo "   <x-filament::avatar
-                                src=". base_path('public/img/aladel.jpeg') .
-                                "size=\"sm\"
-                            />";
-                        }
-
-                                  if($son->VicTalent)
-                                   foreach($son->VicTalent as $talent) {
-                                        echo "<label>&nbsp;</label>";
-                                       if($talent->talent->talentType->name=='دارنس')
-                                          echo " <img
-                                            src= ". base_path('public/img/darens.jpg').
-                                            " style=\"width: 20px; height: 20px;\"/>";
-
-                                        if($talent->talent->talentType->name=='الافريقي')
-                                            echo "<img
-                                            src= ". base_path('public/img/afriky.jpg').
-                                            " style=\"width: 20px; height: 20px;\"/>";
-                                        if($talent->talent->talentType->name=='الهلال_الاحمر')
-                                            echo " <img
-                                            src= ". base_path('public/img/helal.jpg').
-                                            " style=\"width: 20px; height: 20px;\"
-                                            />";
-
-                                        if($talent->talent->talentType->name=='الكشافة')
-                                        echo "<img
-                                            src= ". base_path('public/img/kashaf.jpg').
-                                            " style=\"width: 20px; height: 20px;\"
-                                            />";
-                                     }
-
+                       }
                                 $i++;
                             }
 
@@ -420,46 +248,17 @@
 
                                       if($son->otherName)
                                           echo "<label class=\"text-red-600\" >&nbsp;({$son->otherName})</label> ";
-                    if($son->Job){
-                        echo "<label>&nbsp;</label>";
-                        if($son->Job->jobType->name=='القوات_المسلحة')
-                        echo " <img
-                                            src= ". base_path('public/img/milatary.jpg').
-                                            " style=\"width: 20px; height: 20px;\"
-                                            />";
+                    if($son->Job)
+                        if($son->Job->image)
+                            echo "  <label>&nbsp;</label>
+                            <img src=". storage_path('app/public/'.$son->Job->image) ."  style=\"width: 20px; height: 20px;\" />";
+                        if($item->VicTalent)
+                        foreach($item->VicTalent as $talent) {
+                          echo " <label>&nbsp;</label>";
+                            if($talent->Talent->image)
+                              echo " <img src=". storage_path('app/public/'.$talent->Talent->image) ."  style=\"width: 20px; height: 20px;\" />";
 
-                        if($son->Job->jobType->name=='الداخلية')
-                        echo "   <x-filament::avatar
-                                src=". base_path('public/img/aladel.jpeg').
-                                "size=\"sm\"
-                            />";
-                        }
-
-                                      if($item->VicTalent)
-                                         foreach($item->VicTalent as $talent) {
-                                       echo "<label>&nbsp;</label>";
-                                       if($talent->talent->talentType->name=='دارنس')
-                                          echo " <img
-                                            src= ". base_path('public/img/darens.jpg').
-                                            " style=\"width: 20px; height: 20px;\"
-                                            />";
-                                        if($talent->talent->talentType->name=='الافريقي')
-                                            echo "<img
-                                            src= ". base_path('public/img/afriky.jpg').
-                                            " style=\"width: 20px; height: 20px;\"
-                                            />";
-                                        if($talent->talent->talentType->name=='الهلال_الاحمر')
-                                            echo " <img
-                                            src= ". base_path('public/img/helal.jpg').
-                                            " style=\"width: 20px; height: 20px;\"
-                                            />";
-                                        if($talent->talent->talentType->name=='الكشافة')
-                                        echo "<img
-                                            src= ". base_path('public/img/kashaf.jpg').
-                                            " style=\"width: 20px; height: 20px;\"
-                                            />";
-                                        }
-
+                       }
                                     $i++;
 
                                   }
@@ -475,51 +274,22 @@
                 <div  style="text-align: right;font-size: 11pt;" class="flex">
                     <label  style="font-size: 14pt;" class="text-blue-700">الزوج : </label>
                     <label  >&nbsp;{{$victim->FullName}}</label>
-                    @if($victim->VicTalent)
-                        @foreach($victim->VicTalent as $talent)
-                            <label>&nbsp;</label>
-                            @if($talent->talent->talentType->name=='دارنس')
-                                <img
-                                    src="{{ base_path('public/img/darens.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الافريقي')
-                                <img
-                                    src="{{ base_path('public/img/afriky.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الهلال_الاحمر')
-                                <img
-                                    src="{{ base_path('public/img/helal.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الكشافة')
-                                <img
-                                    src="{{ base_path('public/img/kashaf.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                        @endforeach
-                    @endif
                     @if($victim->otherName)
                         <label class="text-red-600" >&nbsp;({{$victim->otherName}})</label> ;
                     @endif
-                    @if($victim->Job)
-                        <label>&nbsp;</label>
-                        @if($victim->Job->jobType->name=='القوات_المسلحة')
-                            <x-filament::avatar
-                                src="{{ base_path('public/img/milatary.jpg') }}"
-                                size="sm"
-                            />
+                    @if($victim->VicTalent)
+                        @foreach($victim->VicTalent as $talent)
+                            <label>&nbsp;</label>
+                        @if($talent->Talent->image)
+                                <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 20px; height: 20px;" />
                         @endif
-                        @if($victim->Job->jobType->name=='الداخلية')
-                            <x-filament::avatar
-                                src="{{ base_path('public/img/aladel.jpeg') }}"
-                                size="sm"
-                            />
+                        @endforeach
+                    @endif
+
+                    @if($victim->Job)
+                        @if($victim->Job->image)
+                            <label>&nbsp;</label>
+                            <img src="{{ storage_path('app/public/'.$victim->Job->image) }}"  style="width: 20px; height: 20px;" />
                         @endif
                     @endif
 
@@ -535,50 +305,20 @@
                         <label class="text-red-600" >&nbsp;({{$victim->husband->otherName}})</label> ;
                     @endif
                     @if($victim->husband->Job)
-                        <label>&nbsp;</label>
-                        @if($victim->husband->Job->jobType->name=='القوات_المسلحة')
-                            <x-filament::avatar
-                                src="{{ base_path('public/img/milatary.jpg') }}"
-                                size="sm"
-                            />
-                        @endif
-                        @if($victim->husband->Job->jobType->name=='الداخلية')
-                            <x-filament::avatar
-                                src="{{ base_path('public/img/aladel.jpeg') }}"
-                                size="sm"
-                            />
+                        @if($victim->husband->Job->image)
+                            <label>&nbsp;</label>
+                            <img src="{{ storage_path('app/public/'.$victim->husband->Job->image) }}"  style="width: 20px; height: 20px;" />
                         @endif
                     @endif
-
-                @if($victim->husband->VicTalent)
+                    @if($victim->husband->VicTalent)
                         @foreach($victim->husband->VicTalent as $talent)
                             <label>&nbsp;</label>
-                            @if($talent->talent->talentType->name=='دارنس')
-                                <img
-                                    src="{{ base_path('public/img/darens.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الافريقي')
-                                <img
-                                    src="{{ base_path('public/img/afriky.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الهلال_الاحمر')
-                                <img
-                                    src="{{ base_path('public/img/helal.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الكشافة')
-                                <img
-                                    src="{{ base_path('public/img/kashaf.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
+                            @if($talent->Talent->image)
+                                <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 20px; height: 20px;" />
                             @endif
                         @endforeach
                     @endif
+
                 </div>
 
             @endforeach
@@ -592,50 +332,20 @@
                         <label class="text-red-600" >&nbsp;({{$victim->otherName}})</label> ;
                     @endif
                     @if($victim->Job)
-                        <label>&nbsp;</label>
-                        @if($victim->Job->jobType->name=='القوات_المسلحة')
-                            <x-filament::avatar
-                                src="{{ base_path('public/img/milatary.jpg') }}"
-                                size="sm"
-                            />
-                        @endif
-                        @if($victim->Job->jobType->name=='الداخلية')
-                            <x-filament::avatar
-                                src="{{ base_path('public/img/aladel.jpeg') }}"
-                                size="sm"
-                            />
+                        @if($victim->Job->image)
+                            <label>&nbsp;</label>
+                            <img src="{{ storage_path('app/public/'.$victim->Job->image) }}"  style="width: 20px; height: 20px;" />
                         @endif
                     @endif
-
-                @if($victim->VicTalent)
+                    @if($victim->VicTalent)
                         @foreach($victim->VicTalent as $talent)
                             <label>&nbsp;</label>
-                            @if($talent->talent->talentType->name=='دارنس')
-                                <img
-                                    src="{{ base_path('public/img/darens.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الافريقي')
-                                <img
-                                    src="{{ base_path('public/img/afriky.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الهلال_الاحمر')
-                                <img
-                                    src="{{ base_path('public/img/helal.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الكشافة')
-                                <img
-                                    src="{{ base_path('public/img/kashaf.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
+                            @if($talent->Talent->image)
+                                <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 20px; height: 20px;" />
                             @endif
                         @endforeach
                     @endif
+
                     <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                     <label  > العنوان :  &nbsp</label>
                     <label  >{{$victim->Street->StrName}}</label>
@@ -649,50 +359,20 @@
                         <label class="text-red-600" >&nbsp;({{$victim->wife->otherName}})</label> ;
                     @endif
                     @if($victim->wife->Job)
-                        <label>&nbsp;</label>
-                        @if($victim->wife->Job->jobType->name=='القوات_المسلحة')
-                            <x-filament::avatar
-                                src="{{ base_path('public/img/milatary.jpg') }}"
-                                size="sm"
-                            />
-                        @endif
-                        @if($victim->wife->Job->jobType->name=='الداخلية')
-                            <x-filament::avatar
-                                src="{{ base_path('public/img/aladel.jpeg') }}"
-                                size="sm"
-                            />
+                        @if($victim->wife->Job->image)
+                            <label>&nbsp;</label>
+                            <img src="{{ storage_path('app/public/'.$victim->wife->Job->image) }}"  style="width: 20px; height: 20px;" />
                         @endif
                     @endif
-
-                @if($victim->wife->VicTalent)
+                    @if($victim->wife->VicTalent)
                         @foreach($victim->wife->VicTalent as $talent)
                             <label>&nbsp;</label>
-                            @if($talent->talent->talentType->name=='دارنس')
-                                <img
-                                    src="{{ base_path('public/img/darens.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الافريقي')
-                                <img
-                                    src="{{ base_path('public/img/afriky.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الهلال_الاحمر')
-                                <img
-                                    src="{{ base_path('public/img/helal.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الكشافة')
-                                <img
-                                    src="{{ base_path('public/img/kashaf.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
+                            @if($talent->Talent->image)
+                                <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 20px; height: 20px;" />
                             @endif
                         @endforeach
                     @endif
+
                 </div>
 
             @endforeach
@@ -712,51 +392,20 @@
                         <label class="text-red-600" >&nbsp;({{$victim->otherName}})</label> ;
                     @endif
                     @if($victim->Job)
-
-                        <label>&nbsp;</label>
-                        @if($victim->Job->jobType->name=='القوات_المسلحة')
-                            <x-filament::avatar
-                                src="{{ base_path('public/img/milatary.jpg') }}"
-                                size="sm"
-                            />
-                        @endif
-                        @if($victim->Job->jobType->name=='الداخلية')
-                            <x-filament::avatar
-                                src="{{ base_path('public/img/aladel.jpeg') }}"
-                                size="sm"
-                            />
-
+                        @if($victim->Job->image)
+                            <label>&nbsp;</label>
+                            <img src="{{ storage_path('app/public/'.$victim->Job->image) }}"  style="width: 20px; height: 20px;" />
                         @endif
                     @endif
-                @if($victim->VicTalent)
+                    @if($victim->VicTalent)
                         @foreach($victim->VicTalent as $talent)
                             <label>&nbsp;</label>
-                            @if($talent->talent->talentType->name=='دارنس')
-                                <img
-                                    src="{{ base_path('public/img/darens.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الافريقي')
-                                <img
-                                    src="{{ base_path('public/img/afriky.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الهلال_الاحمر')
-                                <img
-                                    src="{{ base_path('public/img/helal.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
-                            @endif
-                            @if($talent->talent->talentType->name=='الكشافة')
-                                <img
-                                    src="{{ base_path('public/img/kashaf.jpg') }}"
-                                    style="width: 20px; height: 20px;"
-                                />
+                            @if($talent->Talent->image)
+                                <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 20px; height: 20px;" />
                             @endif
                         @endforeach
                     @endif
+
                     <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                     <label  > العنوان :  &nbsp</label>
                     <label  >{{$victim->Street->StrName}}</label>

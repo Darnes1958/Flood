@@ -2,10 +2,11 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\jobType;
 use App\Enums\talentType;
-use App\Filament\Resources\TalentResource\Pages;
-use App\Filament\Resources\TalentResource\RelationManagers;
-use App\Models\Talent;
+use App\Filament\Resources\JobResource\Pages;
+use App\Filament\Resources\JobResource\RelationManagers;
+use App\Models\Job;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -16,9 +17,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class TalentResource extends Resource
+class JobResource extends Resource
 {
-    protected static ?string $model = Talent::class;
+    protected static ?string $model = Job::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -28,13 +29,13 @@ class TalentResource extends Resource
             ->schema([
                 TextInput::make('name')
                     ->required()
-                    ->label('الموهبة')
+                    ->label('الوظيفة')
                     ->maxLength(255),
-                Select::make('talentType')
+                Select::make('jobType')
                     ->label('التصنيف')
-                    ->options(talentType::class),
+                    ->options(jobType::class),
                 Forms\Components\FileUpload::make('image')
-                    ->directory('talent-image'),
+                    ->directory('job-image'),
             ]);
     }
 
@@ -44,8 +45,8 @@ class TalentResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id'),
                 Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('talentType')
-                ->badge(),
+                Tables\Columns\TextColumn::make('jobType')
+                    ->badge(),
                 Tables\Columns\ImageColumn::make('image'),
             ])
             ->filters([
@@ -55,9 +56,7 @@ class TalentResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+               //
             ]);
     }
 
@@ -71,9 +70,9 @@ class TalentResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTalent::route('/'),
-            'create' => Pages\CreateTalent::route('/create'),
-            'edit' => Pages\EditTalent::route('/{record}/edit'),
+            'index' => Pages\ListJobs::route('/'),
+            'create' => Pages\CreateJob::route('/create'),
+            'edit' => Pages\EditJob::route('/{record}/edit'),
         ];
     }
 }
