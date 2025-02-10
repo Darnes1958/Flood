@@ -7,6 +7,7 @@ use App\Filament\Resources\FamilyshowResource\RelationManagers;
 use App\Models\BigFamily;
 use App\Models\Family;
 use App\Models\Familyshow;
+use Filament\Actions\DeleteAction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -93,7 +94,7 @@ class FamilyshowResource extends Resource
                     ->relationship('Tribe','TriName'),
             ])
             ->actions([
-               //
+               Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                //
