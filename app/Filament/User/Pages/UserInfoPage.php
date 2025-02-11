@@ -214,6 +214,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                           \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfAllVictims_2',
                               [
                                   'familyshowAll'=>$familyshowAll,])
+                              ->footerView('PDF.footer')
                               ->save(public_path().'/bigFamily.pdf');
 
                           return Response::download(public_path().'/bigFamily.pdf',
@@ -250,6 +251,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                                   'naga'=>Victim::whereIn('street_id',Street::where('road_id',16)->pluck('id'))->count(),
 
                                   ])
+
                               ->save(public_path().'/bigFamily.pdf');
 
                           return Response::download(public_path().'/bigFamily.pdf',

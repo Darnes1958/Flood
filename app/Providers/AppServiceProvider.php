@@ -38,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Pdf::default()
-            ->footerView('PDF.footer')
+
             ->withBrowsershot(function (Browsershot $shot) {
                 $shot->noSandbox()
                     ->setChromePath(Setting::first()->exePath);

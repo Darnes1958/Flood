@@ -159,8 +159,6 @@
                                 @endif
                             @endif
 
-
-
                             @if($victim->husband->VicTalent)
                                 @foreach($victim->husband->VicTalent as $talent)
                                     <label>&nbsp;</label>
@@ -169,7 +167,6 @@
                                     @endif
                                 @endforeach
                             @endif
-
 
                         </div>
                     @endif
