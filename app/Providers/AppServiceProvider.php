@@ -41,6 +41,7 @@ class AppServiceProvider extends ServiceProvider
 
             ->withBrowsershot(function (Browsershot $shot) {
                 $shot->noSandbox()
+                    ->timeout(240)
                     ->setChromePath(Setting::first()->exePath);
             })
             ->margins(10, 10, 20, 10, );
