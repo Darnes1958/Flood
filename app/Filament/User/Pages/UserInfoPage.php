@@ -203,6 +203,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                       } ),
                   \Filament\Forms\Components\Actions\Action::make('printAll2')
                       ->label('طباعة كل الضحايا')
+                      ->visible(Auth::user()->is_admin)
                       ->color('success')
                       ->icon('heroicon-m-printer')
                       ->action(function (Get $get){
@@ -223,6 +224,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                       }),
                   \Filament\Forms\Components\Actions\Action::make('printInfo')
                       ->label('طباعة الاحصائيات')
+                      ->visible(Auth::user()->is_admin)
                       ->color('success')
                       ->icon('heroicon-m-printer')
                       ->action(function (Get $get){
