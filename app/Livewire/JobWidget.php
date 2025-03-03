@@ -47,6 +47,8 @@ class JobWidget extends BaseWidget
                         $this->dispatch('TakeJobId',job_id: $record->id);
                     })
                     ->label(''),
+                Tables\Columns\ImageColumn::make('image')
+                 ->label(''),
                 Tables\Columns\TextColumn::make('victim_count')
                     ->label('')
                     ->counts('Victim')

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Family;
 use App\Models\Road;
 use App\Models\Street;
 use App\Models\Victim;
@@ -33,16 +34,23 @@ class MaleFemale extends BaseWidget
             ->value(new HtmlString('<span class="text-primary-500">'.Victim::count().'</span>')),
           Stat::make('','')
             ->label(new HtmlString('<span class="text-white">ليبيين</span>'))
-            ->value(new HtmlString('<span class="text-primary-500">'.Victim::whereNotin('family_id',[120,162,207,250,303,306,308,343,344,345,346,347,10375,10376,10377,10384])->count().'</span>')),
+            ->value(new HtmlString('<span class="text-primary-500">'.Victim::wherein('family_id',Family::where('country_id',1)->pluck('id'))->count().'</span>')),
           Stat::make('','')
             ->label(new HtmlString('<span class="text-white">أجانب</span>'))
-            ->value(new HtmlString('<span class="text-primary-500">'.Victim::whereIn('family_id',[120,162,207,250,303,306,308,343,344,345,346,347,10375,10376,10377,10384])->count().'</span>')),
+            ->value(new HtmlString('<span class="text-primary-500">'.Victim::wherein('family_id',Family::where('country_id','!=',1)->pluck('id'))->count().'</span>')),
             Stat::make('','')
                 ->label(new HtmlString('<span class="text-white">ذكور</span>'))
                 ->value(new HtmlString('<span class="text-primary-500">'.Victim::where('male','ذكر')->count().'</span>')),
             Stat::make('','')
                 ->label(new HtmlString('<span class="text-white">إناث</span>'))
                 ->value(new HtmlString('<span class="text-danger-600">'.Victim::where('male','أنثي')->count().'</span>')),
+            Stat::make('','')
+                ->label(new HtmlString('<span class="text-white">جد</span>'))
+                ->value(new HtmlString('<span class="text-primary-500">'.Victim::where('is_grandfather',1)->count().'</span>')),
+            Stat::make('','')
+                ->label(new HtmlString('<span class="text-white">جده</span>'))
+                ->value(new HtmlString('<span class="text-danger-600">'.Victim::where('is_grandmother',1)->count().'</span>')),
+
             Stat::make('','')
                 ->label(new HtmlString('<span class="text-white">أب</span>'))
                 ->value(new HtmlString('<span class="text-primary-500">'.Victim::where('is_father',1)->count().'</span>')),
