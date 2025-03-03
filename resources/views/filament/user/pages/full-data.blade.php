@@ -12,34 +12,30 @@
     @endif
     @if ($record->otherName) <p style="color: #9f1239;font-weight: bold"> &nbsp; [{{$record->otherName}}]&nbsp; </p> @endif
     <div>&nbsp;&nbsp;</div>
+
         @if($record->VicTalent)
             @foreach($record->VicTalent as $talent)
-                @if($talent->talent->talentType->name=='دارنس')
+                <label>&nbsp;</label>
+                @if($talent->Talent->image)
+
                     <x-filament::avatar
-                        src="{{ asset('img/darens.jpg') }}"
-                        size="sm"
-                    />
-                @endif
-                @if($talent->talent->talentType->name=='الافريقي')
-                    <x-filament::avatar
-                        src="{{ asset('img/afriky.jpg') }}"
-                        size="sm"
-                    />
-                @endif
-                @if($talent->talent->talentType->name=='الهلال_الاحمر')
-                    <x-filament::avatar
-                        src="{{ asset('img/helal.jpg') }}"
-                        size="sm"
-                    />
-                @endif
-                @if($talent->talent->talentType->name=='الكشافة')
-                    <x-filament::avatar
-                        src="{{ asset('img/kashaf.jpg') }}"
+                        src="{{  asset($talent->Talent->image) }} "
                         size="sm"
                     />
                 @endif
             @endforeach
         @endif
+        @if($record->Job)
+            @if($record->Job->image)
+                <label>&nbsp;</label>
+                <img src="{{ asset($record->Job->image) }}"  style="width: 20px; height: 20px;" />
+            @endif
+        @endif
+
+
+
+
+
 
 </div>
 
