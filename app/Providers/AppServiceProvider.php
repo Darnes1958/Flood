@@ -10,7 +10,7 @@ use Filament\Support\Facades\FilamentView;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
-use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
+
 use Illuminate\View\View;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse;
 use BezhanSalleh\PanelSwitch\PanelSwitch;
@@ -73,10 +73,7 @@ class AppServiceProvider extends ServiceProvider
         \Filament\Support\Assets\Js::make('example-external-script', 'https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js'),
 
       ]);
-      LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
-            $switch
-                ->locales(['ar','en','fr']); // also accepts a closure
-        });
+
       Model::unguard();
 
     }

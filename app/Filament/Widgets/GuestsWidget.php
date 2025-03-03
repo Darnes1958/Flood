@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\Victim;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Support\HtmlString;
@@ -36,6 +37,12 @@ class GuestsWidget extends BaseWidget
                     ->color('warning')
                     ->sortable()
                     ->label('البيان'),
+                ImageColumn::make('image2')
+                    ->height(160)
+                    ->label('')
+                    ->limit(1)
+                    ->circular(),
+
             ]);
     }
 }
