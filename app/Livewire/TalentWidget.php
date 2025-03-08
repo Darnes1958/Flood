@@ -53,6 +53,8 @@ class TalentWidget extends BaseWidget
                     $this->dispatch('TakeTalentId',talent_id: $record->id);
                 })
                 ->label(''),
+                Tables\Columns\ImageColumn::make('image')
+                 ->label(''),
                 Tables\Columns\TextColumn::make('victalent_count')
                 ->label('')
                 ->counts('Victalent')
