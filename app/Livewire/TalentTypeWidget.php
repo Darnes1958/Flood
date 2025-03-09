@@ -46,6 +46,7 @@ class TalentTypeWidget extends BaseWidget
                     }),
                 TextColumn::make('count')
                     ->label('')
+
                     ->formatStateUsing(fn (Talent $record): View => view(
                         'filament.user.pages.img-only',
                         ['record' => $record,'who'=>'talent'],

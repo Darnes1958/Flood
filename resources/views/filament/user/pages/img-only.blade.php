@@ -2,43 +2,27 @@
 <div class="flex ">
 
 @if($who=='talent')
-        @if($record->talentType->name=='دارنس')
+       @php
+        $img=\App\Models\Talent::where('talentType',$record->talentType->value)->where('image','!=',null)->first();
+       @endphp
+    @if($img)
             <x-filament::avatar
-                src="{{ asset('img/darens.jpg') }}"
-                size="md"
-            />
-        @endif
-        @if($record->talentType->name=='الافريقي')
-            <x-filament::avatar
-                src="{{ asset('img/afriky.jpg') }}"
-                size="md"
-            />
-        @endif
-        @if($record->talentType->name=='الهلال_الاحمر')
-            <x-filament::avatar
-                src="{{ asset('img/helal.jpg') }}"
-                size="md"
-            />
-        @endif
-        @if($record->talentType->name=='الكشافة')
-            <x-filament::avatar
-                src="{{ asset('img/kashaf.jpg') }}"
-                size="md"
+                src="{{  asset($img->image) }} "
+                size="sm"
+                :circular="false"
             />
         @endif
 @endif
 
 @if($who=='job')
-        @if($record->jobType->name=='القوات_المسلحة')
+        @php
+            $img=\App\Models\Job::where('jobType',$record->jobType->value)->where('image','!=',null)->first();
+        @endphp
+        @if($img)
             <x-filament::avatar
-                src="{{ asset('img/milatary.jpg') }}"
+                src="{{  asset($img->image) }} "
                 size="sm"
-            />
-        @endif
-        @if($record->jobType->name=='الداخلية')
-            <x-filament::avatar
-                src="{{ asset('img/aladel.jpeg') }}"
-                size="sm"
+                :circular="false"
             />
         @endif
 
