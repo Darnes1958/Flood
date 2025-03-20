@@ -321,11 +321,10 @@ class UserInfoPage extends Page implements HasTable,HasForms
       })
         ->paginationPageOptions([5,10,25,50,100])
         ->searchPlaceholder('بحث بالإسم او بالعائلة ')
+        ->searchDebounce('750ms')
       ->columns([
               TextColumn::make('Name1')
                   ->label('الإسم الأول')
-                  ->width('3%')
-
                   ->searchable(isIndividual: true),
               TextColumn::make('FullName')
                   ->label('الاسم بالكامل')
