@@ -324,6 +324,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
       ->columns([
               TextColumn::make('Name1')
                   ->label('الإسم الأول')
+                  ->width('3%')
 
                   ->searchable(isIndividual: true),
               TextColumn::make('FullName')
