@@ -30,6 +30,7 @@ use App\Models\Victim;
 use Filament\Actions\StaticAction;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -319,8 +320,12 @@ class UserInfoPage extends Page implements HasTable,HasForms
                 ->orderBy('family_id');
       })
         ->paginationPageOptions([5,10,25,50,100])
+        ->searchPlaceholder('بحث بالإسم او بالعائلة ')
       ->columns([
+              TextColumn::make('Name1')
+                  ->label('الإسم الأول')
 
+                  ->searchable(isIndividual: true),
               TextColumn::make('FullName')
                   ->label('الاسم بالكامل')
                   ->sortable()
@@ -406,7 +411,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                   )
                   ->toggleable()
                   ->sortable()
-                  ->searchable(),
+                  ,
               TextColumn::make('Qualification.name')
                           ->label('المؤهل')
                           ->action(
