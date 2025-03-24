@@ -45,6 +45,12 @@ class MaleFemale extends BaseWidget
                 ->label(new HtmlString('<span class="text-white">إناث</span>'))
                 ->value(new HtmlString('<span class="text-danger-600">'.Victim::where('male','أنثي')->count().'</span>')),
             Stat::make('','')
+                ->label(new HtmlString('<span class="text-white">جد الأب</span>'))
+                ->value(new HtmlString('<span class="text-primary-500">'.Victim::where('is_great_grandfather',1)->where('male','ذكر')->count().'</span>')),
+            Stat::make('','')
+                ->label(new HtmlString('<span class="text-white">جدة الأب</span>'))
+                ->value(new HtmlString('<span class="text-primary-500">'.Victim::where('is_great_grandfather',1)->where('male','أنثي')->count().'</span>')),
+            Stat::make('','')
                 ->label(new HtmlString('<span class="text-white">جد</span>'))
                 ->value(new HtmlString('<span class="text-primary-500">'.Victim::where('is_grandfather',1)->count().'</span>')),
             Stat::make('','')
