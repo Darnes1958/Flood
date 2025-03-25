@@ -9,6 +9,7 @@ use App\Models\Tarkeba;
 use App\Models\Tribe;
 use App\Models\Victim;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -50,6 +51,10 @@ class Sons extends BaseWidget
             ))
           ->searchable()
           ->label('الإسم '),
+          ImageColumn::make('image2')
+           ->label('')
+          ->circular()
+          ->limit(1)
 
       ]);
   }
