@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Great_count extends Model
 {
-    use HasFactory;
+    protected $casts = [
+        'image2' =>  'array',
+
+    ];
+
 
 }
