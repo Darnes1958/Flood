@@ -48,7 +48,10 @@ class StreetResource extends Resource
                 Forms\Components\Toggle::make('building')
                     ->label('عمارة')
                     ->onColor( 'success')
-                    ->offColor( 'gray')
+                    ->offColor( 'gray'),
+                Forms\Components\FileUpload::make('image')
+                    ->multiple()
+                    ->directory('Building'),
 
             ]);
     }

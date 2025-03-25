@@ -40,6 +40,10 @@ class Buildingwidget extends BaseWidget
                     ->sortable()
                     ->label('العدد')
                     ->counts('Victim'),
+                Tables\Columns\ImageColumn::make('image')
+                    ->label('')
+                    ->limit(1)
+
 
 
             ]);

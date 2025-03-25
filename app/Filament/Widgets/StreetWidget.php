@@ -45,7 +45,7 @@ class StreetWidget extends BaseWidget
           ->query(function (Street $tribe) {
             $families=Family::where('nation','ليبيا')->pluck('id');
             $tribe=Street::join('victims','street_id','streets.id',)
-                ->selectRaw('StrName,count(*) count')
+                ->selectRaw('StrName,streets.image,count(*) count')
                 ->whereIn('family_id',$families)
               ->when($this->road_id,function ($q){
                 $q->where('road_id',$this->road_id);
@@ -55,7 +55,7 @@ class StreetWidget extends BaseWidget
                 $q->where('area_id',$this->area_id);
               })
 
-                ->groupBy('StrName');
+                ->groupBy('StrName','streets.image');
             return $tribe;
           }
           )
@@ -76,6 +76,9 @@ class StreetWidget extends BaseWidget
               ->color('warning')
               ->sortable()
               ->label('العدد'),
+              Tables\Columns\ImageColumn::make('image')
+              ->label('')
+              ->limit(1)
               //->counts('Victim'),
 
 

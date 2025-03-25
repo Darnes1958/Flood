@@ -18,4 +18,7 @@ class Street extends Model
     public function Victim(){
       return $this->hasMany(Victim::class);
     }
+    protected $casts =[
+        'image'=>'array',
+    ];
 }
