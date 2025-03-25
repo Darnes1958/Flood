@@ -8,6 +8,8 @@ use App\Models\Great_count;
 use App\Models\Tarkeba;
 use App\Models\Tribe;
 use App\Models\Victim;
+use Filament\Actions\StaticAction;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -53,8 +55,25 @@ class Sons extends BaseWidget
           ->label('الإسم '),
           ImageColumn::make('image2')
            ->label('')
-          ->circular()
-          ->limit(1)
+              ->tooltip(function ($record){
+                  if ($record->image2 !=null) return 'انقر هنا لعرض الصور بحجم أكبر' ;
+                  else return null;})
+              ->action(
+                  Tables\Actions\Action::make('show_images')
+                      ->visible(function ($record){return $record->image2 !=null;})
+                      ->label(' ')
+                      ->modalSubmitAction(false)
+                      ->modalCancelAction(fn (StaticAction $action) => $action->label('عودة'))
+                      ->infolist([
+                          ImageEntry::make('image2')
+                              ->label('')
+                              ->height(500)
+                              ->stacked()
+                      ])
+              )
+
+              ->circular()
+              ->stacked()
 
       ]);
   }

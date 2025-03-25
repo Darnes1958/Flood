@@ -7,6 +7,8 @@ use App\Models\Grand_count;
 use App\Models\Great_count;
 use App\Models\Tarkeba;
 use App\Models\Tribe;
+use Filament\Actions\StaticAction;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -43,15 +45,29 @@ class GraetGrandFather extends BaseWidget
           ->searchable()
           ->label('الإسم '),
         TextColumn::make('thesum')
-
-
           ->color('warning')
           ->sortable()
           ->label('عدد الأسرة'),
           ImageColumn::make('image2')
               ->label('')
+              ->tooltip(function ($record){
+                  if ($record->image2 !=null) return 'انقر هنا لعرض الصور بحجم أكبر' ;
+                  else return null;})
+              ->action(
+                  Tables\Actions\Action::make('show_images')
+                      ->visible(function ($record){return $record->image2 !=null;})
+                      ->label(' ')
+                      ->modalSubmitAction(false)
+                      ->modalCancelAction(fn (StaticAction $action) => $action->label('عودة'))
+                      ->infolist([
+                          ImageEntry::make('image2')
+                              ->label('')
+                              ->height(500)
+                              ->stacked()
+                      ])
+              )
               ->circular()
-              ->limit(1)
+
       ]);
   }
 }
