@@ -73,7 +73,8 @@ class Sons extends BaseWidget
               )
 
               ->circular()
-              ->stacked()
+              ->height(100)
+              ->limit(1)
 
       ]);
   }

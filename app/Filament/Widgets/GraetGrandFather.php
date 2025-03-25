@@ -66,6 +66,8 @@ class GraetGrandFather extends BaseWidget
                               ->stacked()
                       ])
               )
+              
+              ->limit(1)
               ->circular()
 
       ]);
