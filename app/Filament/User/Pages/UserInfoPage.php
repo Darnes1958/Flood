@@ -187,10 +187,19 @@ class UserInfoPage extends Page implements HasTable,HasForms
                       })
                       ->color('success')
                       ->icon('heroicon-m-printer')
-                      ->url(function (Get $get) {
-                          return route('pdffamilyshow',
-                              ['familyshow_id' => $get('familyshow_id'),]);
-                      } ),
+                      ->action(function (Get $get){
+
+                          \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfAllVictims_3',
+                              [
+                                  'familyshow_id' => $get('familyshow_id'),])
+                              ->footerView('PDF.footer')
+                              ->save(public_path().'/bigFamily.pdf');
+
+                          return Response::download(public_path().'/bigFamily.pdf',
+                              'filename.pdf', self::ret_spatie_header());
+
+                      })
+                      ,
                   \Filament\Forms\Components\Actions\Action::make('printFamily')
                       ->label('طباعة اللقب')
                       ->visible(function (Get $get){
@@ -208,11 +217,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                       ->color('success')
                       ->icon('heroicon-m-printer')
                       ->action(function (Get $get){
-
-
                           $familyshowAll=Familyshow_count::where('nation','ليبيا')->orderBy('count','desc')->get();
-
-
                           \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfAllVictims_2',
                               [
                                   'familyshowAll'=>$familyshowAll,])
