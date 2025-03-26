@@ -71,10 +71,8 @@ class StreetResource extends Resource
                   ->searchable()
                     ->label('الشارع الرئيسي'),
               Tables\Columns\ToggleColumn::make('building')
-                    ->label('عمارة')
-
-
-                    ,
+                    ->label('عمارة') ,
+                Tables\Columns\ImageColumn::make('image'),
 
             ])
             ->filters([

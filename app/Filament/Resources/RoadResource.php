@@ -52,6 +52,7 @@ class RoadResource extends Resource
                 Tables\Columns\SelectColumn::make('area_id')
                   ->label('المحلة')
                   ->options(Area::all()->pluck('AreaName', 'id')),
+                Tables\Columns\ImageColumn::make('image'),
 
             ])
             ->filters([
