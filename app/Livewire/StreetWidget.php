@@ -32,14 +32,14 @@ class StreetWidget extends BaseWidget
     $this->road_id=$road_id;
     $this->areaName=$areaName;
     $this->area_id=null;
-    $this->pre=$this->areaName;
+    $this->pre=' الشوارع الفرعية لـ : '.$this->areaName;
   }
   #[On('take_area')]
   public function take_area($area_id,$areaName){
     $this->area_id=$area_id;
     $this->areaName=$areaName;
     $this->road_id=null;
-      $this->pre=$this->areaName;
+      $this->pre=' الشوارع الفرعية بمحلة : '.$this->areaName;
   }
   public function table(Table $table): Table
     {
@@ -54,7 +54,9 @@ class StreetWidget extends BaseWidget
               ->when($this->area_id,function ($q){
                 $q->where('area_id',$this->area_id);
               })
-
+                ->when(!$this->area_id && !$this->road_id,function ($q){
+                    $q->where('id',null);
+                })
                ;
             return $tribe;
           }
@@ -63,7 +65,8 @@ class StreetWidget extends BaseWidget
           ->heading(function () {return new HtmlString('<div class="text-primary-400 text-lg ">'.$this->pre.'</div>');} )
           ->defaultPaginationPageOption(16)
            ->paginationPageOptions([5,10,16,25,50,100])
-
+            ->emptyStateHeading('قم بالاختيار من قائمة المحلات والشوارع الرئيسية')
+            ->emptyStateIcon('heroicon-o-arrow-right')
             ->defaultSort('victim_count','desc')
           ->striped()
 

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\EastWest;
 use App\Filament\Resources\RoadResource\Pages;
 use App\Filament\Resources\RoadResource\RelationManagers;
 use App\Models\Area;
@@ -28,15 +29,17 @@ class RoadResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                  ->required()
-                 ->unique()
+                 ->unique(ignoreRecord: true)
                  ->label('الشارع الرئيسي'),
-                Select::make('area_id')
-                    ->relationship('Area','AreaName')
-                    ->label('المحلة')
+                Select::make('east_west')
+                    ->options(EastWest::class)
+                    ->label('الموقع')
                     ->searchable()
                     ->preload()
-                    ->reactive()
                     ->required(),
+                Forms\Components\FileUpload::make('image')
+                    ->multiple()
+                    ->directory('Building'),
             ]);
     }
 
@@ -49,6 +52,7 @@ class RoadResource extends Resource
                 Tables\Columns\SelectColumn::make('area_id')
                   ->label('المحلة')
                   ->options(Area::all()->pluck('AreaName', 'id')),
+                Tables\Columns\ImageColumn::make('image'),
 
             ])
             ->filters([
