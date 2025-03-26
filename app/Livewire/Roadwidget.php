@@ -5,6 +5,10 @@ namespace  App\Livewire;
 
 use App\Models\Road;
 
+use Filament\Actions\StaticAction;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -49,6 +53,23 @@ class Roadwidget extends BaseWidget
                     ->sortable()
                     ->label('العدد')
                     ->counts('Victim'),
+                ImageColumn::make('image')
+                    ->label('')
+                    ->action(
+                        Action::make('show_images')
+                            ->visible(function ($record){return $record->image !=null;})
+                            ->label(' ')
+                            ->modalSubmitAction(false)
+                            ->modalCancelAction(fn (StaticAction $action) => $action->label('عودة'))
+                            ->infolist([
+                                ImageEntry::make('image')
+                                    ->label('')
+                                    ->stacked()
+                                    ->label('')
+                                    ->height(500)
+                            ])
+                    )
+                    ->limit(1)
 
 
             ]);

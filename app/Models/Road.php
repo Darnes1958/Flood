@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Road extends Model
 {
-    use HasFactory;
+    protected $casts=[
+        'image'=>'array',
+    ];
     public function Street(){
         return $this->hasMany(Street::class);
     }
