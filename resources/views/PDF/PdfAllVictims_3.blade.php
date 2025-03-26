@@ -487,46 +487,7 @@
                 @endforeach
             </div>
 
-
-
         @endforeach
-
-
-
-        @if($count>7)
-            @pageBreak
-        @endif
-        @if($count<8 && $count>5)
-            @php $print_count++; @endphp
-            @if($print_count>1)
-                @php $print_count=0; @endphp
-                @pageBreak
-            @else
-                <br>
-            @endif
-        @endif
-
-        @if($count<6 && $count>2)
-            @php $print_count++; @endphp
-            @if($print_count>2)
-                @php $print_count=0; @endphp
-                @pageBreak
-            @else
-                <br>
-            @endif
-        @endif
-
-        @if($count<3 )
-            @php $print_count++; @endphp
-            @if($print_count>3)
-                @php $print_count=0; @endphp
-                @pageBreak
-            @else
-                <br>
-            @endif
-        @endif
-
-
 
 
 @endsection

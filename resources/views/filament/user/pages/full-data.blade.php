@@ -19,7 +19,7 @@
                 @if($talent->Talent->image)
 
                     <x-filament::avatar
-                        src="{{  asset($talent->Talent->image) }} "
+                        src="{{  asset('storage/'.$talent->Talent->image) }} "
                         size="sm"
                     />
                 @endif
@@ -28,14 +28,9 @@
         @if($record->Job)
             @if($record->Job->image)
                 <label>&nbsp;</label>
-                <img src="{{ asset($record->Job->image) }}"  style="width: 20px; height: 20px;" />
+                <img src="{{ asset('storage/'.$record->Job->image) }}"  style="width: 20px; height: 20px;" />
             @endif
         @endif
-
-
-
-
-
 
 </div>
 

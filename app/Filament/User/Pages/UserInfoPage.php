@@ -191,7 +191,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
 
                           \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfAllVictims_3',
                               [
-                                  'familyshow_id' => $get('familyshow_id'),])
+                                  'familyshow_id' => $this->familyshow_id,])
                               ->footerView('PDF.footer')
                               ->save(public_path().'/bigFamily.pdf');
 
