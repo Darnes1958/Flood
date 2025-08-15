@@ -545,6 +545,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                           ->form([
                               FileUpload::make('image2')
                                   ->multiple()
+                                  ->imageEditor()
                                   ->directory('form-attachments'),
                           ])
                           ->action(function (array $data,Victim $record,){
@@ -703,6 +704,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
 
                 ImageEntry::make('image2')
                   ->label('')
+
                     ->stacked()
                     ->label('')
                     ->height(500)
