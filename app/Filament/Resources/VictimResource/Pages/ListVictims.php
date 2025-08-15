@@ -126,6 +126,19 @@ class ListVictims extends ListRecords
                         foreach ($victim2s as $victim2) {$victim2->masterKey = ++$index;$victim2->save();}
                     }
 
+                    $victims=Victim::where('is_mother',1)->where('masterKey',null)->orderBy('familyshow_id')->orderBy('year')->get();
+                    foreach ($victims as $victim) {
+                        $victim->masterKey = ++$index;
+                        $victim->save();
+                    }
+                    $victims=Victim::where('is_mother',0)->where('is_father',0)
+                        ->where(function($query){$query->where('husband_id','!=',null)->orwhere('wife_id','!=',null);})
+                        ->where('masterKey',null)->orderBy('familyshow_id')->orderBy('year')->get();
+                    foreach ($victims as $victim) {
+                        $victim->masterKey = ++$index;
+                        $victim->save();
+                    }
+
                     $victims=Victim::where('masterKey',null)->orderBy('familyshow_id')
                         ->orderBy('Name2')->orderBy('Name3')->orderBy('Name4')->orderBy('year')->get();
                     foreach ($victims as $victim) {
