@@ -223,7 +223,21 @@ class ViewFamily extends Page implements HasTable,HasForms
             ->columns([
                     ImageColumn::make('image2')
                         ->height(160)
-
+                        ->action(
+                            Action::make('Upload')
+                                ->fillForm(function (Victim $record){
+                                    return ['image2'=>$record->image2];
+                                })
+                                ->form([
+                                    FileUpload::make('image2')
+                                        ->multiple()
+                                        ->imageEditor()
+                                        ->directory('form-attachments'),
+                                ])
+                                ->action(function (array $data,Victim $record,){
+                                    $record->update(['image2'=>$data['image2'], ]);
+                                })
+                        )
                         ->limit(1)
                         ->circular(),
                 Stack::make([
