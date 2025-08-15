@@ -18,7 +18,7 @@
         @endphp
 
         <div >
-            <label class="text-xl text-red-500"> العائلة  : </label>
+            <label class="text-xl text-red-500"> آلـ  : </label>
             <label  class="text-xl  font-bold"> {{$familyshow->name}} </label>
             <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
             <label class="text-sm">عدد الضحايا  : </label>
