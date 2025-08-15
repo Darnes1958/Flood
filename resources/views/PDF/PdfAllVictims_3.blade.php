@@ -16,7 +16,7 @@
 
             $victim_father=\App\Models\Victim::with('father')
             ->whereIn('family_id',$families)
-            ->where('is_father','1')->get();
+            ->where('is_father','1')->orderBy('masterKey')->get();
 
             $fathers=\App\Models\Victim::whereIn('family_id',$families)->where('is_father',1)->select('id');
             $mothers=\App\Models\Victim::whereIn('family_id',$families)->where('is_mother',1)->select('id');
@@ -29,7 +29,7 @@
             ->orwhere('husband_id', 0)
             ->orwhereNotIn('husband_id',$fathers);
             })
-
+            ->orderBy('masterKey')
             ->get();
 
             $victim_husband=\App\Models\Victim::
@@ -37,6 +37,7 @@
             ->where('male','ذكر')
             ->where('is_father','0')
             ->where('wife_id','!=',null)
+            ->orderBy('masterKey')
             ->get();
 
             $victim_wife=\App\Models\Victim::
@@ -45,10 +46,10 @@
             ->where('male','أنثي')
             ->where('is_mother','0')
             ->where('husband_id','!=',null)
+            ->orderBy('masterKey')
             ->get();
             $victim_only=\App\Models\Victim::
             whereIn('family_id',$families)
-
             ->Where(function ( $query) {
             $query->where('is_father',null)
             ->orwhere('is_father',0);
@@ -65,6 +66,7 @@
             ->orwhere('mother_id', 0)
             ->orwhereNotIn('mother_id',$mothers);
             })
+            ->orderBy('masterKey')
             ->get();
         @endphp
 
@@ -115,13 +117,19 @@
             <div style="position: relative;">
                 @foreach($victim_father->where('family_id',$family->id) as $victim)
                     <div  style="text-align: right;font-size: 11pt;" class="flex">
-                        @if($victim->is_grandfather)
-                            <label  style="font-size: 14pt;" class="text-red-950">الجد : </label>
+                        @if($victim->is_great_grandfather)
+                            <label  style="font-size: 14pt;" class="text-red-950"> جد الأب : </label>
                         @else
-                            <label  style="font-size: 14pt;" class="text-yellow-700">الأب : </label>
+                            @if($victim->is_grandfather)
+                                <label  style="font-size: 14pt;" class="text-red-950">الجد : </label>
+                            @else
+                                <label  style="font-size: 14pt;" class="text-yellow-700">الأب : </label>
+                            @endif
                         @endif
-
                         {{$victim->FullName}}
+                        @if($victim->otherName)
+                            <label class="text-red-600" >&nbsp;({{$victim->otherName}})</label>
+                        @endif
 
                         @if($victim->Job)
                             @if($victim->Job->image)
@@ -211,16 +219,20 @@
                 @php
                     foreach($victim_mother->where('family_id',$family->id) as $victim) {
                         echo "<div  style=\"text-align: right;font-size: 11pt;\" class=\"flex\">";
+                        if ($victim->is_great_grandfather)
+                            echo "<label style=\"font-size: 14pt;\" class=\"text-red-950\" >جدة الأب : </label>";
+                        else {
                         if ($victim->is_grandmother)
                             echo "<label style=\"font-size: 14pt;\" class=\"text-red-950\" >الجدة : </label>";
                         else
                             echo "<label style=\"font-size: 14pt;\" class=\"text-green-500\" >الأم : </label>";
+                        }
                         echo "<label  >&nbsp;$victim->FullName</label>";
                         if($victim->otherName)
                             echo "<label class=\"text-red-600\" >&nbsp;({$victim->otherName})</label> ";
 
 
-                         if($victim->Job)
+                        if($victim->Job)
                             if($victim->Job->image)
                                 echo "  <label>&nbsp;</label>
                                 <img src=". storage_path('app/public/'.$victim->Job->image) ."  style=\"width: 20px; height: 20px;\" />";

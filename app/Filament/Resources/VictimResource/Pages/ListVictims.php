@@ -3,8 +3,11 @@
 namespace App\Filament\Resources\VictimResource\Pages;
 
 use App\Filament\Resources\VictimResource;
+use App\Models\Victim;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Support\Facades\Auth;
 
 class ListVictims extends ListRecords
 {
@@ -64,6 +67,78 @@ class ListVictims extends ListRecords
           ->icon('heroicon-m-users')
             ->color('success')
           ->url('victims/createbyfather'),
+
+
+            Actions\Action::make('masterKey')
+                ->visible(function (){return Auth::id()==1;})
+                ->icon('heroicon-m-users')
+                ->color('success')
+                ->action(function (){
+                    Victim::query()->update(['masterKey'=>null]);
+                    $index=Victim::max('masterKey');
+                    if (!$index) $index=0;
+
+                    $victims=Victim::where('is_great_grandfather',1)->orderBy('familyshow_id')->orderBy('year')->get();
+                    foreach ($victims as $victim){$victim->masterKey=++$index;$victim->save();}
+
+                    $great_grand=Victim::where('is_great_grandfather',1)->pluck('id');
+                    $victims=Victim::whereIn('father_id',$great_grand)->orderBy('familyshow_id')->orderBy('year')->get();
+                    foreach ($victims as $victim) {
+                        if (!$victim->masterKey){$victim->masterKey=++$index;$victim->save();}
+                        if ($victim->is_father==1){
+                            $victim2s=Victim::where('father_id',$victim->id)->get();
+                            foreach ($victim2s as $victim2){
+                                $victim2->masterKey=++$index;$victim2->save();
+                                if ($victim2->is_father==1){
+                                    $victim3s=Victim::where('father_id',$victim2->id)->get();
+                                    foreach ($victim3s as $victim3){
+                                        $victim3->masterKey=++$index;$victim3->save();
+                                    }
+                                }
+                                }
+                            }
+                        }
+
+
+                    $victims=Victim::where('is_grandfather',1)->where('masterKey',null)->orderBy('familyshow_id')->orderBy('year')->get();
+                    foreach ($victims as $victim){
+                        $victim->masterKey=++$index;$victim->save();
+                        if ($victim->is_father==1){
+                            $victim2s=Victim::where('father_id',$victim->id)->orderBy('year')->get();
+                            foreach ($victim2s as $victim2){
+                                $victim2->masterKey=++$index;$victim2->save();
+                                    if ($victim2->is_father==1){
+                                        $victim3s=Victim::where('father_id',$victim2->id)->orderBy('year')->get();
+                                        foreach ($victim3s as $victim3){$victim3->masterKey=++$index;$victim3->save();}
+                                        }
+                                    }
+
+                                }
+                            }
+
+
+
+                    $victims=Victim::where('is_father',1)->where('masterKey',null)->orderBy('familyshow_id')->orderBy('year')->get();
+                    foreach ($victims as $victim) {
+                        $victim->masterKey = ++$index;
+                        $victim->save();
+                        $victim2s = Victim::where('father_id', $victim->id)->orderBy('year')->get();
+                        foreach ($victim2s as $victim2) {$victim2->masterKey = ++$index;$victim2->save();}
+                    }
+
+                    $victims=Victim::where('masterKey',null)->orderBy('familyshow_id')
+                        ->orderBy('Name2')->orderBy('Name3')->orderBy('Name4')->orderBy('year')->get();
+                    foreach ($victims as $victim) {
+                        $victim->masterKey = ++$index;
+                        $victim->save();
+                    }
+
+
+
+
+                    Notification::make()->title('Ok')->send();
+                }),
+
 
         ];
     }

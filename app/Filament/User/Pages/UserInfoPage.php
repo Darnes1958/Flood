@@ -189,7 +189,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                       ->icon('heroicon-m-printer')
                       ->action(function (Get $get){
 
-                          \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfAllVictims_3',
+                          \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfAllVictims_4',
                               [
                                   'familyshow_id' => $this->familyshow_id,])
                               ->footerView('PDF.footer')
@@ -322,7 +322,8 @@ class UserInfoPage extends Page implements HasTable,HasForms
                         });
                 })
                 ->orderBy('familyshow_id')
-                ->orderBy('family_id');
+                ->orderBy('family_id')
+                ->orderBy('masterKey');
       })
         ->paginationPageOptions([5,10,25,50,100])
         ->searchPlaceholder('بحث بالإسم او بالعائلة ')

@@ -216,9 +216,10 @@ class ViewFamily extends Page implements HasTable,HasForms
                                 });
                         })
                         ->orderBy('familyshow_id')
-                        ->orderBy('family_id');
+                        ->orderBy('family_id')
+                        ->orderBy('masterKey');
             })
-            ->paginationPageOptions([5,10,25,50,100])
+            ->paginationPageOptions([5,10,12,25,50,100])
             ->columns([
                     ImageColumn::make('image2')
                         ->height(160)
@@ -230,7 +231,7 @@ class ViewFamily extends Page implements HasTable,HasForms
                         TextColumn::make('FullName')
                             ->label('الاسم')
                             ->formatStateUsing(fn (Victim $record): View => view(
-                                'filament.user.pages.name-only',
+                                'filament.user.pages.name-only2',
                                 ['record' => $record],
                             ))
                             ->searchable()
@@ -248,7 +249,7 @@ class ViewFamily extends Page implements HasTable,HasForms
 
                         TextColumn::make('is_mother')
                             ->formatStateUsing(fn (Victim $record): View => view(
-                                'filament.user.pages.view-sons',
+                                'filament.user.pages.view-sons2',
                                 ['record' => $record],
                             )),
 
