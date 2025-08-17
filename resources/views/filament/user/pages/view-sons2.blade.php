@@ -1,4 +1,4 @@
-<div >
+<div class="text-lg">
     @if($record->father->count()>0)
         <div class="flex">
             <p style="color: aqua;font-weight: bold">أبناءه :&nbsp;</p>

@@ -254,10 +254,20 @@ class ViewFamily extends Page implements HasTable,HasForms
                             ->sortable(),
                         TextColumn::make('Name2')
                             ->formatStateUsing(fn (Victim $record): HtmlString =>
-                            new HtmlString('<span >'.$record->year.'&nbsp;&nbsp;&nbsp; - '.$record->Street->StrName.'</span>')),
+                            new HtmlString('<span class="text-lg">'.$record->year.'&nbsp;&nbsp;&nbsp; - '.$record->Street->StrName.'</span>')),
                         TextColumn::make('Name1')
                             ->formatStateUsing(fn (Victim $record): View => view(
                                 'filament.user.pages.view-marry',
+                                ['record' => $record],
+                            )),
+                        TextColumn::make('Name3')
+                            ->formatStateUsing(fn (Victim $record): View => view(
+                                'filament.user.pages.view-father',
+                                ['record' => $record],
+                            )),
+                        TextColumn::make('Name4')
+                            ->formatStateUsing(fn (Victim $record): View => view(
+                                'filament.user.pages.view-mother',
                                 ['record' => $record],
                             )),
 
@@ -277,7 +287,7 @@ class ViewFamily extends Page implements HasTable,HasForms
             ])
         ->contentGrid([
         'md' => 2,
-        'xl' => 4,
+        'xl' => 3,
     ]);
     }
 }

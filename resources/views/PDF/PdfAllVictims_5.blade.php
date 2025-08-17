@@ -101,8 +101,68 @@
                         <label  > العنوان :  &nbsp</label>
                         <label  >{{$victim->Street->StrName}}</label>
                     </div>
+                    @if($victim->sonOfFather)
+                            <div   class="flex">
+                                <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                @if($victim->male=='ذكر')
+                                    <label  class="text-green-500">والده : </label>
+                                @else
+                                    <label  class="text-green-500">والدها : </label>
+                                @endif
 
+                                <label  >&nbsp;{{$victim->sonOfFather->FullName}}</label>
+                                @if($victim->sonOfFather->otherName)
+                                    <label class="text-red-600" >&nbsp;({{$victim->sonOfFather->otherName}})</label> ;
+                                @endif
 
+                                @if($victim->sonOfFather->Job)
+                                    @if($victim->sonOfFather->Job->image)
+                                        <label>&nbsp;</label>
+                                        <img src="{{ storage_path('app/public/'.$victim->sonOfFather->Job->image) }}"  style="width: 26px; height: 26px;" />
+                                    @endif
+                                @endif
+
+                                @if($victim->sonOfFather->VicTalent)
+                                    @foreach($victim->sonOfFather->VicTalent as $talent)
+                                        <label>&nbsp;</label>
+                                        @if($talent->Talent->image)
+                                            <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 26px; height: 26px;" />
+                                        @endif
+                                    @endforeach
+                                @endif
+                            </div>
+                        @endif
+                    @if($victim->sonOfMother)
+                            <div   class="flex">
+                                <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                               @if($victim->male=='ذكر')
+                                    <label  class="text-green-500">والدته : </label>
+                                @else
+                                    <label  class="text-green-500">والدتها : </label>
+                               @endif
+
+                                <label  >&nbsp;{{$victim->sonOfMother->FullName}}</label>
+                                @if($victim->sonOfMother->otherName)
+                                    <label class="text-red-600" >&nbsp;({{$victim->sonOfMother->otherName}})</label> ;
+                                @endif
+
+                                @if($victim->sonOfMother->Job)
+                                    @if($victim->sonOfMother->Job->image)
+                                        <label>&nbsp;</label>
+                                        <img src="{{ storage_path('app/public/'.$victim->sonOfMother->Job->image) }}"  style="width: 26px; height: 26px;" />
+                                    @endif
+                                @endif
+
+                                @if($victim->sonOfMother->VicTalent)
+                                    @foreach($victim->sonOfMother->VicTalent as $talent)
+                                        <label>&nbsp;</label>
+                                        @if($talent->Talent->image)
+                                            <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 26px; height: 26px;" />
+                                        @endif
+                                    @endforeach
+                                @endif
+                            </div>
+                        @endif
                     @if($victim->wife_id)
                             <div   class="flex">
                             <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>

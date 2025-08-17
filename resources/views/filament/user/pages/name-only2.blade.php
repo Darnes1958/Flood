@@ -1,5 +1,5 @@
 
-<div class="flex ">
+<div  class="flex text-xl">
 
     @if($record->male='ذكر')
         @if($record->is_great_grandfather)

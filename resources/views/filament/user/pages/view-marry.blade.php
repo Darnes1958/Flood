@@ -1,4 +1,4 @@
-<div class="flex te">
+<div class="flex te text-lg">
     @if($record->wife)
       <p style="color: #fbbf24;font-weight: bold">وزوجها :&nbsp;</p>
       <p >{{$record->wife->FullName}}</p>
