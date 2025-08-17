@@ -17,19 +17,19 @@
         @endphp
 
         <div >
-            <label class="text-xl text-red-500"> آلـ  </label>
-            <label  class="text-xl  font-bold"> {{$familyshow->name}} </label>
+            <label class=" text-red-500"> آلـ  </label>
+            <label  class=" text-2xl font-bold"> {{$familyshow->name}} </label>
         </div>
         <div >
-            <label class="text-sm">عدد الشهداء  </label>
-            <label  class="text-sm text-red-600"> {{$count}} </label>
+            <label class="text-xl">عدد الشهداء  </label>
+            <label  class="text-xl text-red-600"> {{$count}} </label>
         </div>
 
 
         @if($familyshow->who)
             <div class="flex">
-                <label class="text-gray-500 text-sm">تمت المراجعة بمعرفة : &nbsp; </label>
-                <label class="text-gray-500 text-sm">{{$familyshow->who}}</label>
+                <label class="text-gray-500 text-xl">تمت المراجعة بمعرفة : &nbsp; </label>
+                <label class="text-gray-500 text-xl">{{$familyshow->who}}</label>
             </div>
         @endif
 
@@ -44,6 +44,7 @@
                     <div  style="text-align: right;" class="flex ">
                         @if($victim->male=='ذكر')
                             @if($victim->is_great_grandfather)
+
                                 <label   class="text-red-950"> جد الأب : </label>
                             @else
                                 @if($victim->is_grandfather)
@@ -83,14 +84,14 @@
                         @if($victim->Job)
                             @if($victim->Job->image)
                                 <label>&nbsp;</label>
-                                <img src="{{ storage_path('app/public/'.$victim->Job->image) }}"  style="width: 20px; height: 20px;" />
+                                <img src="{{ storage_path('app/public/'.$victim->Job->image) }}"  style="width: 26px; height: 26px;" />
                             @endif
                         @endif
                         @if($victim->VicTalent)
                             @foreach($victim->VicTalent as $talent)
                                 <label>&nbsp;</label>
                                 @if($talent->Talent->image)
-                                    <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 20px; height: 20px;" />
+                                    <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 26px; height: 26px;" />
                                 @endif
                             @endforeach
                         @endif
@@ -101,8 +102,9 @@
                         <label  >{{$victim->Street->StrName}}</label>
                     </div>
 
-                    @if($victim->wife_id)
                         <div  style="text-align: right;" class="flex">
+                    @if($victim->wife_id)
+
                             <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                             <label  class="text-green-500">زوجته : </label>
                             <label  >&nbsp;{{$victim->husband->FullName}}</label>
@@ -113,7 +115,7 @@
                             @if($victim->husband->Job)
                                 @if($victim->husband->Job->image)
                                     <label>&nbsp;</label>
-                                    <img src="{{ storage_path('app/public/'.$victim->husband->Job->image) }}"  style="width: 20px; height: 20px;" />
+                                    <img src="{{ storage_path('app/public/'.$victim->husband->Job->image) }}"  style="width: 26px; height: 26px;" />
                                 @endif
                             @endif
 
@@ -121,15 +123,15 @@
                                 @foreach($victim->husband->VicTalent as $talent)
                                     <label>&nbsp;</label>
                                     @if($talent->Talent->image)
-                                        <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 20px; height: 20px;" />
+                                        <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 26px; height: 26px;" />
                                     @endif
                                 @endforeach
                             @endif
 
-                        </div>
+
                     @endif
                     @if($victim->husband_id)
-                        <div  style="text-align: right;" class="flex">
+
                             <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                             <label  class="text-green-500">زوجها : </label>
                             <label  >&nbsp;{{$victim->wife->FullName}}</label>
@@ -140,7 +142,7 @@
                             @if($victim->wife->Job)
                                 @if($victim->wife->Job->image)
                                     <label>&nbsp;</label>
-                                    <img src="{{ storage_path('app/public/'.$victim->wife->Job->image) }}"  style="width: 20px; height: 20px;" />
+                                    <img src="{{ storage_path('app/public/'.$victim->wife->Job->image) }}"  style="width: 26px; height: 26px;" />
                                 @endif
                             @endif
 
@@ -148,15 +150,15 @@
                                 @foreach($victim->wife->VicTalent as $talent)
                                     <label>&nbsp;</label>
                                     @if($talent->Talent->image)
-                                        <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 20px; height: 20px;" />
+                                        <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 26px; height: 26px;" />
                                     @endif
                                 @endforeach
                             @endif
 
-                        </div>
+
                     @endif
                     @if($victim->is_father)
-                        <div class="flex">
+
                             <div  style="text-align: right;" class="flex">
                                 <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                                 <label class=" text-sky-500" >&nbsp;الأبناء :&nbsp; </label>
@@ -178,26 +180,26 @@
                                 @if($son->Job)
                                     @if($son->Job->image)
                                         <label>&nbsp;</label>
-                                        <img src="{{ storage_path('app/public/'.$son->Job->image) }}"  style="width: 20px; height: 20px;" />
+                                        <img src="{{ storage_path('app/public/'.$son->Job->image) }}"  style="width: 26px; height: 26px;" />
                                     @endif
                                 @endif
                                 @if($son->VicTalent)
                                     @foreach($son->VicTalent as $talent)
                                         <label>&nbsp;</label>
                                         @if($talent->Talent->image)
-                                            <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 20px; height: 20px;" />
+                                            <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 26px; height: 26px;" />
                                         @endif
                                     @endforeach
                                 @endif
                                 @if(!$loop->last) <label> , </label>@endif
                             @endforeach
-                        </div>
+
 
                     @endif
 
                     @if($victim->is_mother)
                         @php
-                         echo "<div class=\"flex\">";
+                     //    echo "<div class=\"flex\">";
                          if ($victim->has_more !=1) {
                               foreach($victim->mother as $son) {
                               $father_name=$son->Name2.' '.$son->Name3.' '.$son->Name4 ;}
@@ -275,6 +277,11 @@
                          @endphp
 
                         @endif
+                        </div>
+                        @if($victim->is_great_grandfather || $victim->is_grandfather
+                               || $victim->is_father || $victim->is_great_grandmother || $victim->is_grandmother
+                               || $victim->is_mother) <br> @endif
+
                 @endforeach
 
             </div>

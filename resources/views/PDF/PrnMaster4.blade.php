@@ -9,8 +9,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
   <style>
 
+
+
       div {
-          font-size: 24px;
+          font-size: 26px;
           font-family: Amiri;
       }
 
@@ -39,9 +41,7 @@
           border: 1pt solid  lightgray;
       }
 
-      br[style] {
-          display:none;
-      }
+
 
 
   </style>
