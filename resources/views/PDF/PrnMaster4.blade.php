@@ -9,6 +9,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
   <style>
 
+      div {
+          font-size: 20px;
+          font-family: Amiri;
+      }
+
 
       tr {
           line-height: 18px;

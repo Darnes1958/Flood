@@ -66,6 +66,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\HtmlString;
 use Livewire\Attributes\On;
+use Spatie\LaravelPdf\Enums\Format;
 
 class UserInfoPage extends Page implements HasTable,HasForms
 {
@@ -189,10 +190,11 @@ class UserInfoPage extends Page implements HasTable,HasForms
                       ->icon('heroicon-m-printer')
                       ->action(function (Get $get){
 
-                          \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfAllVictims_4',
+                          \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfAllVictims_5',
                               [
                                   'familyshow_id' => $this->familyshow_id,])
                               ->footerView('PDF.footer')
+
                               ->save(public_path().'/bigFamily.pdf');
 
                           return Response::download(public_path().'/bigFamily.pdf',
