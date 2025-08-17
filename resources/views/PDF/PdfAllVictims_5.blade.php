@@ -190,7 +190,7 @@
                                         @endif
                                     @endforeach
                                 @endif
-                                @if(!$loop->last) <label> , </label>@endif
+                                @if(!$loop->last) <label> &nbsp;, </label>@endif
                             @endforeach
 
                             </div>
@@ -209,7 +209,7 @@
                                   <label>&nbsp; ($father_name) : </label>";
                               $i=0;
                               foreach($victim->mother as $son) {
-                              if($i>0)  echo "<label> , </label>";
+                              if($i>0)  echo "<label> &nbsp;, </label>";
 
                                 if ($son->is_father) echo " <label  class=\"text-yellow-700 \">&nbsp;$son->Name1</label>";
                                 else {
@@ -253,7 +253,7 @@
                                     }
                                     echo "<label>&nbsp;</label>";
                                     if ($i===0) { echo "<label> &nbsp;{$item->Name1}</label>";}
-                                    else {echo "<label> , {$item->Name1}</label>";}
+                                    else {echo "<label> &nbsp;, {$item->Name1}</label>";}
 
                                     if($son->otherName)
                                         echo "<label class=\"text-red-600\" >&nbsp;({$son->otherName})</label> ";
