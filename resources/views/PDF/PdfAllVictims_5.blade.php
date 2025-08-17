@@ -104,7 +104,7 @@
 
 
                     @if($victim->wife_id)
-                            <div  style="text-align: right;font-size: 11pt;" class="flex">
+                            <div   class="flex">
                             <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                             <label  class="text-green-500">زوجته : </label>
                             <label  >&nbsp;{{$victim->husband->FullName}}</label>
@@ -130,7 +130,7 @@
                             </div>
                     @endif
                     @if($victim->husband_id)
-                            <div  style="text-align: right;font-size: 11pt;" class="flex">
+                            <div   class="flex">
                             <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                             <label  class="text-green-500">زوجها : </label>
                             <label  >&nbsp;{{$victim->wife->FullName}}</label>
