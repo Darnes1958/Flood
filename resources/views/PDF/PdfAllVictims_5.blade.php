@@ -41,21 +41,21 @@
                             && $victim->huband_id==0 && $victim->wife_id==0 )
                         @continue;
                     @endif
-                    <div  style="text-align: right;" class="flex text-xl">
+                    <div  style="text-align: right;" class="flex ">
                         @if($victim->male=='ذكر')
                             @if($victim->is_great_grandfather)
                                 <label   class="text-red-950"> جد الأب : </label>
                             @else
                                 @if($victim->is_grandfather)
-                                    <label   class="text-red-950">الجد : </label>
+                                    <label   class="text-red-950">الجد :&nbsp;&nbsp; </label>
                                 @else
                                     @if($victim->is_father)
-                                    <label  class="text-yellow-700">الأب : </label>
+                                    <label  class="text-yellow-700">الأب :&nbsp;&nbsp; </label>
                                     @endif
                                 @endif
                             @endif
                             @if($victim->is_father==0 && $victim->wife_id!=null)
-                                    <label   class="text-blue-700">الزوج : </label>
+                                    <label   class="text-blue-700">الزوج :&nbsp;&nbsp; </label>
                             @endif
                         @endif
                         @if($victim->male=='أنثي')
@@ -71,7 +71,7 @@
                                     @endif
                                 @endif
                                     @if($victim->is_mother==0 && $victim->husband_id!=null)
-                                        <label style="font-size: 14pt;color: #6b21a8" >الزوجة : </label>
+                                        <label style="font-size: 14pt;color: #6b21a8" >الزوجة :&nbsp;&nbsp; </label>
                                     @endif
 
                             @endif
