@@ -41,7 +41,7 @@
                             && $victim->huband_id==0 && $victim->wife_id==0 )
                         @continue;
                     @endif
-                    <div  style="text-align: right;" class="flex ">
+                    <div  class="flex ">
                         @if($victim->male=='ذكر')
                             @if($victim->is_great_grandfather)
 
@@ -102,7 +102,7 @@
                         <label  >{{$victim->Street->StrName}}</label>
                     </div>
 
-                        <div  style="text-align: right;" class="flex">
+
                     @if($victim->wife_id)
 
                             <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
@@ -127,7 +127,6 @@
                                     @endif
                                 @endforeach
                             @endif
-
 
                     @endif
                     @if($victim->husband_id)
@@ -158,7 +157,7 @@
 
                     @endif
                     @if($victim->is_father)
-
+                            <div   class="flex">
                             <div  style="text-align: right;" class="flex">
                                 <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                                 <label class=" text-sky-500" >&nbsp;الأبناء :&nbsp; </label>
@@ -194,12 +193,13 @@
                                 @if(!$loop->last) <label> , </label>@endif
                             @endforeach
 
-
+                            </div>
                     @endif
 
                     @if($victim->is_mother)
+
                         @php
-                     //    echo "<div class=\"flex\">";
+                         echo "<div class=\"flex\">";
                          if ($victim->has_more !=1) {
                               foreach($victim->mother as $son) {
                               $father_name=$son->Name2.' '.$son->Name3.' '.$son->Name4 ;}
@@ -277,15 +277,15 @@
                          @endphp
 
                         @endif
-                        </div>
+
                         @if($victim->is_great_grandfather || $victim->is_grandfather
                                || $victim->is_father || $victim->is_great_grandmother || $victim->is_grandmother
                                || $victim->is_mother) <br> @endif
 
                 @endforeach
 
-            </div>
 
+            </div>
 
 
 
