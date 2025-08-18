@@ -171,7 +171,12 @@
                     @if($victim->wife_id)
                             <div   class="flex">
                             <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                            <label  class="text-green-500">زوجته : </label>
+                            @if($victim->wife2_id)
+                                    <label  class="text-green-500">زوجته الأولي : </label>
+                               @else
+                                    <label  class="text-green-500">زوجته : </label>
+                            @endif
+
                             <label  >&nbsp;{{$victim->husband->FullName}}</label>
                             @if($victim->husband->otherName)
                                 <label class="text-red-600" >&nbsp;({{$victim->husband->otherName}})</label> ;
@@ -198,6 +203,37 @@
                             @endif
                             </div>
                     @endif
+                        @if($victim->wife2_id)
+                            <div   class="flex">
+                                <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                    <label  class="text-green-500">زوجته الثانية : </label>
+                                <label  >&nbsp;{{$victim->husband2->FullName}}</label>
+                                @if($victim->husband2->otherName)
+                                    <label class="text-red-600" >&nbsp;({{$victim->husband2->otherName}})</label> ;
+                                @endif
+                                @if($victim->husband2->Familyshow->country_id!=1)
+                                    <label>&nbsp;</label>
+                                    <img src="{{ storage_path('app/public/'.\App\Models\Country::find($victim->husband2->Familyshow->country_id)->image) }}"  style="width: 26px; height: 26px;" />
+
+                                @endif
+                                @if($victim->husband2->Job)
+                                    @if($victim->husband2->Job->image)
+                                        <label>&nbsp;</label>
+                                        <img src="{{ storage_path('app/public/'.$victim->husband2->Job->image) }}"  style="width: 26px; height: 26px;" />
+                                    @endif
+                                @endif
+
+                                @if($victim->husband2->VicTalent)
+                                    @foreach($victim->husband2->VicTalent as $talent)
+                                        <label>&nbsp;</label>
+                                        @if($talent->Talent->image)
+                                            <img src="{{ storage_path('app/public/'.$talent->Talent->image) }}"  style="width: 26px; height: 26px;" />
+                                        @endif
+                                    @endforeach
+                                @endif
+                            </div>
+                        @endif
+
                     @if($victim->husband_id)
                             <div   class="flex">
                             <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>

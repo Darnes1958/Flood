@@ -10,7 +10,12 @@
 
     @endif
     @if($record->husband)
-        <p style="color: #00bb00;font-weight: bold">وزوجته :&nbsp;</p>
+        @if($record->husband2)
+                <p style="color: #00bb00;font-weight: bold">وزوجته الأولي :&nbsp;</p>
+        @else
+                <p style="color: #00bb00;font-weight: bold">وزوجته :&nbsp;</p>
+        @endif
+
         <p >{{$record->husband->FullName}}</p>
             @if($record->husband->Familyshow->country_id!=1)
                 <label>&nbsp;</label>
@@ -18,6 +23,24 @@
                 <img src="{{ asset('storage/'.\App\Models\Country::find($record->husband->Familyshow->country_id)->image) }}"  style="width: 30px; height: 30px;" />
             @endif
 
-        @endif
+    @endif
 
 </div>
+
+@if($record->husband2)
+<div class="flex te text-lg">
+
+
+            <p style="color: #00bb00;font-weight: bold">وزوجته الثانية :&nbsp;</p>
+
+
+        <p >{{$record->husband2->FullName}}</p>
+        @if($record->husband2->Familyshow->country_id!=1)
+            <label>&nbsp;</label>
+
+            <img src="{{ asset('storage/'.\App\Models\Country::find($record->husband2->Familyshow->country_id)->image) }}"  style="width: 30px; height: 30px;" />
+        @endif
+</div>
+    @endif
+
+
