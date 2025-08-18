@@ -17,29 +17,7 @@
       }
 
 
-      tr {
-          line-height: 18px;
-      }
-      th {
-          text-align: center;
-          border: 1pt solid  gray;
-          font-size: 12px;
-          height: 30px;
-      }
-      caption {
-          font-family: DejaVu Sans, sans-serif ;
 
-      }
-      thead {
-
-          font-family: DejaVu Sans, sans-serif;
-      }
-
-      td {
-          font-size: 12px;
-          text-align: right;
-          border: 1pt solid  lightgray;
-      }
 
 
 
