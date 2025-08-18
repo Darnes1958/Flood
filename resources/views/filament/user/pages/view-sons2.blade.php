@@ -2,6 +2,12 @@
     @if($record->father->count()>0)
         <div class="flex">
             <p style="color: aqua;font-weight: bold">أبناءه :&nbsp;</p>
+
+            @if($record->father->first()->Familyshow->country_id!=$record->Familyshow->country_id)
+                <label>&nbsp;</label>
+
+                <img src="{{ asset('storage/'.\App\Models\Country::find($record->father->first()->Familyshow->country_id)->image) }}"  style="width: 30px; height: 30px;" />
+            @endif
             @php
                 $i=0;
                 foreach($record->father as $item){
@@ -28,11 +34,19 @@
                     if ($record->has_more !=1) {
                         echo "<div class=\"flex\">
                             <p style=\"color: aqua;font-weight: bold\">أبناءها :&nbsp;</p>";
+                        if($record->mother->first()->Familyshow->country_id!=$record->Familyshow->country_id) {
+                                 echo   "<label>&nbsp;</label>";
+                                 echo   "<img src=". asset('storage/'.\App\Models\Country::find($record->mother->first()->Familyshow->country_id)->image) ."  style=\"width: 26px; height: 26px;\" />";
+                                 echo "&nbsp&nbsp;";
+                                }
+
+
                         $i=0;
                         foreach($record->mother as $item){
                              if ($i == 0) echo "<p>{$item->Name1}</p>"; else echo "<p style=\"color: aqua;font-weight: bold\">&nbsp;,&nbsp;</p><p>{$item->Name1}</p>";
                              $i++;}
                         if (!$record->wife) echo "</div><div class=\"flex\"> <p>&nbsp&nbsp;(من : &nbsp {$item->Name2}&nbsp;{$item->Name3}&nbsp;{$item->Name4})</p>";
+
                         echo "</div>";
                     } else {
                         echo "<div class=\"flex\">
