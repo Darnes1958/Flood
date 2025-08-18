@@ -37,14 +37,14 @@
 
             <div style="position: relative;">
                 @foreach($victims as $victim)
-                    @if($victim->father_id!=null && !$victim->is_father && !$victim->is_mother
-                            && $victim->huband_id==0 && $victim->wife_id==0 )
+                    @if($victim->father_id!=null && (!$victim->is_father && $victim->wife_id==null)
+                            && (!$victim->is_mother && $victim->husband_id==null )
+                            )
                         @continue;
                     @endif
                     <div  class="flex ">
                         @if($victim->male=='ذكر')
                             @if($victim->is_great_grandfather)
-
                                 <label   class="text-red-950"> جد الأب : </label>
                             @else
                                 @if($victim->is_grandfather)
@@ -71,9 +71,9 @@
                                         @endif
                                     @endif
                                 @endif
-                                    @if($victim->is_mother==0 && $victim->husband_id!=null)
-                                        <label style="font-size: 14pt;color: #6b21a8" >الزوجة :&nbsp;&nbsp; </label>
-                                    @endif
+                                @if($victim->is_mother==0 && $victim->husband_id!=null)
+                                    <label style="color: #6b21a8" >الزوجة :&nbsp;&nbsp; </label>
+                                @endif
 
                             @endif
                         {{$victim->FullName}}
@@ -269,7 +269,6 @@
 
                             </div>
                     @endif
-
                     @if($victim->is_mother)
 
                         @php
@@ -351,10 +350,9 @@
                          @endphp
 
                         @endif
-
-                        @if($victim->is_great_grandfather || $victim->is_grandfather
+                    @if($victim->is_great_grandfather || $victim->is_grandfather
                                || $victim->is_father || $victim->is_great_grandmother || $victim->is_grandmother
-                               || $victim->is_mother) <br> @endif
+                               || $victim->is_mother || $victim->husband_id || $victim->wife_id) <br> @endif
 
                 @endforeach
 
