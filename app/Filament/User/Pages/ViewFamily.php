@@ -2,6 +2,7 @@
 
 namespace App\Filament\User\Pages;
 
+use App\Livewire\Traits\PublicTrait;
 use App\Models\Balag;
 use App\Models\Bedon;
 use App\Models\Dead;
@@ -37,11 +38,13 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\HtmlString;
 
 class ViewFamily extends Page implements HasTable,HasForms
 {
     use InteractsWithTable,InteractsWithForms;
+    use PublicTrait;
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
     protected static string $view = 'filament.user.pages.view-family';
@@ -148,6 +151,28 @@ class ViewFamily extends Page implements HasTable,HasForms
                                     return route('pdffamilyshow',
                                         ['familyshow_id' => $get('familyshow_id'),]);
                                 } ),
+                            \Filament\Forms\Components\Actions\Action::make('printBigFamilyNew')
+                                ->label('طباعة العائلة (جديد)')
+                                ->visible(function (Get $get){
+                                    return $get('familyshow_id')!=null;
+                                })
+                                ->color('success')
+                                ->icon('heroicon-m-printer')
+                                ->action(function (Get $get){
+
+                                    \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfAllVictims_5',
+                                        [
+                                            'familyshow_id' => $this->familyshow_id,])
+                                        ->footerView('PDF.footer')
+
+                                        ->save(public_path().'/bigFamily.pdf');
+
+                                    return Response::download(public_path().'/bigFamily.pdf',
+                                        'filename.pdf', self::ret_spatie_header());
+
+                                })
+                            ,
+
                             \Filament\Forms\Components\Actions\Action::make('printFamily')
                                 ->label('طباعة اللقب')
                                 ->visible(function (Get $get){
@@ -160,7 +185,7 @@ class ViewFamily extends Page implements HasTable,HasForms
                                             'bait_id' => 0,]);
                                 } ),
 
-                        ])->columnSpan(2),
+                        ])->columnSpan(3),
 
                     ])
                     ->columns(8),
