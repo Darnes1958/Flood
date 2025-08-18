@@ -38,7 +38,7 @@ class GuestsWidget extends BaseWidget
                     ->action(function (){
 
                         \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfGuests',
-                            ['victims' => Victim::where('guests',1)->orderBy('image','desc')->get(),])
+                            ['victims' => Victim::where('guests',1)->orderBy('image2','desc')->get(),])
                             ->landscape()
 
                             ->save(public_path().'/Guests.pdf');
