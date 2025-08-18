@@ -272,6 +272,11 @@
                             <div  style="text-align: right;" class="flex">
                                 <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
                                 <label class=" text-sky-500" >&nbsp;الأبناء :&nbsp; </label>
+                                @if($victim->father->first()->Familyshow->country_id!=$victim->Familyshow->country_id)
+                                    <label>&nbsp;</label>
+                                    <img src="{{ storage_path('app/public/'.\App\Models\Country::find($victim->husband->Familyshow->country_id)->image) }}"  style="width: 26px; height: 26px;" />
+
+                                @endif
                             </div>
                             @foreach($victim->father as $son)
                                 @if($son->is_father)
@@ -317,6 +322,12 @@
                               else
                                   echo "<label  class=\"text-sky-500\">&nbsp;&nbsp;&nbsp;ابناءها من </label>
                                   <label>&nbsp; ($father_name) : </label>";
+                              if($victim->mother->first()->Familyshow->country_id!=$victim->Familyshow->country_id) {
+                                 echo   "<label>&nbsp;</label>";
+                                 echo   "<img src=". storage_path('app/public/'.\App\Models\Country::find($victim->mother->first()->Familyshow->country_id)->image) ."  style=\"width: 26px; height: 26px;\" />";
+
+                                }
+
                               $i=0;
                               foreach($victim->mother as $son) {
                               if($i>0)  echo "<label> &nbsp;, </label>";
