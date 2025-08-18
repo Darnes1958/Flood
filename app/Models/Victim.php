@@ -9,6 +9,11 @@ class Victim extends Model
 {
     use HasFactory;
 
+    protected $appends=['country'];
+    public function getCountryAttribute()
+    {
+        return $this->Familyshow->country_id;
+    }
   public function Bait(){
     return $this->belongsTo(Bait::class);
   }

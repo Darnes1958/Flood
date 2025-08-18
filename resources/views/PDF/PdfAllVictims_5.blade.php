@@ -142,6 +142,11 @@
                                @endif
 
                                 <label  >&nbsp;{{$victim->sonOfMother->FullName}}</label>
+                                @if($victim->sonOfMother->Familyshow->country_id!=1)
+                                    <label>&nbsp;</label>
+                                    <img src="{{ storage_path('app/public/'.\App\Models\Country::find($victim->sonOfMother->Familyshow->country_id)->image) }}"  style="width: 26px; height: 26px;" />
+
+                                @endif
                                 @if($victim->sonOfMother->otherName)
                                     <label class="text-red-600" >&nbsp;({{$victim->sonOfMother->otherName}})</label> ;
                                 @endif
@@ -171,7 +176,11 @@
                             @if($victim->husband->otherName)
                                 <label class="text-red-600" >&nbsp;({{$victim->husband->otherName}})</label> ;
                             @endif
+                                @if($victim->husband->Familyshow->country_id!=1)
+                                    <label>&nbsp;</label>
+                                    <img src="{{ storage_path('app/public/'.\App\Models\Country::find($victim->husband->Familyshow->country_id)->image) }}"  style="width: 26px; height: 26px;" />
 
+                                @endif
                             @if($victim->husband->Job)
                                 @if($victim->husband->Job->image)
                                     <label>&nbsp;</label>
@@ -197,6 +206,11 @@
                             @if($victim->wife->otherName)
                                 <label class="text-red-600" >&nbsp;({{$victim->wife->otherName}})</label> ;
                             @endif
+                                @if($victim->wife->Familyshow->country_id!=1)
+                                    <label>&nbsp;</label>
+                                    <img src="{{ storage_path('app/public/'.\App\Models\Country::find($victim->wife->Familyshow->country_id)->image) }}"  style="width: 26px; height: 26px;" />
+
+                                @endif
 
                             @if($victim->wife->Job)
                                 @if($victim->wife->Job->image)

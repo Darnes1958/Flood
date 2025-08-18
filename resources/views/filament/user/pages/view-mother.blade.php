@@ -7,6 +7,12 @@
         @endif
 
         <p >{{$record->sonOfMother->FullName}}</p>
+            @if($record->sonOfMother->Familyshow->country_id!=1)
+                <label>&nbsp;</label>
+
+                <img src="{{ asset('storage/'.\App\Models\Country::find($record->sonOfMother->Familyshow->country_id)->image) }}"  style="width: 30px; height: 30px;" />
+            @endif
+
     @endif
 
 </div>
