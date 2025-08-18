@@ -17,7 +17,8 @@
         @endphp
 
         <div >
-            <label class=" text-red-500"> آلـ  </label>
+            @if($familyshow->country_id==1) <label class=" text-red-500"> آلـ  </label> @endif
+
             <label  class=" text-2xl font-bold"> {{$familyshow->name}} </label>
         </div>
         <div >
@@ -142,7 +143,7 @@
                                @endif
 
                                 <label  >&nbsp;{{$victim->sonOfMother->FullName}}</label>
-                                @if($victim->sonOfMother->Familyshow->country_id!=1)
+                                @if($victim->sonOfMother->Familyshow->country_id!=$victim->Familyshow->country_id)
                                     <label>&nbsp;</label>
                                     <img src="{{ storage_path('app/public/'.\App\Models\Country::find($victim->sonOfMother->Familyshow->country_id)->image) }}"  style="width: 26px; height: 26px;" />
 
@@ -181,7 +182,7 @@
                             @if($victim->husband->otherName)
                                 <label class="text-red-600" >&nbsp;({{$victim->husband->otherName}})</label> ;
                             @endif
-                                @if($victim->husband->Familyshow->country_id!=1)
+                                @if($victim->husband->Familyshow->country_id!=$victim->Familyshow->country_id)
                                     <label>&nbsp;</label>
                                     <img src="{{ storage_path('app/public/'.\App\Models\Country::find($victim->husband->Familyshow->country_id)->image) }}"  style="width: 26px; height: 26px;" />
 
@@ -211,7 +212,7 @@
                                 @if($victim->husband2->otherName)
                                     <label class="text-red-600" >&nbsp;({{$victim->husband2->otherName}})</label> ;
                                 @endif
-                                @if($victim->husband2->Familyshow->country_id!=1)
+                                @if($victim->husband2->Familyshow->country_id!=$victim->Familyshow->country_id)
                                     <label>&nbsp;</label>
                                     <img src="{{ storage_path('app/public/'.\App\Models\Country::find($victim->husband2->Familyshow->country_id)->image) }}"  style="width: 26px; height: 26px;" />
 
@@ -242,7 +243,7 @@
                             @if($victim->wife->otherName)
                                 <label class="text-red-600" >&nbsp;({{$victim->wife->otherName}})</label> ;
                             @endif
-                                @if($victim->wife->Familyshow->country_id!=1)
+                                @if($victim->wife->Familyshow->country_id!=$victim->Familyshow->country_id)
                                     <label>&nbsp;</label>
                                     <img src="{{ storage_path('app/public/'.\App\Models\Country::find($victim->wife->Familyshow->country_id)->image) }}"  style="width: 26px; height: 26px;" />
 

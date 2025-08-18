@@ -142,9 +142,7 @@ class ViewFamily extends Page implements HasTable,HasForms
                         \Filament\Forms\Components\Actions::make([
                             \Filament\Forms\Components\Actions\Action::make('printBigFamily')
                                 ->label('طباعة العائلة')
-                                ->visible(function (Get $get){
-                                    return $get('familyshow_id')!=null;
-                                })
+                                ->visible(false)
                                 ->color('success')
                                 ->icon('heroicon-m-printer')
                                 ->url(function (Get $get) {
@@ -152,7 +150,7 @@ class ViewFamily extends Page implements HasTable,HasForms
                                         ['familyshow_id' => $get('familyshow_id'),]);
                                 } ),
                             \Filament\Forms\Components\Actions\Action::make('printBigFamilyNew')
-                                ->label('طباعة العائلة (جديد)')
+                                ->label('طباعة العائلة ')
                                 ->visible(function (Get $get){
                                     return $get('familyshow_id')!=null;
                                 })
