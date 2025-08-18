@@ -18,11 +18,11 @@
                 <td style="color: #bf800c">{{$victim->FullName}}</td>
                 <td > {{$victim->notes}}  </td>
 
-                @if($victim->image)
+                @if($victim->image2)
                  <td style="text-align: center">
 
                      <x-filament::avatar
-                         src="{{  storage_path('app/public/'.$victim->image) }} "
+                         src="{{  storage_path('app/public/'.$victim->image2[0]) }} "
                          size="w-20 h-20"
                      />
                  </td>
