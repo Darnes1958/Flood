@@ -56,8 +56,10 @@ class TalentVictimWidget extends BaseWidget
                             ['victims' => VicTalent::
                             when($this->talent_id,function ($q){
                                 $q->where('talent_id',$this->talent_id);
-                            })
-                            ->whereIn('talent_id',Talent::where('talentType',$this->talentType)->pluck('id'))->get(),])
+                            })->whereIn('talent_id',Talent::where('talentType',$this->talentType)->pluck('id'))->get(),
+                             'talent'=>Talent::find($this->talent_id),
+
+                                ])
 
                             ->format(Format::A5)
                             ->save(public_path().'/Talent.pdf');

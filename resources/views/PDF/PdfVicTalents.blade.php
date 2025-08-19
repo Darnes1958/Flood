@@ -1,6 +1,20 @@
 @extends('PDF.PrnMasterGuest')
 
 @section('mainrep')
+    <table>
+        <thead>
+         <tr style="width: 25%"></tr>
+         <tr style="width: 25%"></tr>
+         <tr style="width: 50%"></tr>
+        </thead>
+        <td><p class="text-4xl"> {{$talent->talentType->name}}</p></td>
+        <td>        <x-filament::avatar :circular="false"
+                                        src="{{  storage_path('app/public/'.$talent->image) }} "
+                                        size="w-20 h-20"
+            />
+        </td>
+        <td ><p class="text-4xl text-blue-500"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$talent->name}}</p></td>
+    </table>
 
     <table style="border-collapse: collapse;
                 border: none;" width="100%"   align="right" >
