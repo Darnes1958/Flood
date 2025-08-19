@@ -32,7 +32,7 @@ class GuestsWidget extends BaseWidget
             )
             ->headerActions([
                 Action::make('printnewGuests')
-                    ->label('طباعة جديدة كليا')
+                    ->label('طباعة')
                     ->color('success')
                     ->icon('heroicon-m-printer')
                     ->action(function (){
