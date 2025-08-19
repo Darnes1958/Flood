@@ -192,7 +192,8 @@ class ViewFamily extends Page implements HasTable,HasForms
 
                                     \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfForeignWives',
                                         [
-                                            'victims' => Victim::whereIn('family_id',[303,306,10384,10404])->orderBy('family_id')->get(),])
+                                            'victims' => Victim::whereIn('family_id',[303,306,10384,10404])
+                                                ->orderBy('family_id','desc')->get(),])
                                         ->footerView('PDF.footer')
                                         ->margins(20,10,20,10)
                                         ->save(public_path().'/bigFamily.pdf');
