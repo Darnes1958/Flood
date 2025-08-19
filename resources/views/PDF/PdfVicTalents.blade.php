@@ -33,11 +33,12 @@
 
 
                  <td style="text-align: center">
-
+                     @if($victim->Victim->image2)
                      <x-filament::avatar :circular="false"
                          src="{{  storage_path('app/public/'.$victim->Victim->image2[0]) }} "
                          size="w-24 h-24"
                      />
+                     @endif
                  </td>
 
             </tr>
