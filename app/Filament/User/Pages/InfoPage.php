@@ -35,6 +35,7 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -183,7 +184,8 @@ class InfoPage extends Page implements HasTable,HasForms
     public function table(Table $table): Table
     {
         return $table
-            ->query(function (){
+
+            ->query(function ( ){
               return
                 Victim::query()
                     ->when($this->family_id,function($q){
@@ -483,6 +485,7 @@ class InfoPage extends Page implements HasTable,HasForms
                     ->boolean(),
                IconColumn::make('is_mother')
                     ->label('أم')
+
                  ->toggleable()
                     ->color(function ($state){
                         if ($state) return 'Fuchsia'; else return 'yellow';
@@ -499,9 +502,29 @@ class InfoPage extends Page implements HasTable,HasForms
                             })
                     )
                     ->boolean(),
+                IconColumn::make('is_grandmother')
+                    ->label('جدة')
+                    ->toggleable()
+                    ->color(function ($state){
+                        if ($state) return 'Fuchsia'; else return 'yellow';
+                    })
+                    ->action(
+                        Action::make('isgrandmother')
+                            ->action(function (Victim $record,){
+                                if ($record->is_grandmother)
+                                    $record->update(['is_grandmother'=>false]);
+                                else {
+                                    if ($record->male=='أنثي') $record->update(['is_grandmother'=>true]);
+                                }
+
+                            })
+                    )
+                    ->boolean(),
+
                 IconColumn::make('is_father')
                     ->label('أب')
-                  ->toggleable()
+
+                    ->toggleable()
                     ->color(function ($state){
                         if ($state) return 'success'; else return 'gray';
                     })
@@ -512,6 +535,23 @@ class InfoPage extends Page implements HasTable,HasForms
                                     $record->update(['is_father'=>false]);
                                 else {
                                     if ($record->male=='ذكر') $record->update(['is_father'=>true]);
+                                }
+                            })
+                    )
+                    ->boolean(),
+                IconColumn::make('is_grandfather')
+                    ->label('جد')
+                    ->toggleable()
+                    ->color(function ($state){
+                        if ($state) return 'success'; else return 'gray';
+                    })
+                    ->action(
+                        Action::make('isgrandfather')
+                            ->action(function (Victim $record,){
+                                if ($record->is_grandfather)
+                                    $record->update(['is_grandfather'=>false]);
+                                else {
+                                    if ($record->male=='ذكر') $record->update(['is_grandfather'=>true]);
                                 }
                             })
                     )
@@ -575,6 +615,24 @@ class InfoPage extends Page implements HasTable,HasForms
                             $record->notes=$data['notes'];
                             $record->save();
                         }),
+                Action::make('detail')
+                    ->iconButton()
+                    ->icon('heroicon-s-information-circle')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->modalHeading('تفاصيل الجد او الجدة او الزوجة .. الخ')
+                    ->fillForm(fn (Victim $record): array => [
+                        'details' => $record->details,
+
+                    ])
+                    ->form([
+                        TextInput::make('details')
+                            ->label('التفاصيل')
+                    ])
+                    ->action(function (Victim $record,array $data){
+                        $record->details=$data['details'];
+                        $record->save();
+                    }),
 
                 Action::make('RetTasreeh')
                     ->label('ارجاع')

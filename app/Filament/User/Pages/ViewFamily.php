@@ -183,6 +183,26 @@ class ViewFamily extends Page implements HasTable,HasForms
                                             'bait_id' => 0,]);
                                 } ),
 
+                            \Filament\Forms\Components\Actions\Action::make('printForeignWives')
+                                ->label('طباعة الزوجات الأجنبيات ')
+
+                                ->color('success')
+                                ->icon('heroicon-m-printer')
+                                ->action(function (){
+
+                                    \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfForeignWives',
+                                        [
+                                            'victims' => Victim::whereIn('family_id',[303,306,10384,10404])->orderBy('family_id')->get(),])
+                                        ->footerView('PDF.footer')
+                                        ->margins(20,10,20,10)
+                                        ->save(public_path().'/bigFamily.pdf');
+
+                                    return Response::download(public_path().'/bigFamily.pdf',
+                                        'filename.pdf', self::ret_spatie_header());
+
+                                })
+                            ,
+
                         ])->columnSpan(3),
 
                     ])

@@ -557,6 +557,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
                   ->label('')
                   ->circular(),
       ])
+      ->searchOnBlur()
 
       ->actions([
         Action::make('View Information')
