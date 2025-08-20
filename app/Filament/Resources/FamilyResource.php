@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\FamilyResource\Pages;
 use App\Filament\Resources\FamilyResource\RelationManagers;
 use App\Models\BigFamily;
+use App\Models\Country;
 use App\Models\Family;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
@@ -60,6 +61,7 @@ class FamilyResource extends Resource
                             ->required(),
                     ])
                     ->label('القبيلة'),
+
                 Forms\Components\Select::make('familyshow_id')
                     ->searchable()
                     ->required()
@@ -116,6 +118,18 @@ class FamilyResource extends Resource
                       ->required(),
                   ])
                   ->label('التركيبة الاجتماعية'),
+                Forms\Components\Select::make('country_id')
+                    ->searchable()
+                    ->required()
+                    ->preload()
+                   ->live()
+                    ->relationship('Country','name')
+                    ->afterStateUpdated(function ($state,Forms\Set $set){
+                        if ($state) $set('nation',Country::find($state)->name);
+                    })
+                    ->label('الدولة'),
+                TextInput::make('nation')
+                    ->label('اسم الدولة'),
             ]);
     }
 
