@@ -2,18 +2,23 @@
 
 namespace App\Filament\Widgets;
 
+use App\Livewire\Traits\PublicTrait;
 use App\Models\Area;
 use App\Models\Road;
+use App\Models\Street;
+use App\Models\Victim;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\HtmlString;
 use Livewire\Attributes\On;
 
 class Roadwidget extends BaseWidget
 {
+
   protected int | string | array $columnSpan = 1;
     protected static ?int $sort=4;
 
@@ -48,6 +53,7 @@ class Roadwidget extends BaseWidget
                     ->counts('Victim'),
 
 
-            ]);
+            ])
+            ;
     }
 }

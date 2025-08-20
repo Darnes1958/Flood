@@ -12,10 +12,6 @@
                     <div  class="flex ">
 
 
-                               <img src="{{ storage_path('app/public/'.\App\Models\Country::find($victim->Familyshow->country_id)->image) }}"  style="width: 26px; height: 26px;" />
-
-                                <label>&nbsp;</label>
-
                                 @if($victim->is_great_grandmother)
                                     <p style="color: aqua; ">جدة الأب :&nbsp;&nbsp;</p>
                                 @else
