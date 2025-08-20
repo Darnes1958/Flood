@@ -37,7 +37,9 @@
             <p  >{{$record->FullName}}&nbsp;&nbsp;</p>
         @endif
     @endif
-
+        @if($record->otherName)
+            <label class="text-red-600" >&nbsp;({{$record->otherName}})&nbsp;&nbsp;</label>
+        @endif
         @if($record->VicTalent)
             @foreach($record->VicTalent as $talent)
                 <label>&nbsp;</label>
