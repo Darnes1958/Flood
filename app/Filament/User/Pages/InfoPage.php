@@ -6,6 +6,7 @@ use App\Models\Archif;
 use App\Models\Bait;
 use App\Models\Bedon;
 use App\Models\Family;
+use App\Models\Familyshow;
 use App\Models\Mafkoden;
 use App\Models\Street;
 use App\Models\Tasreeh;
@@ -13,6 +14,7 @@ use App\Models\Victim;
 use Filament\Actions\ReplicateAction;
 use Filament\Actions\StaticAction;
 use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -391,7 +393,8 @@ class InfoPage extends Page implements HasTable,HasForms
                           ->label('العائلة')
                           ->searchable()
                           ->preload()
-                          ->live()
+                          ->live(),
+
                       ])
                       ->fillForm(fn (Victim $record): array => [
                         'family_id' => $record->family_id,
@@ -400,7 +403,10 @@ class InfoPage extends Page implements HasTable,HasForms
                       ->modalSubmitActionLabel('تحزين')
                       ->modalHeading('تعديل العائلة')
                       ->action(function (array $data,Victim $record,){
-                        $record->update(['family_id'=>$data['family_id']]);
+                        $record->update(['family_id'=>$data['family_id'],'familyshow_id'=>Family::find($data['family_id'])->familyshow_id]);
+                        if ($record->is_father)
+                            Victim::where('father_id',$record->id)
+                                ->update(['family_id'=>$data['family_id'],'familyshow_id'=>Family::find($data['family_id'])->familyshow_id]);
                       })
                   )
                     ->sortable()
