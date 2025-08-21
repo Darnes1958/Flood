@@ -52,6 +52,17 @@ class TalentVictimWidget extends BaseWidget
                     ->icon('heroicon-m-printer')
                     ->action(function (){
 
+                        if ($this->talentType==6)
+                            \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfVicTalents6',
+                                ['victims' => VicTalent::
+                               whereIn('talent_id',Talent::where('talentType',$this->talentType)->pluck('id'))->get(),
+                                    'talent'=>Talent::where('talentType',$this->talentType)->first()])
+
+                                ->format(Format::A5)
+                                ->save(public_path().'/Talent.pdf');
+
+                         else
+
                         \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfVicTalents',
                             ['victims' => VicTalent::
                             when($this->talent_id,function ($q){
