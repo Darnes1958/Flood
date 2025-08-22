@@ -52,7 +52,7 @@ class TalentVictimWidget extends BaseWidget
                     ->icon('heroicon-m-printer')
                     ->action(function (){
 
-                        if ($this->talentType==6)
+                        if ($this->talentType==6 || $this->talentType==4)
                             \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfVicTalents6',
                                 ['victims' => VicTalent::
                                whereIn('talent_id',Talent::where('talentType',$this->talentType)->pluck('id'))->get(),

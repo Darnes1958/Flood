@@ -7,7 +7,14 @@
 
          <tr style="width: 50%"></tr>
         </thead>
-        <td><p class="text-4xl"> حفاظ وأئمة وقيمي مساجد</p></td>
+
+        @if($talent->talentType->value==6)
+            <td><p class="text-4xl"> حفاظ وأئمة وقيمي مساجد</p></td>
+        @endif
+        @if($talent->talentType->value==4)
+            <td><p class="text-4xl text-red-600"> الهلال الأحمر </p></td>
+        @endif
+
         <td>        <x-filament::avatar :circular="false"
                                         src="{{  storage_path('app/public/'.$talent->image) }} "
                                         size="w-20 h-20"
