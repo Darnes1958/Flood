@@ -701,6 +701,8 @@ class InfoPage extends Page implements HasTable,HasForms
                         'father_id' => $record->father_id,
                         'husband_id' => $record->husband_id,
                         'wife_id' => $record->wife_id,
+                        'grandmother_id' => $record->grandmother_id,
+                        'grandfather_id' => $record->grandfather_id,
                     ])
                     ->form([
                         Section::make()
@@ -774,6 +776,26 @@ class InfoPage extends Page implements HasTable,HasForms
                                  ->searchable()
                                  ->reactive()
                                  ->preload(),
+
+                             Select::make('grandfather_id')
+                                 ->label('جده')
+                                 ->options( Victim::query()
+                                     ->where('is_grandfather',1)
+                                     ->pluck('FullName', 'id'))
+                                 ->searchable()
+                                 ->live()
+
+                                 ->preload(),
+                        Select::make('grandmother_id')
+                            ->label('جدته')
+                            ->options( Victim::query()
+                                ->where('is_grandmother',1)
+                                ->pluck('FullName', 'id'))
+                            ->searchable()
+                            ->live()
+
+                            ->preload()
+
                          ])
                             ->columns(3)
                             ->columnSpanFull()
@@ -787,6 +809,7 @@ class InfoPage extends Page implements HasTable,HasForms
                           'father_id'=>$data['father_id'],'husband_id'=>$data['husband_id'],
                             'wife_id'=>$data['wife_id'],'male'=>$data['male'],
                             'is_father'=>$data['is_father'],'is_mother'=>$data['is_mother'],
+                            'grandmother_id'=>$data['grandmother_id'],'grandfather_id'=>$data['grandfather_id'],
                           ]);
                         if ($data['male']=='ذكر' && $data['wife_id']!=null)
                           Victim::find($data['wife_id'])->update(['husband_id'=>$record->id]);

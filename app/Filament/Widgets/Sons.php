@@ -37,7 +37,8 @@ class Sons extends BaseWidget
   {
     return $table
       ->query(function () {
-          $data=Victim::where('father_id',$this->grand)->orwhere('mother_id',$this->grand);
+          $data=Victim::where('father_id',$this->grand)->orwhere('mother_id',$this->grand)
+          ->orwhere('grandfather_id',$this->grand)->orwhere('grandmother_id',$this->grand);
 
         return $data;
       }
