@@ -20,8 +20,8 @@
                 border: none;" width="100%"   align="right" >
         <thead >
         <tr >
-            <th style="width: 50%;"></th>
-            <th style="width: 50%;"></th>
+            <th style="width: 60%;"></th>
+            <th style="width: 40%;"></th>
 
         </tr>
         </thead>

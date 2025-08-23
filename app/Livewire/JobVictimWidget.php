@@ -53,16 +53,12 @@ class JobVictimWidget extends BaseWidget
                     ->color('success')
                     ->icon('heroicon-m-printer')
                     ->action(function (){
-
-
-
                             \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfVicJob',
                                 ['victims' => Victim::
                                 when($this->job_id,function ($q){
                                     $q->where('job_id',$this->job_id);
                                 })->whereIn('job_id',job::where('jobType',$this->jobType)->pluck('id'))->get(),
                                     'job'=>job::find($this->job_id),
-
                                 ])
 
                                 ->format(Format::A5)
