@@ -376,13 +376,13 @@
                                     if ($i===0) { echo "<label> &nbsp;{$item->Name1}</label>";}
                                     else {echo "<label> &nbsp;, {$item->Name1}</label>";}
 
-                                    if($son->otherName)
-                                        echo "<label class=\"text-red-600\" >&nbsp;({$son->otherName})</label> ";
+                                    if($item->otherName)
+                                        echo "<label class=\"text-red-600\" >&nbsp;({$item->otherName})</label> ";
 
-                                    if($son->Job)
-                                      if($son->Job->image)
+                                    if($item->Job)
+                                      if($item->Job->image)
                                           echo "  <label>&nbsp;</label>
-                                          <img src=". storage_path('app/public/'.$son->Job->image) ."  style=\"width: 20px; height: 20px;\" />";
+                                          <img src=". storage_path('app/public/'.$item->Job->image) ."  style=\"width: 20px; height: 20px;\" />";
                                       if($item->VicTalent)
                                       foreach($item->VicTalent as $talent) {
                                         echo " <label>&nbsp;</label>";
