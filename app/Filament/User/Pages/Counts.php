@@ -13,7 +13,7 @@ class Counts extends Page
 
     protected ?string $heading='';
     protected static ?string $navigationLabel='الأعداد';
-    protected static ?int $navigationSort=3;
+    protected static ?int $navigationSort=4;
 
     protected function getFooterWidgets(): array
     {
