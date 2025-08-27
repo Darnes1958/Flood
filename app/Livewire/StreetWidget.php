@@ -2,23 +2,28 @@
 
 namespace  App\Livewire;
 
+use App\Livewire\Traits\PublicTrait;
 use App\Models\Area;
 use App\Models\Family;
 use App\Models\Road;
 use App\Models\Street;
+use App\Models\Victim;
 use Filament\Actions\StaticAction;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\HtmlString;
 use Livewire\Attributes\On;
 
 class StreetWidget extends BaseWidget
 {
+    use PublicTrait;
   protected int | string | array $columnSpan=1;
   protected static ?int $sort=3;
 
@@ -102,6 +107,27 @@ class StreetWidget extends BaseWidget
 
 
 
-          ]);
+          ])
+            ->actions([
+                Action::make('print')
+                    ->icon('heroicon-o-printer')
+                    ->iconButton()
+                    ->color('primary')
+                    ->action(function (Street $record){
+
+                        \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfStreets',
+                            [
+                                'victims' => Victim::where('street_id',$record->id)
+                                    ->orderBy('family_id','desc')->orderBy('masterKey')->get(),])
+                            ->footerView('PDF.footer')
+                            ->margins(20,10,20,10)
+                            ->save(public_path().'/streets.pdf');
+
+                        return Response::download(public_path().'/streets.pdf',
+                            'filename.pdf', self::ret_spatie_header());
+
+                    }),
+            ])
+            ;
     }
 }
