@@ -61,6 +61,8 @@ class ViewFamily extends Page implements HasTable,HasForms
     public $count;
     public $notes=true;
     public $hasNotes=false;
+
+    public $coulmnNumber=3;
     static $ser=0;
 
     public function form(Form $form): Form
@@ -136,6 +138,19 @@ class ViewFamily extends Page implements HasTable,HasForms
                                 'father_only'=>'أباء',
                                 'mother_only'=>'أمهات',
                             ]),
+                        Select::make('coulmnNumber')
+                            ->live()
+                            ->options([
+                                1 => 'One',
+                                2 => 'Two',
+                                3 => 'Three',
+                                4 => 'Four',
+                                5 => 'Five',
+                                6 => 'Six',
+                            ])
+                            ->afterStateUpdated(function ($state){
+                                $this->coulmnNumber=$state;
+                            }),
 
 
 
@@ -331,7 +346,7 @@ class ViewFamily extends Page implements HasTable,HasForms
             ])
         ->contentGrid([
         'md' => 2,
-        'xl' => 3,
+        'xl' => $this->coulmnNumber,
     ]);
     }
 }
