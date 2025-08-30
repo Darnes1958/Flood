@@ -597,10 +597,21 @@ class InfoPage extends Page implements HasTable,HasForms
                         Mafkoden::where('victim_id',$record->id)->update(['victim_id'=>null]);
                         Bedon::where('victim_id',$record->id)->update(['victim_id'=>null]);
                         Tasreeh::where('victim_id',$record->id)->update(['victim_id'=>null]);
-                        $archif=Victim::find($record->id);
-                        $archif->notes=$data['notes'];
-                        Archif::create($archif->toArray());
+                   //     $archif=Victim::find($record->id);
+                   //     $archif->notes=$data['notes'];
+                   //     Archif::create($archif->toArray());
+                   //     $record->delete();
+
+                        $record=Victim::find($record->id);
+                        $oldRecord= $record;
+                        $newRecord = $oldRecord->replicate();
+
+                        $newRecord->setTable('archifs');
+                        $newRecord->id=$record->id;
+                        $newRecord->notes=$data['notes'];
+                        $newRecord->save();
                         $record->delete();
+
                     }),
 
                 Action::make('note')
