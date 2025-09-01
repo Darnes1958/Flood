@@ -34,12 +34,15 @@
         <tbody >
 
         @foreach($victims as $victim)
-            @php $preName=\App\Models\Talent::find($victim->talent_id)->preName @endphp
+            @php $talent=\App\Models\Talent::find($victim->talent_id);  @endphp
             <tr style="margin-top: 40px;padding: 20px;">
                 <td >
                  <div class="flex">
-                     <label  style="color: #0000ff;margin-inline-end: 20px;" >{{ $preName}}</label>
-                     <label  style="color: #bf800c">  {{$victim->Victim->FullName}} </label>
+                     <label  class="text-blue-500 ml-2 " >{{ $talent->preName}}</label>
+                     <x-filament::avatar :circular="false"
+                                         src="{{  storage_path('app/public/'.$talent->image) }} "
+                                         size="w-6 h-6"  />
+                     <label class="text-amber-600 mr-4">  {{$victim->Victim->FullName}} </label>
                  </div>
 
                 </td>
@@ -47,7 +50,7 @@
 
                  <td style="text-align: center">
                      @if($victim->Victim->image2)
-                     <x-filament::avatar :circular="false"
+                     <x-filament::avatar
                          src="{{  storage_path('app/public/'.$victim->Victim->image2[0]) }} "
                          size="w-28 h-28"
                      />
