@@ -47,7 +47,7 @@ class TalentVictimWidget extends BaseWidget
             })
             ->headerActions([
                 Action::make('printTalent')
-                    ->label('طباعة')
+                    ->label('طباعة ')
                     ->color('success')
                     ->icon('heroicon-m-printer')
                     ->action(function (){
@@ -74,6 +74,23 @@ class TalentVictimWidget extends BaseWidget
 
                             ->format(Format::A5)
                             ->save(public_path().'/Talent.pdf');
+
+                        return Response::download(public_path().'/Talent.pdf',
+                            'filename.pdf', self::ret_spatie_header());
+
+                    }),
+                Action::make('printTalent2')
+                    ->label('طباعة الفنانين')
+                    ->color('success')
+                    ->icon('heroicon-m-printer')
+                    ->action(function (){
+                        \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfTalent',
+                                ['victims' => VicTalent::
+                                      whereIn('talent_id',Talent::where('talentType',1)->pluck('id'))->orderBy('talent_id')->get(),
+                                'talents'=>Talent::where('talentType',1)->get(),
+                                ])
+
+                                ->save(public_path().'/Talent.pdf');
 
                         return Response::download(public_path().'/Talent.pdf',
                             'filename.pdf', self::ret_spatie_header());
