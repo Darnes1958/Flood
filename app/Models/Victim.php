@@ -14,7 +14,12 @@ class Victim extends Model
     {
         return $this->Familyshow->country_id;
     }
-  public function Bait(){
+
+    public function Egypt()
+    {
+        return $this->hasOne(Egypt::class);
+    }
+    public function Bait(){
     return $this->belongsTo(Bait::class);
   }
     public function User(){
