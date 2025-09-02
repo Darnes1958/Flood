@@ -31,6 +31,7 @@ class StreetWidget extends BaseWidget
   public $road_id=null;
   public $areaName=null;
   public $pre=null;
+  public $onlyLibyan=false;
 
   #[On('take_road')]
   public function take_road($road_id,$areaName){
@@ -46,7 +47,12 @@ class StreetWidget extends BaseWidget
     $this->road_id=null;
       $this->pre=' الشوارع الفرعية بمحلة : '.$this->areaName;
   }
-  public function table(Table $table): Table
+    #[On('take_libyan')]
+    public function take_libyan($onlyLibyan){
+        $this->onlyLibyan=$onlyLibyan;
+    }
+
+    public function table(Table $table): Table
     {
         return $table
           ->query(function (Street $tribe) {
@@ -61,8 +67,7 @@ class StreetWidget extends BaseWidget
               })
                 ->when(!$this->area_id && !$this->road_id,function ($q){
                     $q->where('id',null);
-                })
-               ;
+                })     ;
             return $tribe;
           }
           )
@@ -118,6 +123,8 @@ class StreetWidget extends BaseWidget
                         \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfStreets',
                             [
                                 'victims' => Victim::where('street_id',$record->id)
+                                    ->when($this->onlyLibyan,function ($q){
+                                        $q->whereIn('family_id',Family::where('country_id',1)->pluck('id'));})
                                     ->orderBy('family_id','desc')->orderBy('masterKey')->get(),])
                             ->footerView('PDF.footer')
                             ->margins(20,10,20,10)

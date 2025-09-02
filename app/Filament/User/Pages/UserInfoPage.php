@@ -92,6 +92,7 @@ class UserInfoPage extends Page implements HasTable,HasForms
   public $hasNotes=false;
   static $ser=0;
 
+
   #[On('resetInfo')]
   public function resetInfo()
   {
@@ -557,8 +558,6 @@ class UserInfoPage extends Page implements HasTable,HasForms
                   ->label('')
                   ->circular(),
       ])
-
-
       ->actions([
         Action::make('View Information')
           ->iconButton()

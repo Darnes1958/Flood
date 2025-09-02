@@ -6,11 +6,13 @@ use App\Livewire\AreaWidget;
 use App\Livewire\Buildingwidget;
 use App\Livewire\Roadwidget;
 use App\Livewire\StreetWidget;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
+use function Livewire\on;
 
 class Places extends Page implements HasForms
 {
@@ -26,6 +28,7 @@ class Places extends Page implements HasForms
         return 3;
     }
     public $show='area';
+    public $onlyLibyan=false;
 
     public function mount(): void{
         $this->form->fill();
@@ -52,6 +55,12 @@ public function form(Form $form): Form
                     'road'=> 'بالشوارع الرئيسية',
                     'two'=>'بالمحلات والشوارع',
                 ]),
+            Checkbox::make('onlyLibyan')
+                ->live()
+                ->afterStateUpdated(function ($state){
+                    $this->onlyLibyan=$state;
+                    $this->dispatch('take_libyan',onlyLibyan: $this->onlyLibyan);
+                })
         ]);
 }
 

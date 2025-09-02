@@ -10,8 +10,6 @@
                 @foreach($victims as $victim)
 
                     <div  class="flex ">
-
-
                                 @if($victim->is_great_grandmother)
                                     <p style="color: aqua; ">جدة الأب :&nbsp;&nbsp;</p>
                                 @else
@@ -27,16 +25,11 @@
                                     <label style="color: #6b21a8" >الزوجة :&nbsp;&nbsp; </label>
                                 @endif
 
-
-
                         {{$victim->FullName}}
                         @if($victim->otherName)
                             <label class="text-red-600" >&nbsp;({{$victim->otherName}})</label>
                         @endif
 
-                        <label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <label  class="text-xl"> &nbsp;العنوان : </label>
-                        <label  class="text-xl">{{$victim->Street->StrName}}</label>
                     </div>
 
 
@@ -120,7 +113,7 @@
                          @endphp
 
                         @endif
-                     <br>
+
 
                 @endforeach
 
