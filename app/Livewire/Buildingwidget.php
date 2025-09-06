@@ -2,8 +2,11 @@
 
 namespace  App\Livewire;
 
+use App\Livewire\Traits\PublicTrait;
+use App\Models\Job;
 use App\Models\Road;
 use App\Models\Street;
+use App\Models\Victim;
 use Filament\Actions\StaticAction;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Tables;
@@ -11,12 +14,16 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\HtmlString;
 use Livewire\Attributes\On;
+use Spatie\LaravelPdf\Enums\Format;
 
 
 class Buildingwidget extends BaseWidget
+
 {
+    use PublicTrait;
     protected int | string | array $columnSpan=1;
     protected static ?int $sort=4;
     public $area_id=null;
@@ -59,6 +66,23 @@ class Buildingwidget extends BaseWidget
                 return $tribe;
             }
             )
+            ->headerActions([
+                Tables\Actions\Action::make('printB')
+                 ->label('طباعة العمارات')
+                    ->action(function (){
+                        \Spatie\LaravelPdf\Facades\Pdf::view('PDF.PdfBuilding',
+                            ['streets' => Street::withcount('Victim')
+                                ->where('building',1)->orderBy('victim_count','desc')->get()
+
+                            ])
+
+                            ->save(public_path().'/job.pdf');
+
+                        return Response::download(public_path().'/job.pdf',
+                            'filename.pdf', self::ret_spatie_header());
+
+                    }),
+            ])
             ->heading(function () {return new HtmlString('<div class="text-primary-400 text-lg ">'.$this->pre.'</div>');} )
             ->defaultPaginationPageOption(16)
             ->paginationPageOptions([5,10,16,25,50,100])

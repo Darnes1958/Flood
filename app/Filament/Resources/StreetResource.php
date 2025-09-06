@@ -51,6 +51,7 @@ class StreetResource extends Resource
                     ->offColor( 'gray'),
                 Forms\Components\FileUpload::make('image')
                     ->multiple()
+                    ->imageEditor()
                     ->directory('Building'),
 
             ]);
